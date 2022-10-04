@@ -1,0 +1,40 @@
+#!/bin/sh
+#
+# Configure TSMAC interfaces
+#
+
+echo "Configuring EMACS interfaces"
+
+for ifcfg in `ls /etc/sysconfig/network-scripts/ifcfg-mii*`; do
+  DEVICE=""; HWADDR=""; CONNTYPE=""; MIITYPE=""; PHYADDR=""; LINKMODE="";
+  . $ifcfg
+
+  if [ -z "${DEVICE}" ]; then
+    echo "  Missing DEVICE for network interface ${ifcfg}"
+    continue
+  fi
+
+  # Connection type
+  if [ -n "${CONNTYPE}" ]; then
+    # Set connType
+    echo ${CONNTYPE} > /proc/net/${DEVICE}/connType
+  fi
+  
+  # PHY address setting
+  if [ -n "${PHYADDR}" ]; then
+    # Set phyAddr
+    echo ${PHYADDR} > /proc/net/${DEVICE}/phyAddr
+  fi
+
+  # MII type
+  if [ -n "${MIITYPE}" ]; then
+    # Set MII type
+    echo ${MIITYPE} > /proc/net/${DEVICE}/miiType
+  fi
+
+  # Link mode (auto negotiation, 1000Full, etc.)
+  if [ -n "${LINKMODE}" ]; then
+    echo ${LINKMODE} > /proc/net/${DEVICE}/linkMode
+  fi
+
+done

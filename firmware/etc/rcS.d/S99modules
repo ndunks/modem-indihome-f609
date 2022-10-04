@@ -1,0 +1,91 @@
+#!/bin/sh
+#
+# add user-defined startup scripts here
+#
+
+#
+# Personalized Paramters Driver
+#
+/sbin/insmod  /kmodule/tagparam_mod.ko 
+
+#usb led module
+/sbin/insmod  /kmodule/usb_led.ko 
+
+#
+# GPON Drivers
+#
+
+#
+# Bcm Drivers
+#
+KERNELVER=3.4
+# test -e /kmodule/bcm_ingqos.ko    && insmod /kmodule/bcm_ingqos.ko
+/sbin/insmod /kmodule/bdmf.ko bdmf_chrdev_major=215 bdmf_global_trace_level=1
+/sbin/insmod /kmodule/rdpa_gpl.ko
+/sbin/insmod /kmodule/rdpa_gpl_ext.ko
+/sbin/insmod /kmodule/rdpa.ko
+
+/sbin/insmod /kmodule/rdpa_mw.ko
+/sbin/insmod /kmodule/system_init.ko
+/sbin/insmod /kmodule/lilac_br_fp.ko
+/sbin/insmod /kmodule/pktrunner.ko
+/sbin/insmod /kmodule/bcm_enet.ko
+
+/sbin/insmod /kmodule/gpon_i2c.ko
+
+/sbin/insmod /kmodule/pmd.ko
+#add by xiebiwen                    
+/sbin/insmod /kmodule/wlcsm.ko
+/sbin/insmod /kmodule/wlemf.ko
+/sbin/insmod /kmodule/wl.ko
+/sbin/insmod /kmodule/bcmgpon.ko
+/sbin/insmod /kmodule/customerApi.ko
+/sbin/insmod /kmodule/switch.ko
+/sbin/insmod /kmodule/gpondrv.ko
+
+
+#
+# Switch Fabric Device Driver
+#
+# ifconfig gpon0 up
+
+#
+# EPON Drivers
+#
+#/sbin/insmod /kmodule/mv_epon.ko
+#/sbin/insmod /kmodule/epon_reg.ko
+
+/sbin/insmod  /kmodule/i2c_bcm6xxx.ko
+
+#optical driver
+bob=`sed -n '1p' /proc/capability/opticalinfo  | sed 's/scheme : //g'`
+echo "get bob board type:$bob"
+if [ $bob = "6" ]; then
+   echo "get bob board type GN25L95"
+   
+	hexdump /userconfig/longlaser_cfg | grep '0000000 b748 ed12 db90 f624' && /sbin/insmod  /kmodule/GN25L95.ko
+else
+echo "get traditional optical board type"
+fi
+
+/sbin/insmod  /kmodule/optical.ko
+
+#
+# SLIC driver
+#
+#/sbin/insmod /kmodule/slc/usrline.ko
+
+#
+# Ethernet Driver
+/sbin/insmod  /kmodule/netdriver.ko
+
+# DSP driver
+#/sbin/insmod /kmodule/kudp.ko
+#/sbin/insmod /kmodule/voip_codec.ko
+#/sbin/insmod /kmodule/dsp_dev.ko
+POTSNUM=`grep 'pots' /proc/capability/portinfo | sed -e 's/pots *: *//g'`
+if [ "$POTSNUM" != "0" ];then
+/sbin/insmod /kmodule/pcmshim.ko
+/sbin/insmod /kmodule/endpointdd.ko
+fi
+

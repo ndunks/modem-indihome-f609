@@ -1,0 +1,294 @@
+<Object name="VoiceService" shortname="VS" objectType="Multi" wr_attr="3" spaattr="3">
+          <ParameterList>
+            <Parameter name="VoiceProfileNumberOfEntries" wr_attr="1" valueType="unsigned int" spaattr="3" isImit="1" defVal="1" />
+          </ParameterList>
+          <ObjectList>
+            <Object name="PhyInterface" shortname="VY" objectType="Multi" wr_attr="3" spaattr="3">
+              <ParameterList>
+                <Parameter name="PhyPort" wr_attr="1" valueType="string" spaattr="3" len="2" />
+                <Parameter name="InterfaceID" wr_attr="1" valueType="unsigned int" spaattr="3" />
+              </ParameterList>
+              <ObjectList>
+                <Object name="Tests" shortname="PT" objectType="Single" wr_attr="3" spaattr="3">
+                  <ParameterList>
+                    <Parameter name="TestState" wr_attr="3" valueType="string" spaattr="3" len="16" />
+                    <Parameter name="TestSelector" wr_attr="3" valueType="string" spaattr="3" len="64" />
+                    <Parameter name="PhoneConnectivity" wr_attr="1" valueType="boolean" spaattr="3" />
+                  </ParameterList>
+		          <ObjectList>
+                    <Object name="X_ZTE-COM_SimulateTest" shortname="PM" objectType="Single" wr_attr="3" spaattr="3">
+                      <ParameterList>
+                        <Parameter name="TestType" wr_attr="3" valueType="string" spaattr="3" len="16" />
+                        <Parameter name="CalledNumber" wr_attr="3" valueType="string" spaattr="3" len="32" />
+                        <Parameter name="DialDTMFConfirmEnable" wr_attr="3" valueType="boolean" spaattr="3" />
+                        <Parameter name="DialDTMFConfirmNumber" wr_attr="3" valueType="string" spaattr="3" len="32" />
+                        <Parameter name="DialDTMFConfirmResult" wr_attr="1" valueType="boolean" spaattr="3" />
+                        <Parameter name="Status" wr_attr="1" valueType="string" spaattr="3" len="16" />
+                        <Parameter name="Conclusion" wr_attr="1" valueType="string" spaattr="3" len="16" />
+                        <Parameter name="CallerFailReason" wr_attr="1" valueType="string" spaattr="3" len="16" />
+                        <Parameter name="CalledFailReason" wr_attr="1" valueType="string" spaattr="3" len="16" />
+                        <Parameter name="FailedResponseCode" wr_attr="1" valueType="unsigned int" spaattr="3" />
+                      </ParameterList>
+                    </Object>
+                  </ObjectList>
+                </Object> 
+              </ObjectList>
+            </Object>            
+            <Object name="Capabilities" shortname="VC" objectType="Single" wr_attr="1" spaattr="3">
+              <ParameterList>
+                <Parameter name="DigitMap" wr_attr="1" valueType="boolean" spaattr="3" />
+                <Parameter name="SignalingProtocols" wr_attr="1" valueType="string" spaattr="3" len="256" />
+                <Parameter name="MaxProfileCount" wr_attr="1" valueType="unsigned int" spaattr="3" isImit="1" defVal="1" />
+                <Parameter name="MaxLineCount" wr_attr="1" valueType="unsigned int" spaattr="3" isImit="1" defVal="2" />
+                <Parameter name="MaxSessionsPerLine" wr_attr="1" valueType="unsigned int" spaattr="3" isImit="1" defVal="3" />
+                <Parameter name="MaxSessionCount" wr_attr="1" valueType="unsigned int" spaattr="3" isImit="1" defVal="6" />
+                <Parameter name="RTCP" wr_attr="1" valueType="boolean" spaattr="3" isImit="1" defVal="true" />
+                <Parameter name="SRTP" wr_attr="1" valueType="boolean" spaattr="3" isImit="1" defVal="false" />
+                <Parameter name="SRTPKeyingMethods" wr_attr="1"  valueType="string" spaattr="3" len="256" isImit="1" defVal="" />
+                <Parameter name="SRTPEncryptionKeySizes" wr_attr="1"  valueType="string"  spaattr="3" len="256" isImit="1" defVal="" />
+                <Parameter name="RTPRedundancy" wr_attr="1" valueType="boolean" spaattr="3" isImit="1" defVal="false" />
+                <Parameter name="DSCPCoupled" wr_attr="1" valueType="boolean" spaattr="3" isImit="1" defVal="false" />
+                <Parameter name="EthernetTaggingCoupled" wr_attr="1" valueType="boolean" spaattr="3" isImit="1" defVal="false" />
+                <Parameter name="PSTNSoftSwitchOver" wr_attr="1" valueType="boolean" spaattr="3" isImit="1" defVal="false" />
+                <Parameter name="FaxT38" wr_attr="1" valueType="boolean" spaattr="3" isImit="1" defVal="true" />
+                <Parameter name="FaxPassThrough" wr_attr="1" valueType="boolean" spaattr="3" isImit="1" defVal="true" />
+                <Parameter name="ModemPassThrough" wr_attr="1" valueType="boolean" spaattr="3" isImit="1" defVal="true" />
+                <Parameter name="ToneGeneration" wr_attr="1" valueType="boolean" spaattr="3" isImit="1" defVal="true" />
+                <Parameter name="ToneDescriptionsEditable" wr_attr="1" valueType="boolean" spaattr="3" isImit="1" defVal="true" />
+                <Parameter name="PatternBasedToneGeneration" wr_attr="1" valueType="boolean" spaattr="3" isImit="1" defVal="true" />
+                <Parameter name="FileBasedToneGeneration" wr_attr="1" valueType="boolean" spaattr="3" isImit="1" defVal="false" />
+                <Parameter name="ToneFileFormats" wr_attr="1" valueType="string" spaattr="3" len="256" isImit="1" defVal="" />
+                <Parameter name="RingGeneration" wr_attr="1" valueType="boolean" spaattr="3" isImit="1" defVal="true" />
+                <Parameter name="PatternBasedRingGeneration" wr_attr="1" valueType="boolean" spaattr="3" isImit="1" defVal="false" />
+                <Parameter name="RingPatternEditable" wr_attr="1" valueType="boolean" spaattr="3" isImit="1" defVal="false" />
+                <Parameter name="RingDescriptionsEditable" wr_attr="1" valueType="boolean" spaattr="3" isImit="1" defVal="true" />
+                <Parameter name="RingFileFormats" wr_attr="1" valueType="string" spaattr="3" len="256" isImit="1" defVal="" />
+                <Parameter name="NumberingPlan" wr_attr="1" valueType="boolean" spaattr="3" isImit="1" defVal="false" />
+                <Parameter name="ButtonMap" wr_attr="1" valueType="boolean" spaattr="3" isImit="1" defVal="false" />
+                <Parameter name="VoicePortTests" wr_attr="1" valueType="boolean" spaattr="3" isImit="1" defVal="false" />
+              </ParameterList>
+          <ObjectList>
+                <Object name="SIP" shortname="CS" objectType="Single" wr_attr="3" spaattr="3" >
+                  <ParameterList>
+                    <Parameter name="Role" wr_attr="1" valueType="string" spaattr="3" len="32" />
+                    <Parameter name="Extensions" wr_attr="1" valueType="string" spaattr="3" len="64" isImit="1" defVal="REFER,INFO" />
+                    <Parameter name="Transports" wr_attr="1" valueType="string" spaattr="3" len="16" />
+                    <Parameter name="URISchemes" wr_attr="1" valueType="string" spaattr="3" len="64"  isImit="1" defVal="sip,tel" />
+                    <Parameter name="EventSubscription" wr_attr="1" valueType="boolean" spaattr="3" isImit="1" defVal="false" />
+                    <Parameter name="ResponseMap" wr_attr="1" valueType="boolean" spaattr="3" isImit="1" defVal="false" />
+                    <Parameter name="TLSAuthenticationKeySizes" wr_attr="1" valueType="string" spaattr="3" len="256" isImit="1" defVal="" />
+                    <Parameter name="TLSAuthenticationProtocols" wr_attr="1" valueType="string" spaattr="3" len="256" isImit="1" defVal="" />
+                    <Parameter name="TLSEncryptionKeySizes" wr_attr="1" valueType="string" spaattr="3" len="256" isImit="1" defVal="" />
+                    <Parameter name="TLSEncryptionProtocols" wr_attr="1" valueType="string" spaattr="3" len="256" isImit="1" defVal="Null" />
+                    <Parameter name="TLSKeyExchangeProtocols" wr_attr="1" valueType="string" spaattr="3" len="256" isImit="1" defVal="" />
+                  </ParameterList>
+                </Object>
+                <Object name="Codecs" shortname="CC" objectType="Multi" wr_attr="3" spaattr="3" >
+                  <ParameterList>
+                    <Parameter name="EntryID" wr_attr="1" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="Codec" wr_attr="1" valueType="string" spaattr="3" len="64" />
+                    <Parameter name="BitRate" wr_attr="1" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="PacketizationPeriod" wr_attr="1" valueType="string" spaattr="3" len="64" />
+                    <Parameter name="SilenceSuppression" wr_attr="1" valueType="boolean" spaattr="3" />
+                  </ParameterList>
+                </Object>
+              </ObjectList>
+            </Object>
+            <Object name="VoiceProfile" shortname="VP" objectType="Multi" wr_attr="3" spaattr="3" >
+              <ParameterList>
+                <Parameter name="Enable" wr_attr="3" valueType="string" spaattr="3" len="16" />
+              	<Parameter name="Reset" wr_attr="3" valueType="boolean" spaattr="3" />
+                <Parameter name="NumberOfLines" wr_attr="1" valueType="unsigned int" spaattr="3" />
+                <Parameter name="Name" wr_attr="3" valueType="string" spaattr="3" len="64" />
+                <Parameter name="SignalingProtocol" wr_attr="3" valueType="string" spaattr="3" len="64" />
+                <Parameter name="MaxSessions" wr_attr="1" valueType="unsigned int" spaattr="3" />                
+                <Parameter name="DTMFMethod" wr_attr="3" valueType="string" spaattr="3" len="64" />
+                <Parameter name="DTMFMethodG711" wr_attr="3" valueType="string" spaattr="3" len="64" />
+                <Parameter name="DigitMap" wr_attr="3" valueType="string" spaattr="3" len="4096" />
+              	<Parameter name="DigitMapEnable" wr_attr="3" valueType="boolean" spaattr="3" />
+                <Parameter name="ClidMode" wr_attr="3" valueType="string" spaattr="3" len="16" />
+	            <Parameter name="ReTxSignalMsgCount" wr_attr="1" valueType="unsigned int" spaattr="3" />
+		        <Parameter name="UnkownSignalMsgCount" wr_attr="1" valueType="unsigned int" spaattr="3" />
+		        <Parameter name="WrongSignalMsgCount" wr_attr="1" valueType="unsigned int" spaattr="3" />
+		        <Parameter name="RxSignalMsgCount" wr_attr="1" valueType="unsigned int" spaattr="3" />
+	            <Parameter name="TxSignalMsgCount" wr_attr="1" valueType="unsigned int" spaattr="3" />
+              </ParameterList>
+              <ObjectList>
+                <Object name="SIP" shortname="PS" objectType="Single" wr_attr="1" spaattr="3">
+                  <ParameterList>
+                    <Parameter name="ProxyServer" wr_attr="3" valueType="string" spaattr="3" len="256" />
+                    <Parameter name="ProxyServerPort" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="ProxyServerTransport" wr_attr="3" valueType="string" spaattr="3" len="16" />
+                    <Parameter name="RegistrarServer" wr_attr="3" valueType="string" spaattr="3" len="256" />
+                    <Parameter name="RegistrarServerPort" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="RegistrarServerTransport" wr_attr="3" valueType="string" spaattr="3" len="16" />
+                    <Parameter name="UserAgentDomain" wr_attr="3" valueType="string" spaattr="3" len="256" />
+                    <Parameter name="UserAgentPort" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="UserAgentTransport" wr_attr="3" valueType="string" spaattr="3" len="16" />
+                    <Parameter name="OutboundProxy" wr_attr="3" valueType="string" spaattr="3" len="256" />
+                    <Parameter name="OutboundProxyPort" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="Organization" wr_attr="3" valueType="string" spaattr="3" len="64" />
+                    <Parameter name="RegistrationPeriod" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="VLANIDMark" wr_attr="3" valueType="int" spaattr="3" />
+                    <Parameter name="DSCPMark" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="InboundAuth" wr_attr="3" valueType="string" spaattr="3" len="16" />
+                    <Parameter name="TimerT1" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="TimerT2" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="TimerT4" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="RegisterRetryInterval" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="InboundAuthUsername" wr_attr="3" valueType="string" spaattr="3" len="16" />
+                    <Parameter name="InboundAuthPassword" wr_attr="3" valueType="string" spaattr="3" len="256" />
+                    <Parameter name="UseCodecPriorityInSDPResponse" wr_attr="3" valueType="boolean" spaattr="3" />
+                    <Parameter name="EthernetPriorityMark" wr_attr="3" valueType="int" spaattr="3" />
+                    <Parameter name="SIPEventSubscribeNumberOfElements" wr_attr="1" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="SIPResponseMapNumberOfElements" wr_attr="1" valueType="unsigned int" spaattr="3" />
+                  </ParameterList>
+                  <ObjectList>
+                    <Object name="EventSubscribe" shortname="SE" objectType="Multi" wr_attr="3" spaattr="3">
+                      <ParameterList>
+                        <Parameter name="Event" wr_attr="3" valueType="string" spaattr="3" len="32" />
+                        <Parameter name="Notifier" wr_attr="3" valueType="string" spaattr="3" len="256" />
+                        <Parameter name="NotifierPort" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                        <Parameter name="NotifierTransport" wr_attr="3" valueType="string" spaattr="3" len="16" />
+                        <Parameter name="ExpireTime" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                      </ParameterList>
+                    </Object>
+                  </ObjectList>
+                </Object>
+                <Object name="RTP" shortname="VR" objectType="Single" wr_attr="1" spaattr="3" >
+                  <ParameterList>
+                    <Parameter name="LocalPortMin" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="LocalPortMax" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="VLANIDMark" wr_attr="3" valueType="int" spaattr="3" />
+                    <Parameter name="DSCPMark" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="TelephoneEventPayloadType" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                  </ParameterList>
+      	          <ObjectList>
+      	            <Object name="RTCP" shortname="RC" objectType="Single" wr_attr="1" spaattr="3" >
+      	              <ParameterList>
+      	                <Parameter name="Enable" wr_attr="3" valueType="boolean" spaattr="3" />
+      	                <Parameter name="TxRepeatInterval" wr_attr="3" valueType="unsigned int" spaattr="3" />
+      	              </ParameterList>
+      	            </Object>
+      	            <Object name="Redundancy" shortname="RD" objectType="Single" wr_attr="1" spaattr="3" >
+      	              <ParameterList>
+      	                <Parameter name="Enable" wr_attr="3" valueType="boolean" spaattr="3" isImit="1" defVal="false" />
+      	                <Parameter name="PayloadType" wr_attr="3" valueType="unsigned int" spaattr="3" />
+      	              </ParameterList>
+      	            </Object>
+      	          </ObjectList>
+                </Object>
+                <Object name="FaxT38" shortname="VF" objectType="Single" wr_attr="1" spaattr="3" >
+                  <ParameterList>
+                    <Parameter name="Enable" wr_attr="3" valueType="boolean" spaattr="3" />
+                    <Parameter name="BitRate" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                  </ParameterList>
+                </Object>
+                <Object name="Line" shortname="VL" objectType="Multi" wr_attr="3" spaattr="3" >
+                  <ParameterList>
+                    <Parameter name="Enable" wr_attr="3" valueType="string" spaattr="3" len="16" />
+                    <Parameter name="DirectoryNumber" wr_attr="3" valueType="string" spaattr="3" len="32" />
+                    <Parameter name="Status" wr_attr="1" valueType="string" spaattr="1" len="16" />
+                    <Parameter name="CallState" wr_attr="1" valueType="string" spaattr="1" len="16" />
+                  </ParameterList>
+                  <ObjectList>
+                    <Object name="SIP" shortname="LS" objectType="Single" wr_attr="3" spaattr="3" >
+                      <ParameterList>
+                        <Parameter name="URI" wr_attr="3" valueType="string" spaattr="3" len="128" />
+                        <Parameter name="AuthUserName" wr_attr="3" valueType="string" spaattr="3" len="128" />
+                        <Parameter name="AuthPassword" wr_attr="3" valueType="string" spaattr="3" len="128" />
+                      </ParameterList>
+                    </Object>
+                    <Object name="CallingFeatures" shortname="LF" objectType="Single" wr_attr="3" spaattr="3" >
+                      <ParameterList>
+                        <Parameter name="CallerIDEnable" wr_attr="3" valueType="boolean" spaattr="3" />
+                        <Parameter name="CallerIDNameEnable" wr_attr="3" valueType="boolean" spaattr="3" />
+                        <Parameter name="CallerIDName" wr_attr="3" valueType="string" spaattr="3" len="256" />
+                        <Parameter name="CallWaitingEnable" wr_attr="3" valueType="boolean" spaattr="3" />                        
+                        <Parameter name="CallForwardUnconditionalEnable" wr_attr="3" valueType="boolean" spaattr="3" />
+                        <Parameter name="CallForwardUnconditionalNumber" wr_attr="3" valueType="string" spaattr="3" len="32" />
+                        <Parameter name="CallForwardOnBusyEnable" wr_attr="3" valueType="boolean" spaattr="3" />
+                        <Parameter name="CallForwardOnBusyNumber" wr_attr="3" valueType="string" spaattr="3" len="32" />
+                        <Parameter name="CallForwardOnNoAnswerEnable" wr_attr="3" valueType="boolean" spaattr="3" />
+                        <Parameter name="CallForwardOnNoAnswerNumber" wr_attr="3" valueType="string" spaattr="3" len="32" />
+                        <Parameter name="CallForwardOnNoAnswerRingCount" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                        <Parameter name="CallTransferEnable" wr_attr="3" valueType="boolean" spaattr="3" />
+                        <Parameter name="MWIEnable" wr_attr="3" valueType="boolean" spaattr="3" />
+                        <Parameter name="MessageWaiting" wr_attr="1" valueType="boolean" spaattr="3" />
+                        <Parameter name="DoNotDisturbEnable" wr_attr="3" valueType="boolean" spaattr="3" />
+                        <Parameter name="X_ZTE-COM_3WayTalking" wr_attr="3" valueType="boolean" spaattr="3" />
+                        <Parameter name="X_ZTE-COM_ConfUri" wr_attr="3" valueType="string" spaattr="3" len="128" />
+                      </ParameterList>
+                    </Object>
+                    <Object name="VoiceProcessing" shortname="LV" objectType="Single" wr_attr="1" spaattr="3" >
+                      <ParameterList>
+                        <Parameter name="TransmitGain" wr_attr="3" valueType="int" spaattr="3" />
+                        <Parameter name="ReceiveGain" wr_attr="3" valueType="int" spaattr="3" />
+                        <Parameter name="EchoCancellationEnable" wr_attr="3" valueType="boolean" spaattr="1" />
+                        <Parameter name="EchoCancellationInUse" wr_attr="1" valueType="boolean" spaattr="1" />
+                        <Parameter name="EchoCancellationTail" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                      </ParameterList>
+                    </Object>
+                    <Object name="Codec" shortname="LC" objectType="Single" wr_attr="1" spaattr="3" >
+                      <ParameterList>
+                        <Parameter name="TransmitCodec" wr_attr="1" valueType="string" spaattr="1" len="64" />
+                        <Parameter name="ReceiveCodec" wr_attr="1" valueType="string" spaattr="1" len="64" />
+                        <Parameter name="TransmitBitRate" wr_attr="1" valueType="unsigned int"  spaattr="3" />
+                        <Parameter name="ReceiveBitRate" wr_attr="1" valueType="unsigned int"  spaattr="3" />
+                        <Parameter name="TransmitSilenceSuppression" wr_attr="1" valueType="boolean" spaattr="1" />
+                        <Parameter name="ReceiveSilenceSuppression" wr_attr="1" valueType="boolean" spaattr="1" />
+                        <Parameter name="TransmitPacketizationPeriod" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                      </ParameterList>
+                      <ObjectList>
+                        <Object name="List" shortname="CL" objectType="Multi" wr_attr="3" spaattr="3" >
+                           <ParameterList>
+                            <Parameter name="EntryID" wr_attr="1" valueType="unsigned int" spaattr="3" />
+                            <Parameter name="Enable" wr_attr="3" valueType="boolean" spaattr="3" />
+                            <Parameter name="Codec" wr_attr="1" valueType="string" spaattr="3" len="64" />
+                            <Parameter name="PacketizationPeriod" wr_attr="3" valueType="string" spaattr="3" len="64" />
+                            <Parameter name="Priority" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                            <Parameter name="SilenceSuppression" wr_attr="3" valueType="boolean" spaattr="3" />
+                          </ParameterList>
+                        </Object>
+                      </ObjectList>
+                      </Object>
+                    <Object name="Stats" shortname="LX" objectType="Single" wr_attr="3" spaattr="3" >
+                      <ParameterList>
+                        <Parameter name="ResetStatistics" wr_attr="3" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="PacketsSent" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="PacketsReceived" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="BytesSent" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="BytesReceived" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="PacketsLost" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="Overruns" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="Underruns" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="ReceivePacketLossRate" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="FarEndPacketLossRate" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="ReceiveInterarrivalJitter" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="FarEndInterarrivalJitter" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="RoundTripDelay" wr_attr="1" valueType="unsigned int" spaattr="3" />
+                        <Parameter name="IncomingCallsReceived" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="IncomingCallsAnswered" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="IncomingCallsConnected" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="IncomingCallsFailed" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="OutgoingCallsAttempted" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="OutgoingCallsAnswered" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="OutgoingCallsConnected" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="OutgoingCallsFailed" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="CallsDropped" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="TotalCallTime" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="ServerDownTime" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="AverageFarEndInterarrivalJitter" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="AverageReceiveInterarrivalJitter" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="AverageRoundTripDelay" wr_attr="1" valueType="unsigned int" spaattr="1" />
+			            <Parameter name="RoundTripDelayPeak" wr_attr="1" valueType="unsigned int" spaattr="1" />
+			            <Parameter name="ReceiveInterarrivalJitterPeak" wr_attr="1" valueType="unsigned int" spaattr="1" />
+			            <Parameter name="FarEndInterarrivalJitterPeak" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                      </ParameterList>
+                    </Object>
+                  </ObjectList>
+                </Object>
+              </ObjectList>
+            </Object>
+          </ObjectList>
+</Object>
