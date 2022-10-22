@@ -1,0 +1,8 @@
+
+DECIMAL       HEXADECIMAL     DESCRIPTION
+--------------------------------------------------------------------------------
+131072        0x20000         JFFS2 filesystem, big endian
+2752512       0x2A0000        UBI erase count header, version: 1, EC: 0x1, VID header offset: 0x800, data offset: 0x1000
+26345472      0x1920000       JFFS2 filesystem, big endian
+52559872      0x3220000       JFFS2 filesystem, big endian
+
