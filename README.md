@@ -1,5 +1,8 @@
 # Modem Indihome ZTE F609
 
+Target:
+
+- [ ] Rooting
 
 ## UART
 
@@ -24,16 +27,16 @@ ubi.mtd=8 root=ubi:rootfs_ubifs ro rootfstype=ubifs  irqaffinity=0
 
 #cat /proc/mtd 
 dev:    size   erasesize  name
-mtd0: 07f00000 00020000 "whole flash"
-mtd1: 00020000 00020000 "nvram"
-mtd2: 01900000 00020000 "rootfs1"
-mtd3: 01900000 00020000 "rootfs2"
-mtd4: 00400000 00020000 "parameter tags"
-mtd5: 00800000 00020000 "usercfg"
-mtd6: 00400000 00020000 "middle ware"
-mtd7: 00100000 00020000 "others"
-mtd8: 01680000 00020000 "ubifs"
-mtd9: 00280000 00020000 "spare_bootfs"
+mtd0:  07f00000 00020000 "whole flash"
+mtd1:  00020000 00020000 "nvram"
+mtd2:  01900000 00020000 "rootfs1"
+mtd3:  01900000 00020000 "rootfs2"
+mtd4:  00400000 00020000 "parameter tags"
+mtd5:  00800000 00020000 "usercfg"
+mtd6:  00400000 00020000 "middle ware"
+mtd7:  00100000 00020000 "others"
+mtd8:  01680000 00020000 "ubifs"
+mtd9:  00280000 00020000 "spare_bootfs"
 mtd10: 01512000 0001f000 "rootfs_ubifs"
 
 # cat /proc/mounts 
