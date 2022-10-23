@@ -1,0 +1,48 @@
+<script language="javascript">
+var PARA= new Array(
+"UsbPrinterEnable",
+"UsbPrinterEnable"
+);
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+ProcessRet(errstr, errpara);
+pageGetValue();
+}
+function pageGetValue()
+{
+if("1" == getValue("UsbPrinterEnable"))
+{
+setChecked("Frm_UsbPrinterEnable", true);
+}
+else
+{
+setChecked("Frm_UsbPrinterEnable", false);
+}
+}
+function pageSetValue()
+{
+if(getChecked("Frm_UsbPrinterEnable") == true)
+{
+setValue("UsbPrinterEnable", 1);
+}
+else
+{
+setValue("UsbPrinterEnable", 0);
+}
+}
+function pageCancel()
+{
+jslDisable("Btn_Submit","Btn_Cancel", "Frm_UsbPrinterEnable");
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+jslDisable("Btn_Submit","Btn_Cancel", "Frm_UsbPrinterEnable");
+pageSetValue();
+setValue("IF_ACTION", "apply");
+getObj("fSubmit").submit();
+}
+</script>

@@ -1,0 +1,12 @@
+<%
+IMPORT FILE "common_gch.gch";
+var FP_OBJNAME      = "OBJ_PON3GSETTING_ID";
+var FP_MULTIDISPLAY = 0;
+var FP_PARANUM      = 2;
+var PARA[2] =
+{
+"Enable",
+"AutoTransTime"
+};
+getOldPageGCH(FP_OBJNAME, FP_MULTIDISPLAY, PARA, FP_PARANUM);
+%>

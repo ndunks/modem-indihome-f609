@@ -1,0 +1,25 @@
+<%
+IMPORT FILE "common_gch.gch";
+var FP_OBJNAME      = "OBJ_TESTFTPCONTROL_ID";
+var FP_MULTIDISPLAY = 0;
+var FP_ACTION       = request("IF_ACTION");
+var FP_TAG          = "";
+var FP_PARANUM      = 2;
+var FP_ERRORSTR     = "SUCC";
+var PARA[2]         =
+{
+"Control",
+"None"
+};
+create_form_start("fSubmit", "");
+createSubmitHidden(FP_MULTIDISPLAY, PARA, FP_PARANUM, "");
+if (FP_ACTION == "apply")
+{
+FP_ERRORSTR = applyOrNewOrDelInst(FP_OBJNAME, FP_ACTION, "", PARA, FP_PARANUM, FP_ERRORSTR);
+FP_TAG = request("IF_TAG");
+}
+displayInst(FP_OBJNAME, FP_MULTIDISPLAY, PARA, FP_PARANUM, FP_ERRORSTR);
+create_hidden_sep("IF_TAG", FP_TAG);
+create_form_end();
+undoDBSave();
+%>

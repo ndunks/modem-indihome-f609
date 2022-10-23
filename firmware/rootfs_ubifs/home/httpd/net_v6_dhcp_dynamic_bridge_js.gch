@@ -1,0 +1,137 @@
+<script language="javascript">
+var DHCPDYNAMIC_PARA = new Array(
+"ViewName",
+"LandViewName",
+"ServerEnable",
+"DnsRefreshTime",
+"Prefer",
+"ConflictAddrHoldingTime",
+"DomainName"
+);
+var DHCPHOSTINFO_PARA = new Array(
+"Duid",
+"IpAddr",
+"ExpiredTime"
+);
+var DHCPBASIC_PARA = new Array(
+"ETHIfNum",
+"USBIfNum",
+"WLANIfNum",
+"Enable",
+"BasicIPAddr",
+"SubMask",
+"AddressingType",
+"IPv6Addr",
+"IPv6PrefLen"
+);
+
+
+function getmsg(id)
+{
+
+var str      = new Array();
+str[0]   = new Array(101, "&?error_101;");
+str[1]   = new Array(115, "&?error_115;");
+str[2]   = new Array(116, "&?error_116;");
+str[3]   = new Array(117, "&?error_117;");
+str[4]   = new Array(200, "&?error_200;");
+
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+pageGetValue();
+
+}
+
+
+function pageGetValue()
+{
+jslSetValue("Frm_IPv6Addr", "IPv6Addr");
+jslSetValue("Frm_IPv6PrefLen", "IPv6PrefLen");
+}
+function pageSetValue()
+{
+
+HiddenParaInit(DHCPBASIC_PARA);
+jslSetValue("IPv6Addr", "Frm_IPv6Addr");
+jslSetValue("IPv6PrefLen", "Frm_IPv6PrefLen");
+
+
+}
+function Check_PrefixValue(FrmPrefix, FntPrefix, FrmPrefixLen, min, max)
+{
+var msg;
+var prefixValue = getValue(FrmPrefix);
+var prefixLenValue = getValue(FrmPrefixLen);
+if(false == checkNull(prefixValue))
+{
+msg = getmsg(101);
+ShowErrorForCom(FrmPrefix, FntPrefix, msg);
+return false;
+}
+if(false == checkNull(prefixLenValue))
+{
+msg = getmsg(101);
+ShowErrorForCom(FrmPrefixLen, FntPrefix, msg);
+return false;
+}
+if((false == checkIPV6Address(prefixValue)) || ("::" == prefixValue))
+{
+msg = getmsg(200);
+ShowErrorForCom(FrmPrefix, FntPrefix, msg);
+return false;
+}
+var ret = checkIntegerRange(prefixLenValue, 48, 64);
+if(-2 == ret)
+{
+msg = getmsg(115);
+ShowErrorForCom(FrmPrefixLen, FntPrefix, msg);
+return false;
+}
+else if(-3 == ret)
+{
+msg = getmsg(116, 48, 64);
+ShowErrorForCom(FrmPrefixLen, FntPrefix, msg);
+return false;
+}
+return true;
+}
+function pageCheckValue()
+{
+if(Check_PrefixValue("Frm_IPv6Addr", "Fnt_IPv6Addr", "Frm_IPv6PrefLen", 48, 64) != true)
+{
+return false;
+}
+return true;
+}
+function pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+if(pageCheckValue() == true)
+{
+pageSetValue();
+setValue("IF_ACTION", "apply");
+var loginaddr = document.URL;
+var parts = loginaddr.split("/");
+if(true == checkIpAddress(parts[2],""))
+{
+setValue("IP_Protocol","IPv4");
+}
+else
+{
+setValue("IP_Protocol","IPv6");
+}
+setValue("IP_URL_IP",parts[2]);
+DisableALL();
+getObj("fSubmit").submit();
+}
+}
+</script>

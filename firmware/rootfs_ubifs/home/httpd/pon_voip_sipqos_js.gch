@@ -1,0 +1,127 @@
+<script language="javascript">
+var RTP_PARA = new Array(
+"RTPLocalPortMin",
+"RTPTelephoneEventPT",
+"RTPVLANIDMark",
+"RTPDSCPMark",
+"RTPEthernetPriorityMark",
+"RTPQueueNum"
+);
+var SIP_PARA = new Array(
+"UserAgentDoimain",
+"UserAgentPort",
+"UserAgentTransport",
+"100rel",
+"Precondition",
+"EarlySession",
+"Timer",
+"Replace",
+"ExtPath",
+"DNSRetryInterval",
+"RegisterExpires",
+"DeRegister",
+"LinkTest",
+"LinkTestInterval",
+"LineDownTime",
+"PeerCall",
+"RemotePartyID",
+"PPreferredID",
+"PAssertedID",
+"PEarlyMedia",
+"TelUrl",
+"Filter",
+"DNSMode",
+"Organization",
+"InviteExpires",
+"ReInviteExpires",
+"RegistersMinExpires",
+"RegisterRetryInterval",
+"SubscribeRetryInterval",
+"InboundAuth",
+"DSCPMark",
+"VLANIDMark",
+"EthernetPriorityMark",
+"QueueNum",
+"EventSubscribeNumber"
+);
+function getmsg(id)
+{
+var str  = new Array();
+str[0]   = new Array(118, "&?error_118;");
+str[1]   = new Array(119, "&?error_119;");
+str[2]   = new Array(122, "&?error_122;");
+str[3]   = new Array(101, "&?error_101;");
+str[4]   = new Array(115, "&?error_115;");
+str[5]   = new Array(116, "&?error_116;");
+str[6]   = new Array(117, "&?error_117;");
+str[7]   = new Array(159, "&?error_159;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errparam = getValue("IF_ERRORPARAM");
+ProcessRet(errstr, errparam);
+showoption("Frm_VoipDscp",1,64);
+showoption("Frm_Voip8021P",0,8);
+showoption("Frm_RtpDscp",1,64);
+showoption("Frm_Rtp8021P",0,8);
+pageGetValue();
+}
+function addoption(id,start,index)
+{
+var SelectObj = getObj(id);
+SelectObj.options[index-start+1] = new Option(index, index);
+SelectObj.options[index-start+1].value = index;
+}
+function showoption(id,start,optionlen)
+{
+if (optionlen > 0)
+{
+for(var i = start; i < optionlen; i++)
+{
+addoption(id,start,i);
+}
+}
+}
+function pageGetValue()
+{
+jslSetValue("Frm_VoipDscp","DSCPMark");
+jslSetValue("Frm_Voip8021P","EthernetPriorityMark");
+jslSetValue("Frm_RtpDscp","RTPDSCPMark");
+jslSetValue("Frm_Rtp8021P","RTPEthernetPriorityMark");
+}
+function pageSetValue()
+{
+HiddenParaInit(RTP_PARA);
+HiddenParaInit(SIP_PARA);
+jslSetValue("DSCPMark", "Frm_VoipDscp");
+jslSetValue("EthernetPriorityMark", "Frm_Voip8021P");
+jslSetValue("RTPDSCPMark","Frm_RtpDscp");
+jslSetValue("RTPEthernetPriorityMark","Frm_Rtp8021P");
+}
+function pageCheckValue()
+{
+var msg = "";
+return true;
+}
+function pageCancel()
+{
+jslDisable("Btn_Submit","Btn_Cancel");
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+if(pageCheckValue() == true)
+{
+jslDisable("Btn_Submit","Btn_Cancel");
+pageSetValue();
+setValue("IF_ACTION", "apply");
+getObj("fSubmit").submit();
+}
+else
+{
+}
+}
+</script>

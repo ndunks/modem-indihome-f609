@@ -1,0 +1,657 @@
+<%
+var login_err_msg       = getenv("request/login_err_msg");
+var login_err_type      = getenv("request/login_err_type");
+var is_login_blocked    = getenv("request/is_login_blocked");
+var login_monotonic_id  = getenv("request/login_monotonic_id");
+var language            = getenv("request/language");
+var langclass           = getenv("request/langclass");
+var styleback           = getenv("request/styleback");
+var head      = "<!DOCTYPE html PUBLIC \"-\/\/W3C\/\/DTD XHTML 1.0 Transitional\/\/EN\"";
+var head1     = "\"http:\/\/www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">";
+var head_html = "<html xmlns=\"http:\/\/www.w3.org/1999/xhtml\">";
+=head + head1;
+=head_html;
+
+header("X-Frame-Options:DENY");
+var upload_login_flag = getenv("UPLOAD_LOGIN");
+unsetenv("UPLOAD_LOGIN");
+var MGT_HANDLE = create_paralist();
+get_inst(MGT_HANDLE, "OBJ_USER_REGISTER", "IGD");
+var ActiveState=get_para(MGT_HANDLE,"Status");
+var RegType = get_para(MGT_HANDLE,"RegType");
+setenv("RegType",RegType);
+destroy_paralist(MGT_HANDLE);
+var CurrentVersionInfo = getenv("CurrentVersionInfo");
+%>
+<head>
+<META HTTP-EQUIV="pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+<meta http-equiv="Content-Type" content="text/html; charset=&?LANG;" />
+<title><%=getenv("WEBTitle");%></title>
+<LINK REL="stylesheet" HREF='<%=getenv("css_path_login");%>' TYPE="text/css" />
+<LINK REL="stylesheet" HREF="&?csslang;" TYPE="text/css" />
+<script src="js/common.js"></script>
+<%
+if(CurrentVersionInfo == "54")
+{
+%>
+<style>
+.notecontent{
+font-size: 12px;
+font-family:"Times New Roman", Verdana, Geneva, Arial, Helvetica, sans-serif;
+color:#000000;
+}
+</style>
+<%
+}
+%>
+<script>
+<%
+if (upload_login_flag == "1") {
+%>
+top.location.href = "/";
+<%
+}
+%>
+
+if(top.location != self.location)
+{
+top.location=self.location;
+}
+var SetTFlag = 0;
+var maxtime;
+var interval;
+<%
+if(CurrentVersionInfo == "82")
+{
+%>
+var locktime = 300;
+<%
+}
+else
+{
+%>
+var locktime = 60;
+<%
+}
+%>
+function setTime()
+{
+if(window.name>=locktime || window.name<0 || window.name=="")
+{
+maxtime = Math.min(locktime, <%=getenv("errLoginTime");%> + locktime - <%=timestamp();%>);
+}
+else
+{
+maxtime = window.name;
+}
+if(maxtime>=0)
+{
+seconds = maxtime;
+getObj("time").innerHTML=seconds+"&?login005;";
+if (maxtime == 0)
+{
+setDisable();
+SetTFlag =0;
+window.name="";
+if(interval)
+{
+clearInterval(interval);
+interval = 0;
+}
+}
+else
+{
+--maxtime;
+SetTFlag = 1;
+window.name = maxtime;
+}
+}
+}
+function setinner(type)
+{
+if (SetTFlag ==0)
+{
+getObj("myLayer").style.visibility = type ;
+}
+}
+function ChangeLang()
+{
+var lang = "<%=language;%>";
+getObj("_lang").disabled = false;
+getObj("Frm_Username").disabled = true;
+getObj("Frm_Password").disabled = true;
+if(true != getObj("TestLang01").disabled)
+{
+if ("English" == lang)
+{
+getObj("_lang").value = "Chinese";
+}
+else if ("Chinese" == lang)
+{
+getObj("_lang").value = "English";
+}
+getObj("action").value = "setlang";
+getObj("Frm_Username").disabled = true;
+getObj("Frm_Password").disabled = true;
+getObj("LoginId").disabled = true;
+<%
+if(CurrentVersionInfo == "85")
+{
+%>
+getObj("Frm_Validatecode").disabled = true;
+getObj("RefreshId").disabled = true;
+<%
+}
+%>
+var ObjAct = getObj("DevActive");
+if(ObjAct != null)
+{
+ObjAct.disabled = true;
+}
+document.fLogin.submit();
+}
+}
+function SetCookie(name,value)
+{
+var Days = 30;
+var exp = new Date();
+exp.setTime(exp.getTime() + Days*24*60*60*1000);
+document.cookie = name + "="+ escape (value)
++ ";expires=" + exp.toGMTString();
+}
+function getCookie(name)
+{
+var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
+if(arr != null)
+{
+return unescape(arr[2]);
+}
+return null;
+}
+function delCookie(name)
+{
+var exp = new Date();
+exp.setTime(exp.getTime() - 1);
+var cval = getCookie(name);
+if( cval!=null )
+{
+document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+}
+}
+function IsBrowserSupportCookie()
+{
+var support = false;
+SetCookie('cookie_test','1');
+var cookie_test = getCookie('cookie_test');
+if( '1' == cookie_test)
+{
+support = true;
+}
+delCookie('cookie_test');
+return support;
+}
+function focusUsername()
+{
+if (getObj("Frm_Username").disabled == false)
+{
+getObj("Frm_Username").focus();
+}
+<%
+if(CurrentVersionInfo == "85")
+{
+%>
+validatecodeRefresh();
+<%
+}
+%>
+}
+</script>
+</head>
+<%
+%>
+<body onload = "focusUsername();">
+<div id="container">
+<div id="myLayer" onmousedown="setinner('hidden')">
+<iframe id="myiframe" style="position: absolute; width: 179px; height: 88px; border: 1px none #000000; z-index: -1; filter:alpha(opacity=0); -moz-opacity:0">
+</iframe>
+<div id="layer_login_title">
+<div style="position:relative; left:35px; top:8px;" >
+<font  class="note" id="errnote">&nbsp;&?ErrRep;</font>
+</div>
+</div>
+<div id="layer_login_content">
+<span>
+&nbsp;&nbsp;<font id="errmsg" class="notecontent" ></font><span id="time" style="color:red;display:none;"></span>
+</span>
+</div>
+</div>
+<!--head部分开始-->
+<%
+var idStr = "banner";
+var cssStr = "type";
+var cver = getenv("CurrentVersionInfo");
+if(cver == 52)
+{
+idStr = "banner_new";
+}
+else if(cver == 36)
+{
+idStr = "banner_tot";
+}
+else if(cver == 54)
+{
+idStr = "banner_viet";
+}
+else if(cver == 45)
+{
+idStr = "banner_Linkstar";
+}
+else if(cver == 59)
+{
+idStr = "banner_st";
+}
+else if(cver == 75)
+{
+idStr = "banner_maxcom";
+cssStr = "maxcomtype";
+}
+else if(cver == 85)
+{
+idStr = "banner_3bb";
+}
+%>
+<div id="head">
+<%
+if(cver == "59")
+{
+%>
+<div class="comtype"><font id="">&?pon_SeteTec;</font></div>
+<%
+}
+%>
+<div class="<%=cssStr;%>"><font id=""><%=getenv("WEBTitle");%></font></div>
+<div id="<%=idStr;%>"></div>
+</div>
+<!--head部分结束-->
+<!--content部分开始-->
+<div id="loginArea">
+<form name="fLogin" id="fLogin" method="post"  onsubmit="return false;" action="">
+<input type="hidden" name="_lang" id="_lang" value="" disabled>
+<input type="hidden" name="frashnum" id="frashnum" value="">
+<input type="hidden" name="action" id="action" value="login">
+<input type="hidden" name="Frm_Logintoken" id="Frm_Logintoken" value="">
+<!--内容开始-->
+<div class="login_frame">
+<ul class="login_title">
+<li class="login_title_left"></li>
+<li class="login_title_center">&?login001;</li>
+<%
+
+
+if (get_config("lang") == "Y" && CurrentVersionInfo != 54 && CurrentVersionInfo != 61 && CurrentVersionInfo != 75 && CurrentVersionInfo != 85)
+{
+%>
+<a id="TestLang" style="cursor:pointer" href="#" ><li id="TestLang01" class="<%=langclass;%>" style="<%=styleback;%>" onclick="ChangeLang();"></li></a>
+<%
+}
+%>
+<li class="login_title_right"></li>
+</ul>
+<%
+if(getenv("LanguageCtr") == "rus")
+{
+%>
+<div class="content login_rus_content">
+<ul class="login_blank"></ul>
+<ul class="login_ul_1">
+<li class="login_li_rus_1"><span>&?login002;</span></li>
+<li class="login_li_2">
+<input type="text" class="username" name="Username" id="Frm_Username">
+</li>
+</ul>
+<ul class="login_blank"></ul>
+<ul class="login_ul_1">
+<li class="login_li_rus_1"><span>&?login003;</span></li>
+<li class="login_li_2">
+<input type="password" class="password" name="Password"  id="Frm_Password" autocomplete="off">
+</li>
+</ul>
+<ul class="login_blank"></ul>
+<ul class="login_ul_1">
+<li class="login_li_4"><span></span></li>
+<li class="login_li_3">
+<input class="login_rus" type="submit"  id="LoginId"  value="&?login004;"  onclick="dosubmit()">
+</li>
+</ul>
+</div>
+</div>
+<%
+}
+else if(CurrentVersionInfo == "85")
+{
+%>
+<div class="content login_3bb_content">
+<ul class="login_blank"></ul>
+<ul class="login_ul_1">
+<li class="login_li_1"><span>&?login002;</span></li>
+<li class="login_li_2">
+<input type="text" class="username" name="Username" id="Frm_Username">
+</li>
+<%
+if(ActiveState != 5  && RegType != 0)
+{
+%>
+<li class="login_li_3">
+<input class="login" type="button"  id="DevActive"  value="&?ponDevActive001;"  onclick="doDevActive()">
+</li>
+<%
+}
+%>
+</ul>
+<ul class="login_blank"></ul>
+<ul class="login_ul_1">
+<li class="login_li_1"><span>&?login003;</span></li>
+<li class="login_li_2">
+<input type="password" class="password" name="Password"  id="Frm_Password" autocomplete="off">
+</li>
+</ul>
+<!-- 3bb增加验证码  -->
+<ul class="login_blank"></ul>
+<ul class="login_ul_1">
+<li class="login_li_1"><span>&?login015;</span></li>
+<li class="login_li_2">
+<input type="text" class="username" name="Validatecode" id="Frm_Validatecode" autocomplete="off" />
+</li>
+</ul>
+<ul class="login_3bb_blank"></ul>
+<ul class="validate_ul_1">
+<li class="validate_left"></li>
+<li class="validate_img"><img id="ImgID" src="" width="100px" height="35px" alt="please wait" onload="imgLoad()" /></li>
+<li class="login_li_3">
+<input class="val_refresh" type="button" name="RefreshId" id="RefreshId" value="&?btn001;" onclick="validatecodeRefresh();" disabled="true" />
+</li>
+</ul>
+<ul class="login_3bb_blank"></ul>
+<ul class="login_ul_3bb_1">
+<li class="login_li_3bb_1"><span>&?sbb_006;</span></li>
+</ul>
+<ul class="login_blank"></ul>
+<ul class="login_ul_1">
+<li class="login_li_3bb_left"></li>
+<li class="login_li_3bb_3">
+<input class="login" type="submit"  id="LoginId"  value="&?login004;" onclick="dosubmit()" />
+</li>
+</ul>
+</div>
+</div>
+<%
+}
+else
+{
+%>
+<div class="content login_content">
+<ul class="login_blank"></ul>
+<ul class="login_ul_1">
+<li class="login_li_1"><span>&?login002;</span></li>
+<li class="login_li_2">
+<input type="text" class="username" name="Username" id="Frm_Username">
+</li>
+<%
+if(ActiveState != 5  && RegType != 0)
+{
+%>
+<li class="login_li_3">
+<input class="login" type="button"  id="DevActive"  value="&?ponDevActive001;"  onclick="doDevActive()">
+</li>
+<%
+}
+%>
+</ul>
+<ul class="login_blank"></ul>
+<ul class="login_ul_1">
+<li class="login_li_1"><span>&?login003;</span></li>
+<li class="login_li_2">
+<input type="password" class="password" name="Password"  id="Frm_Password" autocomplete="off">
+</li>
+<li class="login_li_3">
+<input class="login" type="submit"  id="LoginId"  value="&?login004;"  onclick="dosubmit()">
+</li>
+</ul>
+</div>
+</div>
+<%
+}
+%>
+<!--内容结束-->
+</form>
+</div>
+<!--bottom部分开始-->
+<%
+if(get_config("hideCopyRight")!="Y" && CurrentVersionInfo == 45)
+{
+%>
+<div style="font-family: Arial;font-size: 12px;text-align:center;"> &?LinkStar; </div>
+<%
+}
+else if(get_config("hideCopyRight")!="Y" && CurrentVersionInfo != 54)
+{
+%>
+<div style="font-family: Arial;font-size: 12px;text-align:center;">&?ZTE;<%=getenv("VerDate");%>&?ZTE1;</div>
+<%
+}
+%>
+<div class="bottom_line"></div>
+<div id="bottomx"></div>
+<!--bottom部分结束-->
+</div>
+</body>
+</html>
+<script>
+<%
+if(CurrentVersionInfo == 21)
+{
+var FP_HANDLE, FP_INSTNUM, FP_IDENTITY;
+var username = "user";
+var password = "user";
+FP_HANDLE = create_paralist();
+set_para(FP_HANDLE, "Username", username);
+FP_INSTNUM = qeury_list_bycond("OBJ_USERINFO_ID", "IGD", FP_HANDLE);
+destroy_paralist(FP_HANDLE);
+if(FP_INSTNUM != -1)
+{
+FP_HANDLE = create_paralist();
+FP_IDENTITY = query_identity(0);
+get_inst(FP_HANDLE, "OBJ_USERINFO_ID", FP_IDENTITY);
+password = get_para(FP_HANDLE, "Password");
+destroy_paralist(FP_HANDLE);
+}
+%>
+getObj("Frm_Username").value = "<%=username;%>";
+getObj("Frm_Password").value = "<%=password;%>";
+<%
+}
+%>
+var bBrowserCookieOn = IsBrowserSupportCookie();
+if ( bBrowserCookieOn == false )
+{
+getObj("errmsg").innerHTML = "&?error_244;";
+getObj("myLayer").style.visibility = "visible" ;
+}
+else
+{
+<%
+if (login_err_msg != "")
+{
+if(CurrentVersionInfo == "54" || CurrentVersionInfo == "101")
+{
+switch (login_err_type)
+{
+case "INVALID_NOSN_PASSWORD":
+login_err_msg = "&?1008;";
+break;
+case "INVALID_SN_PASSWORD":
+login_err_msg = "&?1007;";
+break;
+case "EXCEED_MAX_ATTEMPT":
+login_err_msg = "&?1009;";
+break;
+default:
+break;
+}
+}
+%>
+getObj("errmsg").innerHTML = "<%=login_err_msg;%>";
+getObj("myLayer").style.visibility = "visible" ;
+<%
+}
+if(is_login_blocked == 1)
+{
+%>
+SetDisabled();
+<%
+}
+else
+{
+%>
+window.name="";
+<%
+}
+%>
+}
+function SetDisabled()
+{
+getObj("Frm_Username").disabled = true;
+getObj("Frm_Password").disabled = true;
+getObj("LoginId").disabled = true;
+<%
+if (get_config("lang") == "Y" && CurrentVersionInfo != 54 && CurrentVersionInfo != 61 && CurrentVersionInfo != 75 && CurrentVersionInfo != 85)
+{
+%>
+getObj("TestLang01").disabled = true;
+<%
+}
+%>
+getObj("myLayer").style.visibility = "visible" ;
+getObj("time").style.display = "" ;
+interval = setInterval("setTime()",1000);
+}
+function setDisable()
+{
+if (SetTFlag == 1)
+{
+getObj("Frm_Username").disabled = false;
+getObj("Frm_Password").disabled = false;
+getObj("LoginId").disabled = false;
+<%
+if (get_config("lang") == "Y" && CurrentVersionInfo != 54 && CurrentVersionInfo != 61 && CurrentVersionInfo != 75 && CurrentVersionInfo != 85)
+{
+%>
+getObj("TestLang01").disabled = false;
+<%
+}
+%>
+getObj("time").style.display = "none";
+getObj("myLayer").style.visibility = "hidden";
+}
+}
+function dosubmit()
+{
+if (getObj("Frm_Username").value == "")
+{
+getObj("errmsg").innerHTML = "&?1001;";
+getObj("myLayer").style.visibility = "visible" ;
+return;
+}
+else
+{
+<%
+if(CurrentVersionInfo == "85")
+{
+%>
+var vaCode = getObj("Frm_Validatecode").value;
+if(vaCode == "")
+{
+alert("&?error_246;");
+}
+else
+{
+checkValidateCode(subpageSubmit);
+}
+<%
+}
+else
+{
+%>
+subpageSubmit();
+<%
+}
+%>
+}
+}
+<%
+if(ActiveState != 5 && RegType != 0)
+{
+%>
+function doDevActive()
+{
+top.location.href = "tele_wanregister.gch";
+}
+<%
+}
+%>
+function MathRand()
+{
+var Num="";
+for(var i=0;i<6;i++)
+{
+Num+=Math.floor(Math.random()*10);
+}
+return Num;
+}
+function validatecodeRefresh()
+{
+var randnum = MathRand();
+getObj("ImgID").src = "/queryImg.gif?"+randnum;
+jslDisable("RefreshId");
+getObj("Frm_Validatecode").value = "";
+}
+function checkValidateCode(successCall)
+{
+var ajaxObj = new AJAXObj();
+ajaxObj.addPostItem("Validate_Code", getObj("Frm_Validatecode").value.toLowerCase());
+ajaxObj.post("checkValidateCode.gch", checkValidateCodeCallBack);
+function checkValidateCodeCallBack()
+{
+if ( ajaxObj.getReadyState() == xmlHTTPStatus['Loaded']
+&& 200 == ajaxObj.getStatus() )
+{
+var resultText = ajaxObj.getResponseText();
+if( -1 != resultText.indexOf("SUCC"))
+{
+successCall();
+}
+else
+{
+alert("&?error_247;");
+validatecodeRefresh();
+}
+}
+}
+}
+function subpageSubmit()
+{
+getObj("LoginId").disabled = true;
+var ObjAct = getObj("DevActive");
+if(ObjAct != null)
+{
+ObjAct.disabled = true;
+}
+getObj("Frm_Logintoken").value = "<%=login_monotonic_id;%>";
+document.fLogin.submit();
+}
+function imgLoad()
+{
+getObj("RefreshId").disabled = false;
+}
+</script>

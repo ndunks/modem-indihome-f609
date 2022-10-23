@@ -1,0 +1,483 @@
+<script language="javascript">
+var PPP_PARA = new Array(
+"Enable",
+"WANCName",
+"ConnType",
+"LANDViewName",
+"StrServList",
+"ServList",
+"IsNAT",
+"IsDefGW",
+"IsForward",
+"VLANID",
+"Priority",
+"WBDMode",
+"IPAddress",
+"SubnetMask",
+"GateWay",
+"DNS1",
+"DNS2",
+"DNS3",
+"WorkIFMac",
+"UpTime",
+"ConnStatus",
+"UserName",
+"Password",
+"MRU",
+"MTU",
+"ConnTrigger",
+"TransType",
+"ConnError",
+"DestAddress",
+"ATMLinkType",
+"ATMEncapsulation",
+"ATMQoS",
+"ATMPeakCellRate",
+"ATMMaxBurstSize",
+"ATMMinCellRate",
+"ATMSCR",
+"ATMCDV",
+"RxPackets",
+"TxPackets",
+"RxBytes",
+"TxBytes",
+"EnableProxy",
+"MaxUser",
+"EnablePassThrough",
+"ValidWANRx",
+"ValidLANTx",
+"HostTrigger",
+"IsAuto",
+"GuaSrc",
+"GuaNum",
+"Gua1",
+"Gua1PrefixLen",
+"Gua2",
+"Gua2PrefixLen",
+"Gua3",
+"Gua3PrefixLen",
+"DnsSrc",
+"Dns1v6",
+"Dns2v6",
+"Dns3v6",
+"Gateway6Src",
+"Gateway6",
+"IsPd",
+"PdNum",
+"IpMode",
+"IsPdAddr",
+"PTMLinkType",
+"IPv6CPExt",
+"PrefixSrc",
+"Prefix1",
+"Prefix1Len"
+);
+var IP_PARA = new Array(
+"Enable",
+"WANCName",
+"ConnType",
+"LANDViewName",
+"StrServList",
+"ServList",
+"IsNAT",
+"IsDefGW",
+"IsForward",
+"VLANID",
+"Priority",
+"WBDMode",
+"IPAddress",
+"SubnetMask",
+"GateWay",
+"DNS1",
+"DNS2",
+"DNS3",
+"WorkIFMac",
+"UpTime",
+"RemainLeaseTime",
+"ConnStatus",
+"Addressingtype",
+"DestAddress",
+"ATMLinkType",
+"ATMEncapsulation",
+"ATMQoS",
+"ATMPeakCellRate",
+"ATMMaxBurstSize",
+"ATMMinCellRate",
+"ATMSCR",
+"ATMCDV",
+"RxPackets",
+"TxPackets",
+"RxBytes",
+"TxBytes",
+"MTU",
+"IsAuto",
+"GuaSrc",
+"GuaNum",
+"Gua1",
+"Gua1PrefixLen",
+"Gua2",
+"Gua2PrefixLen",
+"Gua3",
+"Gua3PrefixLen",
+"DnsSrc",
+"Dns1v6",
+"Dns2v6",
+"Dns3v6",
+"Gateway6Src",
+"Gateway6",
+"IsPd",
+"PdNum",
+"IpMode",
+"IsPdAddr",
+"PTMLinkType",
+"PrefixSrc",
+"Prefix1",
+"Prefix1Len"
+);
+var BRIDGE_PARA = new Array(
+"Enable",
+"WANCName",
+"StrServList",
+"ServList",
+"VLANID",
+"Priority",
+"WBDMode",
+"LANDViewName",
+"DestAddress",
+"ATMLinkType",
+"ATMEncapsulation",
+"ATMQoS",
+"ATMPeakCellRate",
+"ATMMaxBurstSize",
+"ATMMinCellRate",
+"ATMSCR",
+"ATMCDV",
+"RxPackets",
+"TxPackets",
+"RxBytes",
+"TxBytes",
+"PTMLinkType"
+);
+function getmsg(id)
+{
+var str      = new Array();
+str[0]   = new Array(128, "&?error_128;");
+str[1]   = new Array(114, "&?error_114;");
+str[2]   = new Array(102, "&?error_102;");
+str[3]   = new Array(103, "&?error_103;");
+str[4]   = new Array(129, "&?error_129;");
+str[5]   = new Array(115, "&?error_115;");
+str[6]   = new Array(116, "&?error_116;");
+str[7]   = new Array(117, "&?error_117;");
+str[8]   = new Array(101, "&?error_101;");
+str[9]   = new Array(200, "&?error_200;");
+str[10]  = new Array(109, "&?error_109;");
+str[11]  = new Array(108, "&?error_108;");
+str[12]  = new Array(130, "&?error_130;");
+str[13]  = new Array(206, "&?error_206;");
+str[14]  = new Array(215, "&?error_215;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+moveErrLayer(590,110);
+PageGetValue();
+}
+function PageGetValue()
+{
+var key = getValue("IF_IDENTITY");
+if (key == "")
+{
+key = -1;
+}
+if (-1 == key)
+{
+DisableALL();
+}
+else
+{
+jslSetValue("Frm_WANCName0","WANCName");
+jslDisable("Frm_WANCName0");
+var tag = getValue("Enable");
+if(1 == tag)
+setChecked("Frm_WANEnable",true);
+else if(0 == tag)
+setChecked("Frm_WANEnable",false);
+var mode = getValue("IF_WANCTYPE");
+if ( "bridge" == mode )
+{
+jslDiDisplay("TR_MTU","TABLE_PPP","TABLE_static");
+}
+else
+{
+jslSetValue("Frm_MTU","MTU");
+var IpMode = getValue("IpMode");
+if ( "pppoe" == mode )
+{
+jslSetValue("Frm_UserName","UserName");
+jslSetValue("Frm_Password","Password","GET");
+}
+else if ( "dhcp/static" == mode )
+{
+jslDiDisplay("TABLE_PPP");
+var WANCType = getValue("Addressingtype");
+if ( "Static" == WANCType )
+{
+jslEnDisplay("TABLE_static");
+jslSetValue("Frm_IPAddress","IPAddress");
+jslSetValue("Frm_SubnetMask","SubnetMask");
+jslSetValue("Frm_GateWay","GateWay");
+jslDisable("Frm_IPAddress", "Frm_SubnetMask", "Frm_GateWay");
+}
+else if ( "DHCP" == WANCType )
+{
+WANCType = "DHCP";
+jslDiDisplay("TABLE_static");
+}
+else
+{
+}
+}
+else
+{
+}
+}
+}
+}
+function Change_Link()
+{
+setValue("IF_ACTION","Reposition");
+DisableALL();
+setValue("xDslMode","NULL");
+getObj("fSubmit").submit();
+}
+function Check_StrLengthRange(value,min,max,Frm,Fnt)
+{
+if (value.length < min || value.length > max)
+{
+msg =  getmsg(102,min,max);
+ShowErrorForCom(Frm,Fnt,msg);
+return false;
+}
+return true;
+}
+function PageCheckValue()
+{
+var msg="";
+var linkmode = getValue("IF_WANCTYPE");
+if(linkmode != "bridge")
+{
+var IpMode = getValue("IpMode");
+var MTU = getValue("Frm_MTU");
+if("pppoe" == linkmode)
+{
+if("IPv4" == IpMode)
+{
+var MaxMTU;
+var MaxPPPoEMTU = getValue("IF_MaxPPPoEMTU");
+MaxMTU = parseInt(MaxPPPoEMTU, 10);
+if( Check_IntegerRange(MTU, 128, MaxMTU,"Frm_MTU","Fnt_MTU") != true )
+{
+return false;
+}
+}
+else if("IPv6" == IpMode || "Both" == IpMode)
+{
+var MaxMTU = 1492;
+var MaxPPPoEMTU = getValue("IF_MaxPPPoEMTU");
+MaxMTU = parseInt(MaxPPPoEMTU, 10);
+if( Check_IntegerRange(MTU, 1280, MaxMTU, "Frm_MTU","Fnt_MTU") != true )
+{
+return false;
+}
+}
+else
+{
+}
+}
+else if("dhcp/static" == linkmode)
+{
+if("IPv4" == IpMode)
+{
+var WANCType = getValue("Addressingtype");
+if ("Static" == WANCType)
+{
+if(Check_IntegerRange(MTU,128,1500,"Frm_MTU","Fnt_MTU")!=true)
+{
+return false;
+}
+}
+else if ("DHCP" == WANCType)
+{
+if(Check_IntegerRange(MTU,576,1500,"Frm_MTU","Fnt_MTU")!=true)
+{
+return false;
+}
+}
+else
+{
+}
+}
+else if("IPv6" == IpMode || "Both" == IpMode)
+{
+if(Check_IntegerRange(MTU,1280,1500,"Frm_MTU","Fnt_MTU")!=true)
+{
+return false;
+}
+}
+else
+{
+}
+}
+else
+{
+}
+}
+if ("pppoe" == linkmode)
+{
+var username = getValue("Frm_UserName");
+if(checkGenStringForASC(username)!=true)
+{
+msg = getmsg(114);
+ShowErrorForCom("Frm_UserName","Fnt_UserName",msg);
+return false;
+}
+if(Check_StrLengthRange(username,1,64,
+"Frm_UserName","Fnt_UserName")!=true)
+{
+return false;
+}
+var pass = getValue("Frm_Password");
+if(checkGenStringForASC(pass)!=true)
+{
+msg = getmsg(114);
+ShowErrorForCom("Frm_Password","Fnt_Password",msg);
+return false;
+}
+var pass_range=checkStrLengthRange(pass,0,64);
+if(pass_range==-3)
+{
+msg =  getmsg(102,0,64);
+ShowErrorForCom("Frm_Password","Fnt_Password",msg);
+return false;
+}
+}
+return true;
+}
+function PageSetValue()
+{
+var linkmode = getValue("IF_WANCTYPE");
+if (getChecked("Frm_WANEnable") == true)
+{
+setValue("Enable", "1");
+}
+else
+{
+setValue("Enable","0");
+}
+if("bridge" != linkmode)
+{
+jslSetValue("MTU","Frm_MTU");
+}
+if ("pppoe" == linkmode)
+{
+jslSetValue("UserName","Frm_UserName");
+jslSetValue("Password","Frm_Password","SET");
+}
+}
+function pageCancel()
+{
+DisableALL();
+Change_Link();
+}
+function PagesetType()
+{
+var type = getValue("IF_WANCTYPE");
+if ( "bridge" == type )
+{
+HiddenParaInit(BRIDGE_PARA);
+}
+else if ( "pppoe" == type )
+{
+HiddenParaInit(PPP_PARA);
+}
+else if ( "dhcp/static" == type)
+{
+HiddenParaInit(IP_PARA);
+}
+else
+{
+}
+}
+function pageSubmit()
+{
+if (true == PageCheckValue())
+{
+setValue("IF_ACTION","edit");
+PagesetType();
+PageSetValue();
+DisableALL();
+getObj("fSubmit").submit();
+}
+}
+function DisPlayPPP()
+{
+var img=getObj("Frm_PPP").src;
+var tmp = img.substring(img.length-6,img.length);
+if ("up.gif" == tmp)
+{
+getObj("Frm_PPP").src="img/down.gif";
+jslDiDisplay("TR_UserName","TR_Password");
+}
+else
+{
+getObj("Frm_PPP").src="img/up.gif";
+jslEnDisplay("TR_UserName","TR_Password");
+}
+}
+function DisPlayIPv4Static()
+{
+var img=getObj("Frm_IPv4Static").src;
+var tmp = img.substring(img.length-6,img.length);
+if ("up.gif" == tmp)
+{
+getObj("Frm_IPv4Static").src="img/down.gif";
+jslDiDisplay("TR_IPAddress","TR_SubnetMask","TR_GateWay");
+}
+else
+{
+getObj("Frm_IPv4Static").src="img/up.gif";
+jslEnDisplay("TR_IPAddress","TR_SubnetMask","TR_GateWay");
+}
+}
+function Check_IntegerRange(value,min,max,Frm,Fnt)
+{
+var tem = checkIntegerRange(value,min,max);
+if(tem==-1)
+{
+msg = getmsg(101);
+ShowErrorForCom(Frm,Fnt,msg);
+return false;
+}
+else if(tem==-2)
+{
+msg = getmsg(115);
+ShowErrorForCom(Frm,Fnt,msg);
+return false;
+}
+else if(tem==-3)
+{
+msg = getmsg(116,min,max);
+ShowErrorForCom(Frm,Fnt,msg);
+return false;
+}
+else
+{
+}
+return true;
+}
+</script>

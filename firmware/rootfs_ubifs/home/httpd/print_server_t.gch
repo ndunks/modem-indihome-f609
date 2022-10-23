@@ -1,0 +1,13 @@
+<%
+IMPORT FILE "print_server_gch.gch";
+IMPORT FILE "print_server_js.gch";
+%>
+<table id="TestContent"  class="table" width="450px" border="0">
+<tr>
+<td class="td1">&?pdt_printserver001;</td>
+<td class="td2">
+<input type="checkbox" id="Frm_UsbPrinterEnable" name="Frm_UsbPrinterEnable">
+</td>
+</tr>
+</table>
+<div id="div4"></div>

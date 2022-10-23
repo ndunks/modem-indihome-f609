@@ -1,0 +1,144 @@
+<%
+var FP_OBJNAME = "OBJ_PON_PORT_BASIC_STATUS_ID";
+var FP_ADDOBJNAME = "OBJ_PON_PORT_LINK_STATUS_ID";
+var FP_INSTNUM = 1;
+FP_INSTNUM = query_list(FP_OBJNAME, "IGD");
+var PortNum = 1;
+var FP_IDENTITY="";
+for (var i=0; i<FP_INSTNUM; i++)
+{
+PortNum = i+1;
+FP_IDENTITY = query_identity(i);
+var FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+var InBytes     = get_para(FP_HANDLE, "InBytes");
+var InPkts      = get_para(FP_HANDLE, "InPkts");
+var InError     = get_para(FP_HANDLE, "InError");
+var InDiscard   = get_para(FP_HANDLE, "InDiscard");
+var OutBytes    = get_para(FP_HANDLE, "OutBytes");
+var OutPkts     = get_para(FP_HANDLE, "OutPkts");
+var FP_ADDHANDLE = create_paralist();
+get_inst(FP_ADDHANDLE, FP_ADDOBJNAME, FP_IDENTITY);
+var UniPortRate = get_para(FP_ADDHANDLE, "tSpeed");
+var UniPortDuplex = get_para(FP_ADDHANDLE, "tDuplex");
+var Status = get_para(FP_ADDHANDLE, "Status");
+if (UniPortRate == "0")
+{
+UniPortRate = "&?pdt009;";
+}
+else if (UniPortRate == "1")
+{
+UniPortRate = "&?pdt010;";
+}
+else if (UniPortRate == "2")
+{
+UniPortRate = "&?pdt011;";
+}
+else
+{
+UniPortRate = "&?pdt012;";
+}
+if (UniPortDuplex == "0")
+{
+UniPortDuplex = "&?pdt013;";
+}
+else if (UniPortDuplex == "1")
+{
+UniPortDuplex = "&?pdt014;";
+}
+else
+{
+UniPortDuplex = "&?pdt012;";
+}
+if( Status == 0)
+{
+Status = "&?pdt016;";
+}
+else
+{
+Status = "&?pdt017;";
+UniPortRate = "--";
+UniPortDuplex = "--";
+}
+if(InError=="")
+{
+InError = "null";
+}
+if(InDiscard=="")
+{
+InDiscard= "null";
+}
+%>
+<!--分端口显示的内容开始-->
+<div class="space_0">
+<table id="TestContent"  class="infor" width="410" border="0" cellpadding="0" cellspacing="1" bgcolor="#979797">
+<tr class="blue_1">
+<td class="tdleft">&?pdt001;</td>
+<td class="tdright">&?pdt002;<%=PortNum;%></td>
+</tr>
+<tr class="white_1">
+<td class="tdleft">&?pdt015;</td>
+<td class="tdright"><%=Status;%></td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft">&?pdt006;</td>
+<td class="tdright"><%=UniPortRate;%></td>
+</tr>
+<tr class="white_1">
+<td class="tdleft">&?pdt007;</td>
+<td class="tdright"><%=UniPortDuplex;%></td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft">&?pdt003;</td>
+<td class="tdright"><%=InPkts;%>/<%=InBytes;%></td>
+</tr>
+<tr class="white_1">
+<td class="tdleft">&?pdt004;</td>
+<td class="tdright"><%=OutPkts;%>/<%=OutBytes;%></td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft">&?pdt005;</td>
+<td name="Frm_ErrorFrames<%=i;%>" id="Frm_ErrorFrames<%=i;%>" class="tdright">
+<SCRIPT>
+var str_InError = <%=InError;%>;
+var str_InDiscard = <%=InDiscard;%>;
+var ErrorFrames = "";
+if(str_InError == null && str_InDiscard != null)
+{
+ErrorFrames = str_InDiscard;
+}
+if(str_InError != null && str_InDiscard == null)
+{
+ErrorFrames = str_InError;
+}
+if(str_InError != null && str_InDiscard != null)
+{
+ErrorFrames = str_InError + str_InDiscard;
+}
+
+document.getElementById("Frm_ErrorFrames<%=i;%>").innerHTML = ErrorFrames;
+</SCRIPT>
+</td>
+</tr>
+</table>
+</div>
+<!--分端口显示的内容结束-->
+<div id="div4"></div>
+<%
+destroy_paralist(FP_ADDHANDLE);
+destroy_paralist(FP_HANDLE);
+}
+%>
+<form id="fSubmit" method="post" action="">
+<input type="hidden" id="IF_ERRORSTR" name="IF_ERRORSTR" value="">
+</form>
+<SCRIPT>
+function pageLoad(url)
+{
+document.getElementById("fSubmit").action = url;
+}
+function pageReFresh()
+{
+getObj("fSubmit").submit();
+}
+</SCRIPT> 

@@ -1,0 +1,46 @@
+<%
+IMPORT FILE "prefix_ban_port_gch.gch";
+IMPORT FILE "net_v6_prefix_ban_port_js.gch";
+%>
+<div class="space_0">
+<table width="450px" border="0" class="table">
+<tbody><tr>
+<td valign="top" style="width:30px;"><img src="img/info.gif"></td>
+<td height="18" align="left" style="padding-left:10px;">&?pon_v6ban_001;</td>
+</tr></tbody>
+</table>
+</div>
+<table id="TestContent"  class="table" width="450px" border="0">
+<tr>
+<td class="td1_1"></td>
+<td class="td2">&nbsp;</td>
+</tr>
+<%
+var FP_LAN_INSTNUM = query_list("OBJ_PREFIX_BAN_PORT_ID", "IGD");
+var LAN_HANDLE     = null;
+var LAN_identity   = "";
+var index = 0;
+var Port_Name;
+if(FP_LAN_INSTNUM >= 1 && FP_LAN_INSTNUM != 888)
+{
+for(var i = 0; i < FP_LAN_INSTNUM; i++ )
+{
+LAN_HANDLE   = create_paralist();
+LAN_identity = query_identity(i);
+get_inst(LAN_HANDLE, "OBJ_PREFIX_BAN_PORT_ID", LAN_identity);
+Port_Name    = get_para(LAN_HANDLE, "PortName");
+%>
+<tr id="TR_portname<%=index;%>">
+<td class="td1_1"><font id="fnt_portname<%=index;%>"><%=Port_Name;%></font>&nbsp;&nbsp;&nbsp;</td>
+<td class="td2">
+<input name="Frm_DHCPV6<%=index;%>" id="Frm_DHCPV6<%=index;%>" type="checkbox"  value="" size="15" /> &?v6prefix_014;&nbsp;&nbsp;&nbsp;
+<input name="Frm_RA<%=index;%>" id="Frm_RA<%=index;%>" type="checkbox"  value="" size="15" /> &?v6prefix_013;
+</td>
+</tr>
+<%
+index++;
+destroy_paralist(LAN_HANDLE);
+}
+}
+%>
+</table>

@@ -1,0 +1,290 @@
+<%
+IMPORT FILE "auth/common.gch";
+function auth_sessid_impl()
+{
+return auth_sessid_common();
+}
+function auth_get_status_impl(type)
+{
+return auth_get_status_common(type);
+}
+function auth_router_action_impl()
+{
+var action = request("action");
+if (request("logout") == 1)
+{
+action = "logout";
+}
+return action;
+}
+function auth_chgpwd_impl(sess_id)
+{
+var username    = session_get("login_name");
+var password    = request("NewPassword");
+var password2   = request("NewPassword2");
+if (password IS NULL || password == "N/A")
+{
+return 300;
+}
+if (password == password2)
+{
+if (auth_dochgpwd(username, password, 1))
+{
+session_set("login_pwd", password);
+auth_set_status_common("chgpwd", 0);
+return 0;
+}
+}
+else
+{
+return 301;
+}
+return 302;
+}
+function auth_preempt_impl(sess_id)
+{
+var index           = request("index");
+if (index IS NOT NULL)
+{
+var sid             = request("sid" + index);
+if (sid IS NOT NULL)
+{
+return auth_preempt_common(sess_id, sid);
+}
+}
+return 400;
+}
+function auth_check_ticket_impl(ticket)
+{
+var ref_ticket = auth_getenv("auth/login_ticket", "") + ":" + auth_getenv("auth/login_monotonic_id", 0);
+if (ticket == ref_ticket)
+{
+return 1;
+}
+puts("tickets doesn't match!");
+puts("request ticket ="+ticket);
+puts("environment ref_ticket ="+ref_ticket);
+return 0;
+}
+function get_sess_random(refresh)
+{
+var random = session_get("auth/random");
+if (random IS NULL || random == "N/A" || refresh)
+{
+random = rand();
+session_set("auth/random", random);
+}
+return random;
+}
+function set_sess_cookie(cookie_name, cookie_value)
+{
+set_cookie(cookie_name, cookie_value, 0, "/");
+}
+function remove_sess_cookie(cookie_name)
+{
+header("Set-Cookie: " + cookie_name + "=;expires=Thu, 01-Jan-1970 00:00:00 GMT;path=/;");
+}
+function preempt_directly_byip()
+{
+var isPreempted = 0;
+var remote_addr = get_remote_addr();
+var old_sess_id     = session_id();
+var sess_count = session_count();
+for (var i = 0; i < sess_count; i++)
+{
+session_bind(i);
+var sess_id     = session_id();
+if ( old_sess_id == sess_id )
+{
+continue;
+}
+if ("logined" == auth_get_status_common("login")
+&& session_get("Clientaddr") == remote_addr)
+{
+session_destroy(sess_id);
+isPreempted = 1;
+break;
+}
+}
+session_start(old_sess_id, 0);
+puts("sess_id("+old_sess_id+") preempt directly, isPreempted="+isPreempted);
+return isPreempted;
+}
+function auth_login_impl(sess_id)
+{
+var user    = request("Username");
+var pass    = request("Password");
+var err_login_num = auth_getenv("errLoginNum", 0);
+var err_login_time = auth_getenv("errLoginTime", 0);
+var err_login_max;
+if(getenv("CurrentVersionInfo") == "54")
+{
+setenv("errLoginNumMax",5);
+}
+err_login_max = auth_getenv("errLoginNumMax", 3);
+var hdrCookie = get_cookie("_TESTCOOKIESUPPORT");
+if ( hdrCookie IS NULL || hdrCookie == "" )
+{
+puts("client do not support cookie, cannot login.");
+return 201;
+}
+if (err_login_num >= err_login_max)
+{
+if ( err_login_time > 0 && (timestamp() - err_login_time) > 60 )
+{
+setenv("errLoginNum", 0);
+}
+else
+{
+return 202;
+}
+}
+var ticket = get_remote_addr();
+var ticket2 = ticket + ":" + request("Frm_Logintoken");
+var login_allowed = 0;
+var is_logined_before = 0;
+if (session_get("login_name") == user)
+{
+login_allowed = 1;
+is_logined_before = 1;
+}
+if (auth_check_ticket_impl(ticket2))
+{
+login_allowed = 1;
+}
+var err_code = 0;
+if (!login_allowed)
+{
+err_code = 201;
+}
+else
+{
+var logined_sess_count = auth_sess_count("logined");
+var user_max = get_integer_config("user_max");
+err_code = auth_login_common(sess_id, user, pass);
+if (ticket == getenv("auth/login_ticket"))
+{
+unsetenv("auth/login_ticket");
+}
+if (err_code == 0)
+{
+if (is_logined_before == 0)
+{
+var token = integer(auth_getenv("auth/login_monotonic_id", 0));
+setenv("auth/login_monotonic_id", token + 1);
+}
+if (auth_if_defined("login.MUS.Preempt"))
+{
+var logined_me_count = auth_sess_count("logined_me");
+var logined_sess_count2 = auth_sess_count("logined");
+if ( 1 < logined_me_count
+|| (logined_sess_count2 > logined_sess_count && logined_sess_count2 > user_max) )
+{
+if ( preempt_directly_byip() == 1 )
+{
+}
+else if (0 < auth_sess_count("preemptable"))
+{
+auth_set_status_common("login", "preempt");
+}
+else
+{
+session_destroy(sess_id);
+return 203;
+}
+}
+}
+setenv("login_name", session_get("login_name"));
+setenv("login_pwd", session_get("login_pwd"));
+setenv("Lastvisit", session_get("Lastvisit"));
+setenv("Clientaddr", session_get("Clientaddr"));
+setenv("Right", session_get("Right"));
+setenv("IsLogin", session_get("IsLogin"));
+setenv("weblogin", session_get("IsLogin"));
+setenv("_SESSION_TOKEN", session_get("_SESSION_TOKEN"));
+}
+}
+if (err_code != 0)
+{
+err_login_num = auth_login_err();
+if (err_login_num >= err_login_max)
+{
+return 202;
+}
+}
+else
+{
+set_sess_cookie("SID", sess_id);
+}
+return err_code;
+}
+function auth_logout_impl()
+{
+var succ = auth_logout_common();
+if (succ)
+{
+unsetenv("Lastvisit");
+unsetenv("Clientaddr");
+unsetenv("IsLogin");
+unsetenv("nextpage");
+unsetenv("weblogin");
+unsetenv("_SESSION_TOKEN");
+unsetenv("UPLOAD_ENV");
+remove_sess_cookie("SID");
+}
+return succ;
+}
+function auth_check_impl(sess_id)
+{
+var err_code = auth_check_common(sess_id);
+puts("auth_check_common err_code="+err_code);
+var pwdcheck = get_config("pwdcheck");
+if (err_code == 0)
+{
+var is_session_started = session_start(sess_id, 0);
+if (is_session_started == 0)
+{
+err_code = 100;
+}
+}
+if (err_code == 0 && pwdcheck == "Y")
+{
+var succ = isUserNamePwdCorrect(session_get("login_name"), session_get("login_pwd"));
+if ( 1 != succ )
+{
+auth_logout_impl();
+err_code = 100;
+}
+}
+if (err_code == 100)
+{
+var sess_count = auth_sess_count("all");
+var sess_max = get_integer_config("session_max");
+if (sess_count >= sess_max)
+{
+err_code = 103;
+}
+if (auth_if_defined("login.MUS.Preempt"))
+{
+}
+else if (auth_if_defined("login.MUS.Block"))
+{
+var logined_sess_count = auth_sess_count("logined");
+var user_max = get_integer_config("user_max");
+if (err_code == 100 && logined_sess_count >= user_max)
+{
+return 101;
+}
+}
+else
+{
+return 103;
+}
+}
+if (err_code == 0)
+{
+session_start(sess_id, -1);
+}
+return err_code;
+}
+%>

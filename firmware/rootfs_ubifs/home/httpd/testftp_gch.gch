@@ -1,0 +1,61 @@
+<%
+IMPORT FILE "common_gch.gch";
+function testftp(FP_ACTION, FP_INDEX, FP_ERRORSTR)
+{
+var FP_OBJNAME      = "OBJ_TESTFTP_ID";
+var FP_PARANUM      = 13;
+var FP_IDENTITY     = "";
+var FP_MULTIDISPLAY = 0;
+var FP_HANDLE;
+var PARA[13] =
+{
+"Host",
+"Port",
+"User",
+"Pass",
+"FilePath",
+"Curfile",
+"Ratio",
+"Abbrevsize",
+"Remaining",
+"ReceivedBytes",
+"Pastseconds",
+"ByteSec",
+"Flag"
+};
+create_hidden_newpara(PARA, FP_PARANUM);
+if (FP_ACTION == "apply")
+{
+setenv("ftptag","apply");
+FP_ERRORSTR = applyOrNewOrDelInst(FP_OBJNAME, FP_ACTION, "", PARA, FP_PARANUM, FP_ERRORSTR);
+}
+if(0 == FP_MULTIDISPLAY)
+{
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+for(var i = 0; i < FP_PARANUM ; i ++)
+{
+if(PARA[i]!="Buf")
+{
+var value;
+if (PARA[i] == "Pass")
+{
+value = "******";
+}
+else
+{
+value = get_para(FP_HANDLE, PARA[i]);
+}
+="<script language=javascript>Transfer_meaning('";
+=PARA[i];
+="','";
+=encodeJS(value);
+="');";
+="</script>\n";
+}
+}
+destroy_paralist(FP_HANDLE);
+}
+return getDisplayInstError(FP_ERRORSTR);
+}
+%>

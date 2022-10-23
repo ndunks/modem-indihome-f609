@@ -1,0 +1,48 @@
+<%
+IMPORT FILE "common_gch.gch";
+var FP_MULTIDISPLAY = 1;
+var Sip_Line_OBJNAME    = "OBJ_VOIPSIPLINE_ID";
+var Sip_Line_IDENTITY   = "";
+var Sip_Line_PARANUM    = 7;
+var Sip_Line_PARA[7]    =
+{
+"Enable",
+"AuthUserName",
+"DigestUserName",
+"DisplayName",
+"RegStatus",
+"DNSStatus",
+"AuthPassword"
+};
+var FP_ACTION   = request("IF_ACTION");
+if ("apply" != FP_ACTION)
+{
+FP_ACTION = "";
+}
+var FP_ERRORSTR = "SUCC";
+var FP_INDEX    = getInstIndex("new");
+create_form_start("fSubmit", "");
+createSubmitHidden(FP_MULTIDISPLAY, Sip_Line_PARA, Sip_Line_PARANUM, FP_INDEX);
+if (FP_ACTION == "apply")
+{
+var FP_INSTNUM = query_list(Sip_Line_OBJNAME, "IGD");
+if (FP_INSTNUM > 0 && FP_INDEX >= 0)
+{
+Sip_Line_IDENTITY = query_identity(FP_INDEX);
+FP_ERRORSTR=applyOrNewInst(Sip_Line_OBJNAME, FP_ACTION, Sip_Line_IDENTITY, Sip_Line_PARA, Sip_Line_PARANUM, FP_ERRORSTR);
+}
+}
+var FP_INSTNUM = query_list(Sip_Line_OBJNAME, "IGD");
+for (var i = 0; i < FP_INSTNUM; i++)
+{
+var FP_HANDLE   = create_paralist();
+var FP_IDENTITY = query_identity(i);
+get_inst(FP_HANDLE, Sip_Line_OBJNAME, FP_IDENTITY);
+create_hidden_multiinstpara(FP_HANDLE, Sip_Line_PARA, i, Sip_Line_PARANUM-1);
+create_hidden_sep("AuthPassword"+i, "******");
+destroy_paralist(FP_HANDLE);
+}
+getDisplayInstError(FP_ERRORSTR);
+setInstNumHidden(Sip_Line_OBJNAME, FP_MULTIDISPLAY);
+create_form_end();
+%>

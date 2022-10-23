@@ -1,0 +1,53 @@
+
+<%
+IMPORT FILE "igmp_proxy_gch.gch";
+IMPORT FILE "app_igmp_conf_js.gch";
+%>
+<div id="DIV_IGMPWAN" class="info">
+<p class="info_p">&?IGMP_019;</p>
+</div>
+<table id="TestContent"  class="table">
+<tr>
+<td class="td1"><font id="Fnt_WanName">&?comm002;</font></td>
+<td class="td2">
+<select id="Frm_WanName" name="Frm_WanName" class="list_2" onchange="Change_Wan()">
+</select>
+</td>
+</tr>
+<%
+var buttoncss   = "button2";
+if(getenv("LanguageCtr") == "rus")
+{
+buttoncss   = "button3";
+}
+%>
+<tr>
+<td class="td1"></td>
+<td class="td2">
+<input name="" type="submit" id="add" class="<%=buttoncss;%>" value="&?btn007;" onclick="Add()"/>
+</td>
+</tr>
+<tr>
+<td class="td1"></td>
+<td class="td2"></td>
+</tr>
+</table>
+<table id="WAN_Table"  class="item" border="0" cellpadding="0" cellspacing="1" bgcolor="#979797">
+<tr class="h2_s title_1">
+<td width="300px">&?comm002;</td>
+<td id="Td_prefix" style="display:none">&?IGMPProxy_001;</td>
+<td width="50px" >&?btn006;</td>
+</tr>
+</table>
+<table>
+<tr style="display:none">
+<td>
+<select id="Frm_WanName_hidden" name="Frm_WanName_hidden">
+<%
+IMPORT FILE "wan_func.gch";
+wanV4QueryByApp("igmpproxy");
+%>
+</select>
+</td>
+</tr>
+</table>

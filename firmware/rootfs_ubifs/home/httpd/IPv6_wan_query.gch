@@ -1,0 +1,35 @@
+
+<%
+var ALL_OBJNAME = "OBJ_ALLWANC_ID";
+var IP_PPP_INSTNUM = query_list(ALL_OBJNAME, "IGD");
+var identity = "";
+var name = "";
+var IpMode = "";
+var type = "";
+if(IP_PPP_INSTNUM >= 1 && IP_PPP_INSTNUM != 888)
+{
+for(var i = 0; i < IP_PPP_INSTNUM; i++ )
+{
+identity = query_identity(i);
+type = query_wanctype(i);
+name     = query_name(i);
+IpMode   = get_IPMode(identity);
+if ("1" != IpMode && "bridge"!=type)
+{
+%>
+<option value="<%=identity;%>" ><%=encodeHTML(name);%></option>
+<%
+}
+}
+}
+var T64INSTNUM = query_list("OBJ_6IN4TUNL_ID", "IGD");
+if(T64INSTNUM >= 1 && T64INSTNUM != 888)
+{
+for(var i = 0; i < T64INSTNUM; i++ )
+{
+var identity = query_identity(i);
+var name     = query_name(i);
+="<option value='" + identity + "' >" + encodeHTML(name) + "</option>";
+}
+}
+%>

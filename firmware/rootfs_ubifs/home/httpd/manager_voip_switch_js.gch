@@ -1,0 +1,167 @@
+
+<script language="javascript">
+function getmsg(id)
+{
+var str     = new Array();
+str[0]   = new Array(1, "&?note_001;");
+str[1]   = new Array(110, "&?msg_110;");
+str[2]   = new Array(115, "&?msg_115;");
+str[3]   = new Array(116, "&?msg_116;");
+str[4]   = new Array(117, "&?msg_117;");
+return getMsgFormArray(str, arguments);
+}
+var ajaxObjDevReboot = new AJAXObj();
+function showRebootMannullyMsg()
+{
+EnableALL();
+var msg = "&?cvoip5;";
+ShowNote("&?NotRep;", msg);
+}
+function showWillRebootMsg()
+{
+var msg = getmsg(1);
+ShowNote("&?NotRep;", msg);
+AutoRelogin("restart");
+}
+function updatePageDevReboot()
+{
+if ( ajaxObjDevReboot.getReadyState() == xmlHTTPStatus['Loaded'] )
+{
+if (200 == ajaxObjDevReboot.getStatus())
+{
+var xmlDoc2 = new XMLDocObj(ajaxObjDevReboot.getResponseText());
+if (xmlDoc2.xmlDoc == null)
+{
+showRebootMannullyMsg();
+}
+else
+{
+if (xmlDoc2.getXMLNodeValue("IF_ERRORSTR") != "SUCC")
+{
+showRebootMannullyMsg();
+}
+else
+{
+showWillRebootMsg();
+}
+}
+}
+else if ( 0 != ajaxObjDevReboot.getStatus() )
+{
+showRebootMannullyMsg();
+}
+}
+}
+function ajaxRebootRequest()
+{
+var devURL = "ajaxComLogic.gch?pid=1";
+ajaxObjDevReboot.addPostItem("IF_ACTION", "devRestart");
+ajaxObjDevReboot.addPostItem("_SESSION_TOKEN", getValue("_SESSION_TOKEN"));
+ajaxObjDevReboot.post(devURL, updatePageDevReboot);
+}
+function transVoIPProtocal( eProtocal )
+{
+if ( "1" == eProtocal )
+{
+eProtocal = "H248";
+}
+else if ( "2" == eProtocal )
+{
+eProtocal = "MGCP";
+}
+else if ( "4" == eProtocal )
+{
+eProtocal = "SIP";
+}
+else
+{
+}
+return eProtocal;
+}
+function isSwitchChanged()
+{
+var VoIPProtocal = getValue("VoIPProtocal");
+var ProtocolSet = getValue("ProtocolSet");
+ProtocolSet = transVoIPProtocal(ProtocolSet);
+if ( ProtocolSet != VoIPProtocal )
+{
+return true;
+}
+return false;
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+pageGetValue();
+var isApplyAndSucc = getValue("isApplyAndSucc");
+if( "1" == isApplyAndSucc && true == isSwitchChanged() )
+{
+var objDBSave = getObj("frame_para_DBSavedOver");
+if ( null == objDBSave )
+{
+DisableALL();
+ajaxRebootRequest();
+}
+else if ( "1" == objDBSave.value )
+{
+deleteHiddenInput("fSubmit", "frame_para_DBSavedOver");
+DisableALL();
+ajaxRebootRequest();
+}
+else
+{
+deleteHiddenInput("fSubmit", "frame_para_DBSavedOver");
+}
+}
+else
+{
+}
+}
+function pageGetValue()
+{
+jslSetValue("Frm_ProtocolSet", "ProtocolSet");
+}
+function pageSetValue()
+{
+jslSetValue("ProtocolSet", "Frm_ProtocolSet");
+}
+function pageCheckValue()
+{
+return true;
+}
+function msgCallback()
+{
+if(pageCheckValue() == true)
+{
+DisableALL();
+pageSetValue();
+setValue("IF_ACTION", "apply");
+getObj("fSubmit").submit();
+}
+}
+function pageSubmit()
+{
+var att  = getmsg(110);
+var showmsg = getmsg(115);
+var msgcon  = getmsg(116);
+var msgcan  = getmsg(117);
+var msgJSONData = {
+title:att,
+content:showmsg,
+confirmLabel:msgcon,
+cancelLabel:msgcan,
+confirmCallback:'msgCallback()',
+cancelDisplay:'yes',
+focusButtun:'Cancel'
+};
+msgbox(msgJSONData);
+}
+function pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+</script>

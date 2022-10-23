@@ -1,0 +1,45 @@
+<%
+IMPORT FILE "common_gch.gch";
+var FP_OBJNAME = "OBJ_PPPOE_SETUP_ID";
+var FP_ERRORSTR = "SUCC";
+var FP_IDENTITY = "";
+var FP_JUMP = "";
+var FP_MULTIDISPLAY = 0;
+var FP_PARANUM = 2;
+var PARA[2] =
+{
+"UserName",
+"Password"
+};
+var MASK_PARA[2] =
+{
+NULL,
+"******"
+};
+var FP_ACTION   = request("IF_ACTION");
+create_form_start("fSubmit", "");
+create_hidden_newpara(PARA, FP_PARANUM);
+createBasicHidden();
+if(FP_ACTION == "apply")
+{
+FP_JUMP = "enable";
+
+FP_ERRORSTR = applyOrNewOrDelInst(FP_OBJNAME, FP_ACTION, FP_IDENTITY, PARA, FP_PARANUM, FP_ERRORSTR);
+}
+
+if (FP_MULTIDISPLAY == 0)
+{
+var FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+
+var passwd = get_para(FP_HANDLE, "Password");
+set_para(FP_HANDLE, "Password", strencode(passwd));
+filter_cover_hidden(FP_HANDLE, PARA, MASK_PARA, FP_PARANUM);
+if(get_para(FP_HANDLE, "UserName") == "")
+set_hidden("Password", "");
+destroy_paralist(FP_HANDLE);
+}
+FP_ERRORSTR = getDisplayInstError(FP_ERRORSTR);
+create_hidden_sep("IF_JUMP", FP_JUMP);
+create_form_end();
+%>

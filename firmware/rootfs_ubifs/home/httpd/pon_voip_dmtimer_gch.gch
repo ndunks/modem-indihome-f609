@@ -1,0 +1,16 @@
+<%
+IMPORT FILE "common_gch.gch";
+function sip_dmtimer_func(FP_ACTION, FP_INDEX, FP_ERRORSTR)
+{
+var FP_OBJNAME      = "OBJ_VOIPDMTIMER_ID";
+var FP_PARANUM      = 3;
+var FP_MULTIDISPLAY = 0;
+var PARA[3]    =
+{
+"StartTimer",
+"ShortTimer",
+"LongTimer"
+};
+return getOldFunctionGCH(FP_OBJNAME, FP_MULTIDISPLAY, PARA, FP_PARANUM, FP_ACTION, FP_INDEX, FP_ERRORSTR);
+}
+%>

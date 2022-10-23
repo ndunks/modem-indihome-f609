@@ -1,0 +1,352 @@
+<%
+IMPORT FILE "common_gch.gch";
+var TTYWANC_OBJNAME, TTYWANC_NUM, WANC_TYPE;
+TTYWANC_OBJNAME = "OBJ_DONGLEWANC_ID";
+TTYWANC_NUM = query_list(TTYWANC_OBJNAME, "IGD");
+if(TTYWANC_NUM > 0)
+{
+var FP_INDEX = 0;
+query_list(TTYWANC_OBJNAME, "IGD");
+var WANC_HANDLE = create_paralist();
+WANC_TYPE    = query_wanctype(FP_INDEX);
+destroy_paralist(WANC_HANDLE);
+}
+if("pppoe" == WANC_TYPE)
+{
+var PPP_NUM,PPP_OBJNAME,PPP_IDENTITY,PPP_HANDLE;
+var PPP_WANCName,PPP_IsNAT;
+var PPP_IPAddress,PPP_ConnStatus,PPP_UpTime,PPP_DNS1,PPP_DNS2,PPP_DNS3,PPP_ConnError;
+WANC_TYPE="&?cmn55;";
+PPP_OBJNAME="OBJ_TTYWANCPPP_ID";
+PPP_NUM = query_list(PPP_OBJNAME, "IGD");
+for(var i=0;i<PPP_NUM;i++)
+{
+PPP_HANDLE = create_paralist();
+PPP_IDENTITY = query_identity(i);
+get_inst(PPP_HANDLE, PPP_OBJNAME, PPP_IDENTITY);
+PPP_WANCName    = Escapquotes(get_para(PPP_HANDLE, "WANCName"));
+PPP_IsNAT       = get_para(PPP_HANDLE, "IsNAT");
+if(PPP_IsNAT=="1")
+{
+PPP_IsNAT="&?wan049;";
+}
+else
+{
+PPP_IsNAT="&?wan050;";
+}
+PPP_IPAddress  = get_para(PPP_HANDLE, "IPAddress");
+PPP_ConnStatus = get_para(PPP_HANDLE, "ConnStatus");
+PPP_DNS1       = get_para(PPP_HANDLE, "DNS1");
+PPP_DNS2       = get_para(PPP_HANDLE, "DNS2");
+PPP_DNS3       = get_para(PPP_HANDLE, "DNS3");
+if(PPP_ConnStatus=="Connected")
+{
+PPP_ConnStatus="&?wan051;";
+}
+else if(PPP_ConnStatus=="Demand")
+{
+PPP_ConnStatus="&?wan054;";
+}
+else if(PPP_ConnStatus=="Unconfigured")
+{
+PPP_ConnStatus = "&?wan081;";
+}
+else if(PPP_ConnStatus=="Connecting")
+{
+PPP_ConnStatus = "&?wan082;";
+}
+else if(PPP_ConnStatus=="Authenticating")
+{
+PPP_ConnStatus = "&?wan083;";
+}
+else if(PPP_ConnStatus=="PendingDisconnect")
+{
+PPP_ConnStatus = "&?wan084;";
+}
+else
+{
+PPP_ConnStatus="&?wan052;";
+}
+PPP_UpTime    = get_para(PPP_HANDLE, "UpTime");
+PPP_ConnError = get_para(PPP_HANDLE, "ConnError");
+if(PPP_ConnError=="ERROR_NONE")
+{
+PPP_ConnError="&?public002;";
+}
+else if(PPP_ConnError=="ERROR_ISP_TIME_OUT")
+{
+PPP_ConnError="&?wan069;";
+}
+else if(PPP_ConnError=="ERROR_USER_DISCONNECT")
+{
+PPP_ConnError="&?wan070;";
+}
+else if(PPP_ConnError=="ERROR_ISP_DISCONNECT")
+{
+PPP_ConnError="&?wan071;";
+}
+else if(PPP_ConnError=="ERROR_IDLE_DISCONNECT")
+{
+PPP_ConnError="&?wan072;";
+}
+else if(PPP_ConnError=="ERROR_FORCED_DISCONNECT")
+{
+PPP_ConnError="&?wan073;";
+}
+else if(PPP_ConnError=="ERROR_AUTHENTICATION_FAILURE")
+{
+PPP_ConnError="&?wan074;";
+}
+else if(PPP_ConnError=="ERROR_UNKNOWN")
+{
+PPP_ConnError="&?wan076;";
+}
+else if(PPP_ConnError=="ERROR_IP_CONFIGURATION")
+{
+PPP_ConnError="&?wan094;";
+}
+else if(PPP_ConnError=="ERROR_NOT_ENABLED_FOR_INTERNET")
+{
+PPP_ConnError="&?wan095;";
+}
+else if (PPP_ConnError=="ERROR_NO_CARRIER")
+{
+PPP_ConnError="&?public001;";
+}
+else
+{
+PPP_ConnError="&?wan076;";
+}
+var pdptype = get_para(PPP_HANDLE, "TtyPDPType");
+var apn = get_para(PPP_HANDLE, "TtyAPN");
+var dialNum = get_para(PPP_HANDLE, "TtyDialNum");
+if (pdptype == "PDP_IP")
+{
+pdptype = "IP";
+}
+else if (pdptype == "PDP_PPP")
+{
+pdptype = "PPP";
+}
+%>
+<!--PPPoTTY表单信息开始-->
+<table id="TestContent" class="infor" cellpadding="0" cellspacing="1">
+<tr class="white_1">
+<td class="tdleft">&?wan001;</td>
+<td class="tdright"><input type="text" id="Frm_PPPWANCName<%=i;%>" name="Frm_PPPWANCName<%=i;%>" class="uiNoBorder" style="text-align:left;" size=33 value="<%=encodeHTML(PPP_WANCName);%>" readonly></td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft">&?cmn54;</td>
+<td class="tdright"><input type="text" class="uiNoBorder" style="text-align:left;" size=33 value="<%=WANC_TYPE;%>" readonly></td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft">&?cmn1;</td>
+<td class="tdright"><input type="text" class="uiNoBorder" style="text-align:left;" size=33 value="<%=pdptype;%>" readonly></td>
+</tr>
+<tr class="white_1">
+<td class="tdleft">APN</td>
+<td class="tdright"><input type="text" class="uiNoBorder" style="text-align:left;" size=33 value="<%=apn;%>" readonly></td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft">&?cmn2;</td>
+<td class="tdright"><input type="text" class="uiNoBorder" style="text-align:left;" size=33 value="<%=dialNum;%>" readonly></td>
+</tr>
+<tr class="white_1">
+<td class="tdleft">&?wan042;</td>
+<td class="tdright"><input type="text" class="uiNoBorder" style="text-align:left;" size=33 value="<%=PPP_IsNAT;%>" readonly></td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft">&?wan043;</td>
+<td class="tdright"><input type="text" class="uiNoBorder" style="text-align:left;" size=33 value="<%=PPP_IPAddress;%>" readonly></td>
+</tr>
+<tr class="white_1">
+<td class="tdleft">&?wan055;</td>
+<td class="tdright"><input type="text" class="uiNoBorder" style="text-align:left;" size=33 value="<%=PPP_DNS1;%>/<%=PPP_DNS2;%>/<%=PPP_DNS3;%>" readonly></td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft">&?wan044;</td>
+<td class="tdright"><input type="text" class="uiNoBorder" style="text-align:left;" size=33 value="<%=PPP_ConnStatus;%>" readonly></td>
+</tr>
+<tr class="white_1">
+<td class="tdleft">&?wan068;</td>
+<td class="tdright"><input type="text" class="uiNoBorder" style="text-align:left;" size=33 value="<%=PPP_ConnError;%>" readonly></td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft">&?wan045;</td>
+<td class="tdright"><input type="text" class="uiNoBorder" style="text-align:left;" size=33 value="<%=PPP_UpTime;%>&?wan053;" readonly></td>
+</tr>
+</table>
+<%
+destroy_paralist(PPP_HANDLE);
+}
+}
+else
+{
+var IP_NUM,IP_OBJNAME,IP_IDENTITY,IP_HANDLE;
+var IP_WANCName,IP_IsNAT;
+var IP_IPAddress,IP_ConnStatus,IP_UpTime,IP_DNS1,IP_DNS2,IP_DNS3,IP_ConnError;
+WANC_TYPE="&?cmn56;";
+IP_OBJNAME="OBJ_TTYWANCIP_ID";
+IP_NUM = query_list(IP_OBJNAME, "IGD");
+for(var i=0;i<IP_NUM;i++)
+{
+IP_HANDLE = create_paralist();
+IP_IDENTITY = query_identity(i);
+get_inst(IP_HANDLE, IP_OBJNAME, IP_IDENTITY);
+IP_WANCName    = Escapquotes(get_para(IP_HANDLE, "WANCName"));
+IP_IsNAT       = get_para(IP_HANDLE, "IsNAT");
+if(IP_IsNAT=="1")
+{
+IP_IsNAT="&?wan049;";
+}
+else
+{
+IP_IsNAT="&?wan050;";
+}
+IP_IPAddress  = get_para(IP_HANDLE, "IPAddress");
+IP_ConnStatus = get_para(IP_HANDLE, "ConnStatus");
+IP_DNS1       = get_para(IP_HANDLE, "DNS1");
+IP_DNS2       = get_para(IP_HANDLE, "DNS2");
+IP_DNS3       = get_para(IP_HANDLE, "DNS3");
+if(IP_ConnStatus=="Connected")
+{
+IP_ConnStatus="&?wan051;";
+}
+else if(IP_ConnStatus=="Demand")
+{
+IP_ConnStatus="&?wan054;";
+}
+else if(IP_ConnStatus=="Unconfigured")
+{
+IP_ConnStatus = "&?wan081;";
+}
+else if(IP_ConnStatus=="Connecting")
+{
+IP_ConnStatus = "&?wan082;";
+}
+else if(IP_ConnStatus=="Authenticating")
+{
+IP_ConnStatus = "&?wan083;";
+}
+else if(IP_ConnStatus=="PendingDisconnect")
+{
+IP_ConnStatus = "&?wan084;";
+}
+else
+{
+IP_ConnStatus="&?wan052;";
+}
+IP_UpTime    = get_para(IP_HANDLE, "UpTime");
+IP_ConnError = get_para(IP_HANDLE, "ConnError");
+if(IP_ConnError=="ERROR_NONE")
+{
+IP_ConnError="&?public002;";
+}
+else if(IP_ConnError=="ERROR_ISP_TIME_OUT")
+{
+IP_ConnError="&?wan069;";
+}
+else if(IP_ConnError=="ERROR_USER_DISCONNECT")
+{
+IP_ConnError="&?wan070;";
+}
+else if(IP_ConnError=="ERROR_ISP_DISCONNECT")
+{
+IP_ConnError="&?wan071;";
+}
+else if(IP_ConnError=="ERROR_IDLE_DISCONNECT")
+{
+IP_ConnError="&?wan072;";
+}
+else if(IP_ConnError=="ERROR_FORCED_DISCONNECT")
+{
+IP_ConnError="&?wan073;";
+}
+else if(IP_ConnError=="ERROR_AUTHENTICATION_FAILURE")
+{
+IP_ConnError="&?wan074;";
+}
+else if(IP_ConnError=="ERROR_UNKNOWN")
+{
+IP_ConnError="&?wan076;";
+}
+else if(IP_ConnError=="ERROR_IP_CONFIGURATION")
+{
+IP_ConnError="&?wan094;";
+}
+else if(IP_ConnError=="ERROR_NOT_ENABLED_FOR_INTERNET")
+{
+IP_ConnError="&?wan095;";
+}
+else if (IP_ConnError=="ERROR_NO_CARRIER")
+{
+IP_ConnError="&?public001;";
+}
+else
+{
+IP_ConnError="&?wan076;";
+}
+%>
+<!--IPTTY表单信息开始-->
+<table id="TestContent" class="infor" cellpadding="0" cellspacing="1">
+<tr class="white_1">
+<td class="tdleft">&?wan001;</td>
+<td class="tdright"><input type="text" id="Frm_IPWANCName<%=i;%>" name="Frm_IPWANCName<%=i;%>" class="uiNoBorder" style="text-align:left;" size=33 value="<%=encodeHTML(IP_WANCName);%>" readonly></td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft">&?cmn54;</td>
+<td class="tdright"><input type="text" class="uiNoBorder" style="text-align:left;" size=33 value="<%=WANC_TYPE;%>" readonly></td>
+</tr>
+<tr class="white_1">
+<td class="tdleft">&?wan042;</td>
+<td class="tdright"><input type="text" class="uiNoBorder" style="text-align:left;" size=33 value="<%=IP_IsNAT;%>" readonly></td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft">&?wan043;</td>
+<td class="tdright"><input type="text" class="uiNoBorder" style="text-align:left;" size=33 value="<%=IP_IPAddress;%>" readonly></td>
+</tr>
+<tr class="white_1">
+<td class="tdleft">&?wan055;</td>
+<td class="tdright"><input type="text" class="uiNoBorder" style="text-align:left;" size=33 value="<%=IP_DNS1;%>/<%=IP_DNS2;%>/<%=IP_DNS3;%>" readonly></td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft">&?wan044;</td>
+<td class="tdright"><input type="text" class="uiNoBorder" style="text-align:left;" size=33 value="<%=IP_ConnStatus;%>" readonly></td>
+</tr>
+<tr class="white_1">
+<td class="tdleft">&?wan068;</td>
+<td class="tdright"><input type="text" class="uiNoBorder" style="text-align:left;" size=33 value="<%=IP_ConnError;%>" readonly></td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft">&?wan045;</td>
+<td class="tdright"><input type="text" class="uiNoBorder" style="text-align:left;" size=33 value="<%=IP_UpTime;%>&?wan053;" readonly></td>
+</tr>
+</table>
+<%
+destroy_paralist(IP_HANDLE);
+}
+}
+if( TTYWANC_NUM == 0)
+{
+%>
+<table class="inforContent" cellpadding="0" cellspacing="1">
+<tr>
+<td align="center">&?wan056;</td>
+</tr>
+</table>
+<%
+}
+%>
+<form id="fSubmit" method="post" action="">
+</form>
+<SCRIPT>
+function pageLoad(url)
+{
+document.getElementById("fSubmit").action = url;
+}
+function pageReFresh()
+{
+jslDisable("Btn_ReFresh");
+document.getElementById("fSubmit").submit();
+}
+</SCRIPT>

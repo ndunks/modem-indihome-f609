@@ -1,0 +1,39 @@
+<%
+IMPORT FILE "common_gch.gch";
+function wds_func(FP_ACTION, FP_TAG, FP_ERRORSTR)
+{
+var FP_OBJNAME      = "OBJ_WDS_ID";
+var FP_MULTIDISPLAY = 0;
+var FP_PARANUM      = 8;
+var FP_IDENTITY     = "";
+var PARA[8]         =
+{
+"WDSMac1",
+"WDSMac2",
+"WDSMac3",
+"WDSMac4",
+"WDSConnectStatus1",
+"WDSConnectStatus2",
+"WDSConnectStatus3",
+"WDSConnectStatus4"
+};
+create_hidden_newpara(PARA, FP_PARANUM);
+var FP_INSTNUM = query_list(FP_OBJNAME, getenv("g_wlanSettingID"));
+if ( FP_INSTNUM != 888 && FP_INSTNUM > 0 )
+{
+FP_IDENTITY = query_identity(0);
+}
+FP_ERRORSTR = getDisplayInstError(FP_ERRORSTR);
+
+if (FP_TAG == "Y")
+{
+FP_ERRORSTR = applyOrNewOrDelInst(FP_OBJNAME, FP_ACTION, FP_IDENTITY, PARA, FP_PARANUM, FP_ERRORSTR);
+}
+
+if (FP_MULTIDISPLAY == 0  && FP_IDENTITY != "")
+{
+FP_ERRORSTR = displayOldSingleInst(FP_OBJNAME, FP_IDENTITY, PARA, FP_PARANUM, FP_ERRORSTR);
+}
+return FP_ERRORSTR;
+}
+%>

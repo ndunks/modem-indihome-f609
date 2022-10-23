@@ -1,0 +1,19 @@
+<%
+IMPORT FILE "common_gch.gch";
+function sipcid_func(FP_ACTION, FP_INDEX, FP_ERRORSTR)
+{
+var FP_OBJNAME      = "OBJ_VOIPDTMF_ID";
+var FP_MULTIDISPLAY = 0;
+var FP_PARANUM      = 6;
+var PARA[6] =
+{
+"ViewName",
+"CIDMode",
+"TimeEnable",
+"CallerNameAsCIDNumber",
+"FskFrameType",
+"ETSICallIDStandard"
+};
+return getOldFunctionGCH(FP_OBJNAME, FP_MULTIDISPLAY, PARA, FP_PARANUM, FP_ACTION, FP_INDEX, FP_ERRORSTR);
+}
+%>

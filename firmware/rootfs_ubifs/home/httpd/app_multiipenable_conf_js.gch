@@ -1,0 +1,42 @@
+<script language="javascript">
+var URL_BASIC_PARA = new Array(
+"IsWanSrvCntl",
+"IpFilterTarget",
+"UrlFilterTarget",
+"UrlFilterEnable",
+"SrvCntlTarget",
+"DefaultPolicy",
+"MacFilterTarget",
+"MacFilterEnable",
+"MacfilterMode"
+,
+"MultiIpEnable"
+);
+function getmsg(id)
+{
+var str      = new Array();
+str[0]   = new Array(118, "&?error_118;");
+str[1]   = new Array(119, "&?error_119;");
+str[2]   = new Array(122, "&?error_122;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+pageGetValue();
+}
+function pageGetValue()
+{
+jslPostToViewCheckBox("Frm_MultiIPEnable","MultiIpEnable");
+}
+function Slect_Enable()
+{
+jslViewToPostCheckBox("MultiIpEnable", "Frm_MultiIPEnable");
+setValue("IF_ACTION", "basic_apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+</script>

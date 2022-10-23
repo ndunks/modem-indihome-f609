@@ -1,0 +1,49 @@
+<script language="javascript">
+var PARA=  new Array(
+"NatPower"
+);
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+ProcessRet(errstr, errpara);
+pageGetValue();
+}
+function pageGetValue()
+{
+if("1" == getValue("NatPower"))
+{
+setChecked("Frm_NatPower", true);
+}
+else
+{
+setChecked("Frm_NatPower", false);
+}
+}
+function pageSetValue()
+{
+HiddenParaInit(PARA);
+if( getChecked("Frm_NatPower") == true)
+{
+setValue("NatPower","1");
+}
+else
+{
+setValue("NatPower","0");
+}
+}
+function pageCancel()
+{
+jslDisable("Btn_Submit","Btn_Cancel");
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+jslDisable("Frm_NatPower");
+jslDisable("Btn_Submit","Btn_Cancel");
+pageSetValue();
+setValue("IF_ACTION", "apply");
+getObj("fSubmit").submit();
+}
+</script>

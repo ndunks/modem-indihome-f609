@@ -1,0 +1,66 @@
+<script language="javascript">
+var PON_PARA = new Array(
+"Enable",
+"AutoTransTime"
+);
+function getmsg(id)
+{
+var str  = new Array();
+str[0]   = new Array(101, "&?error_101;");
+str[1]   = new Array(116, "&?error_116;");
+str[2]   = new Array(117, "&?error_117;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr  = getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+moveErrLayer(595,93);
+pageGetValue();
+}
+function pageGetValue()
+{
+jslPostToViewCheckBox("Frm_3gEnable", "Enable");
+jslSetValue("Frm_AutoTransTime","AutoTransTime");
+}
+function pageCheckValue()
+{
+var msg = "";
+var code = checkIntegerRange(getValue("Frm_AutoTransTime"), 0, 2147483647);
+if (-1 == code)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_AutoTransTime","Fnt_AutoTransTime",msg);
+return false;
+}
+else if (-2 == code || -3 == code)
+{
+msg = getmsg(116, 0, 2147483647);
+ShowErrorForCom("Frm_AutoTransTime","Fnt_AutoTransTime",msg);
+return false;
+}
+return true;
+}
+function pageSetValue()
+{
+jslViewToPostCheckBox("Enable", "Frm_3gEnable");
+jslSetValue("AutoTransTime","Frm_AutoTransTime");
+}
+function pageSubmit()
+{
+if(pageCheckValue() == true)
+{
+DisableALL();
+pageSetValue();
+setValue("IF_ACTION", "apply");
+getObj("fSubmit").submit();
+}
+}
+function pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+</script>

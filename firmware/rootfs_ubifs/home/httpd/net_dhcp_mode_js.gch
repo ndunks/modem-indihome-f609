@@ -1,0 +1,77 @@
+<script language="javascript">
+var PORT_PARA = new Array(
+"VendorClassID",
+"LdarRule"
+);
+function getmsg(id)
+{
+var str      = new Array();
+str[0]   = new Array(118, "&?error_118;");
+str[1]   = new Array(122, "&?error_122;");
+return getMsgFormArray(str, arguments)  
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+moveErrLayer(580,40);
+pageGetValue();
+}
+function pageGetValue()
+{
+var number = getValue("IF_INSTNUM");
+for(var i=0;i<number;i++)
+{
+if(getValue("LdarRule"+i)=="1")
+{
+setValue("Frm_DhcpModeSelect"+i,"Lan");
+}
+else if(getValue("LdarRule"+i)=="2")
+{
+setValue("Frm_DhcpModeSelect"+i,"Wan");
+}
+else
+{
+setValue("Frm_DhcpModeSelect"+i,"Default");
+}
+}
+}
+function pageSetValue()
+{
+HiddenParaInit(PORT_PARA);
+var number = getValue("IF_INSTNUM");
+for(var i=0;i<number;i++)
+{
+if(getValue("Frm_DhcpModeSelect"+i)=="Default")
+{
+setValue("LdarRule"+i,"0");
+}
+else if(getValue("Frm_DhcpModeSelect"+i)=="Lan")
+{
+setValue("LdarRule"+i,"1");
+}
+else if(getValue("Frm_DhcpModeSelect"+i)=="Wan")
+{
+setValue("LdarRule"+i,"2");
+}
+else
+{
+setValue("LdarRule"+i,"3");
+}
+}
+}
+function pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+pageSetValue();
+setValue("IF_ACTION", "apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+</script>

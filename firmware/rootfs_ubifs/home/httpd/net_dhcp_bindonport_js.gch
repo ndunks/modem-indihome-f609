@@ -1,0 +1,78 @@
+<script language="javascript">
+var PORT_PARA = new Array(
+"VendorClassID",
+"LdarRule"
+);
+function getmsg(id)
+{
+var str      = new Array();
+str[0]   = new Array(118, "&?error_118;");
+str[1]   = new Array(122, "&?error_122;");
+return getMsgFormArray(str, arguments)  
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+moveErrLayer(580,40);
+pageGetValue();
+}
+function pageGetValue()
+{
+var number = getValue("IF_INSTNUM");
+for(var i=0;i<number;i++)
+{
+if(document.getElementById("LdarRule"+i).value=="2" || document.getElementById("LdarRule"+i).value=="3")
+{
+setChecked("FRM_VendorClassID"+i,true);
+}
+else
+{
+setChecked("FRM_VendorClassID"+i,false);
+}
+<%
+if((getenv("CurrentVersionInfo") == 3) && (getenv("Right") == 2))
+{
+%>
+if( getObj("fnt_lanname"+i).innerHTML == "SSID2" || getObj("fnt_lanname"+i).innerHTML == "SSID3" || getObj("fnt_lanname"+i).innerHTML == "SSID4")
+{
+jslDiDisplay("TR_VendorClassID"+i);
+}
+<%
+}
+%>
+}
+}
+function pageSetValue()
+{
+HiddenParaInit(PORT_PARA);
+var number = getValue("IF_INSTNUM");
+for(var i=0;i<number;i++)
+{
+if(document.getElementById("FRM_VendorClassID"+i).checked==true)
+{
+setValue("LdarRule"+i,"2");
+}
+else
+{
+setValue("LdarRule"+i,"0");
+}
+}
+}
+function pageCancel()
+{
+jslDisable("Btn_Submit","Btn_Cancel");
+DisableALL();
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+jslDisable("Btn_Submit","Btn_Cancel");
+pageSetValue();
+setValue("IF_ACTION", "apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+</script>

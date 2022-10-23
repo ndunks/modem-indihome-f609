@@ -1,0 +1,52 @@
+
+<%
+IMPORT FILE "pon_voip_h248_termi.gch";
+IMPORT FILE "pon_voip_h248_termi_js.gch";
+%>
+<table id="h248term"  class="table" width="480px" border="0">
+<tr>
+<td class="td1">&?ponh248termi001;</td>
+<td colspan="2" class="td2">
+<select id="Frm_PhysicalTermIDConfigMethod" name="select2" size="1" class="list_2" onchange="PhyTermFlagChange();">
+<option value="0">&?ponh248termi002;</option>
+<option value="1">&?ponh248termi003;</option>
+</select>
+</td>
+</tr>
+<tr id="TR_PhysicalTermIDPrefix" style="display:none;">
+<td id="Fnt_PhysicalTermIDPrefix" class="td11">&?ponh248termi004;</td>
+<td class="td2"><input name="" id="Frm_PhysicalTermIDPrefix" type="text" class="inputId" value="" size="15" /></td>
+</tr>
+<tr id="TR_PhysicalTermIDAddLen" style="display:none;">
+<td id="Fnt_PhysicalTermIDAddLen" class="td11">&?ponh248termi005;</td>
+<td class="td2"><input name="" id="Frm_PhysicalTermIDAddLen" type="text" class="inputId" value="" size="15" /></td>
+</tr>
+<%
+var portnum = query_list("OBJ_PON_VOIPH248LINE_ID", "IGD");
+for(var i = 0; i < portnum; i++)
+{
+%>
+<tr id="TR_PhysicalTermID<%=i;%>" style="display:none;">
+<td id="Fnt_PhysicalTermID<%=i;%>" class="td11">&?ponh248termi007;<%=i+1;%></td>
+<td class="td2"><input name="" id="Frm_PhysicalTermID<%=i;%>" type="text" class="inputId" value="" size="15" /></td>
+</tr>
+<%
+}
+%>
+<tr>
+<td class="td1">&nbsp;</td>
+<td class="td2">&nbsp;</td>
+</tr>
+<tr>
+<td id="Fnt_EphemeralTermIDPrefix" class="td11">&?ponh248termi006;</td>
+<td class="td2"><input name="" id="Frm_EphemeralTermIDPrefix" type="text" class="inputId" value="" size="15" /></td>
+</tr>
+<tr>
+<td id="Fnt_EphemeralTermIDAddLen" class="td11">&?ponh248termi005;</td>
+<td class="td2"><input name="" id="Frm_EphemeralTermIDAddLen" type="text" class="inputId" value="" size="15" /></td>
+</tr>
+<tr>
+<td id="Fnt_EphemeralTermIDStart" class="td11">&?ponh248termi008;</td>
+<td class="td2"><input name="" id="Frm_EphemeralTermIDStart" type="text" class="inputId" value="" size="15" /></td>
+</tr>
+</table>

@@ -1,0 +1,237 @@
+<%
+IMPORT FILE "common_gch.gch";
+var FP_ERRORSTR     = "SUCC";
+var FP_HANDLE, FP_ACTION;
+create_form_start("fSubmit", "easySetup.ghtml");
+createBasicHidden();
+FP_ACTION = request("IF_ACTION");
+create_hidden_sep("hostname", "");
+if( request("IF_ACTION") == "wanc_setup")
+{
+var nextpage = "IPv46_net_wan2_conf_t.gch";
+setenv("nextpage", nextpage);
+header("Location: /start.ghtml");
+}
+var FP_WLAN_FLAG = 0;
+FP_WLAN_FLAG = 1;
+create_hidden_sep("IF_WLAN_FLAG", FP_WLAN_FLAG);
+var FP_WLAN_CONFIG_OBJNAME = "OBJ_WLANCONFIG_ID";
+var FP_WLAN_CONFIG_PARANUM = 2;
+var WLAN_CONFIG_PARA[2] =
+{
+"ESSID",
+"zte"
+};
+var WLAN_PSK_OBJNAME = "OBJ_WLANPSK_ID";
+var WLAN_PSK_PARANUM = 2;
+var WLAN_PSK_PARA[2] =
+{
+"KeyPassphrase",
+"zte"
+};
+if( FP_WLAN_FLAG == 1)
+{
+query_list("OBJ_WLANCONFIG_ID", "IGD");
+var FP_WLAN_IDENTITY = query_identity(0);
+if( FP_WLAN_IDENTITY == "")
+{
+FP_WLAN_IDENTITY = "IGD.LD1.WLAN1";
+}
+query_list(WLAN_PSK_OBJNAME, FP_WLAN_IDENTITY);
+var FP_PSK_IDENTITY = query_identity(0);
+if( FP_PSK_IDENTITY == "")
+{
+FP_PSK_IDENTITY = "IGD.LD1.WLAN1.PSK1";
+}
+if( FP_ACTION == "apply" && request("IF_WLAN_FLAG") == "1")
+{
+FP_HANDLE = create_paralist();
+setpara(FP_HANDLE, "ESSID");
+set_inst(FP_HANDLE, FP_WLAN_CONFIG_OBJNAME, FP_WLAN_IDENTITY);
+FP_ERRORSTR = getNewInstError(FP_ERRORSTR);
+FP_HANDLE = create_paralist();
+setpara(FP_HANDLE, "KeyPassphrase");
+set_inst(FP_HANDLE, WLAN_PSK_OBJNAME, FP_PSK_IDENTITY);
+FP_ERRORSTR = getNewInstError(FP_ERRORSTR);
+}
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, FP_WLAN_CONFIG_OBJNAME, FP_WLAN_IDENTITY);
+create_hidden_para(FP_HANDLE, WLAN_CONFIG_PARA, FP_WLAN_CONFIG_PARANUM);
+destroy_paralist(FP_HANDLE);
+FP_ERRORSTR = getDisplayInstError(FP_ERRORSTR);
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, WLAN_PSK_OBJNAME, FP_PSK_IDENTITY);
+create_hidden_para(FP_HANDLE, WLAN_PSK_PARA, WLAN_PSK_PARANUM);
+destroy_paralist(FP_HANDLE);
+FP_ERRORSTR = getDisplayInstError(FP_ERRORSTR);
+}
+var FP_USER_OBJNAME = "OBJ_USERINFO_ID";
+var FP_USER_PARANUM = 4;
+var FP_USER_INDEX = 0;
+var USER_PARA[4] =
+{
+"userUsername",
+"userPassword",
+"userOldPassword",
+"Right"
+};
+var FP_USER_INSTNUM = query_list(FP_USER_OBJNAME, "IGD");
+var FP_USER_IDENTITY;
+if(FP_USER_INSTNUM != 888 && FP_USER_INDEX >=0)
+{
+FP_USER_IDENTITY = query_identity(FP_USER_INDEX);
+}
+if( FP_ACTION == "apply" && getenv("Right") == 1 && request("userFlag") == "1")
+{
+FP_HANDLE = create_paralist();
+set_para(FP_HANDLE, "Username",    request("userUsername"));
+set_para(FP_HANDLE, "Password",    request("userOldPassword"));
+var FP_RESULT = login(FP_HANDLE, "OBJ_LOGIN_ID");
+if( FP_RESULT == 0)
+{
+FP_HANDLE = create_paralist();
+set_para(FP_HANDLE, "Password",    request("userPassword"));
+set_inst(FP_HANDLE, FP_USER_OBJNAME, FP_USER_IDENTITY);
+FP_ERRORSTR = getNewInstError(FP_ERRORSTR);
+}
+else
+{
+FP_ERRORSTR = getDisplayInstError(FP_ERRORSTR);
+}
+}
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, FP_USER_OBJNAME, FP_USER_IDENTITY);
+create_hidden_sep("userUsername", get_para(FP_HANDLE, "Username"));
+create_hidden_sep("userPassword", "******");
+create_hidden_sep("userOldPassword", "******");
+create_hidden_sep("Right", get_para(FP_HANDLE, "Right"));
+var pwd  = get_para(FP_HANDLE, "Password");
+session_set("login_pwd", pwd);
+setenv("login_pwd", pwd);
+destroy_paralist(FP_HANDLE);
+FP_ERRORSTR = getDisplayInstError(FP_ERRORSTR);
+create_hidden_sep("userFlag", "");
+var FP_DHCP_FLAG = 0;
+FP_DHCP_FLAG = 1;
+create_hidden_sep("IF_DHCP_FLAG", FP_DHCP_FLAG);
+var FP_DHCP_CONFIG_OBJNAME = "OBJ_DHCPHOST_ID";
+var FP_DHCP_CONFIG_PARANUM = 2;
+var DHCP_CONFIG_PARA[2] =
+{
+"ServerEnable",
+"zte"
+};
+var FP_LAN_PORT_OBJNAME = "OBJ_LAN_PORT_ID";
+var FP_LAN_CONFIG_PARANUM = 2;
+var LAN_PORT_PARA[2] =
+{
+"LANporttype",
+"Isonline"
+};
+var Port_Num = 4;
+var FP_IDENTITY[4] =
+{
+"IGD.LD1.ETH1",
+"IGD.LD1.ETH2",
+"IGD.LD1.ETH3",
+"IGD.LD1.ETH4"
+};
+if(FP_DHCP_FLAG == 1)
+{
+if( FP_ACTION == "apply")
+{
+FP_HANDLE = create_paralist();
+setpara(FP_HANDLE, "ServerEnable");
+set_inst(FP_HANDLE, FP_DHCP_CONFIG_OBJNAME, "");
+FP_ERRORSTR = getNewInstError(FP_ERRORSTR);
+}
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, FP_DHCP_CONFIG_OBJNAME, "");
+create_hidden_para(FP_HANDLE, DHCP_CONFIG_PARA, FP_DHCP_CONFIG_PARANUM);
+destroy_paralist(FP_HANDLE);
+FP_ERRORSTR = getDisplayInstError(FP_ERRORSTR);
+for( var i=0; i < Port_Num; i++)
+{
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE,FP_LAN_PORT_OBJNAME,FP_IDENTITY[i]);
+create_hidden_multiinstpara(FP_HANDLE,LAN_PORT_PARA,i,FP_LAN_CONFIG_PARANUM);
+destroy_paralist(FP_HANDLE);
+}
+FP_ERRORSTR = getDisplayInstError(FP_ERRORSTR);
+}
+var FP_CATVRF_FLAG = 0;
+if(getenv("IsOnuCatv") != 0)
+{
+FP_CATVRF_FLAG = 1;
+}
+create_hidden_sep("IF_CATVRF_FLAG", FP_CATVRF_FLAG);
+var FP_CATV_RFCONF_OBJNAME = "OBJ_PON_CATV_ID";
+var FP_CATV_RFCONF_PARANUM = 3;
+var CATV_RFCONF_PARA[3] =
+{
+"CatvEnable",
+"AgcOffset",
+"zte"
+};
+if(FP_CATVRF_FLAG == 1)
+{
+if( FP_ACTION == "apply")
+{
+FP_HANDLE = create_paralist();
+setpara(FP_HANDLE, "AgcOffset");
+setpara(FP_HANDLE, "CatvEnable");
+set_inst(FP_HANDLE, FP_CATV_RFCONF_OBJNAME, "");
+FP_ERRORSTR = getNewInstError(FP_ERRORSTR);
+}
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, FP_CATV_RFCONF_OBJNAME, "");
+create_hidden_para(FP_HANDLE, CATV_RFCONF_PARA, FP_CATV_RFCONF_PARANUM);
+destroy_paralist(FP_HANDLE);
+FP_ERRORSTR = getDisplayInstError(FP_ERRORSTR);
+}
+var FP_WAN_FLAG = 0;
+FP_WAN_FLAG = 1;
+create_hidden_sep("IF_WAN_FLAG", FP_WAN_FLAG);
+var WAN_SETUP_OBJNAME = "OBJ_WAN_SETUP_ID";
+var FP_WAN_INTER_IDENTITY = "Internet";
+var WAN_INTER_SETUP_PARANUM = 2;
+var WAN_INTER_SETUP_PARA[2] =
+{
+"interpppname",
+"interppppassword"
+};
+var FP_WAN_VOIP_IDENTITY = "Voip";
+var WAN_VOIP_SETUP_PARANUM = 2;
+var WAN_VOIP_SETUP_PARA[2] =
+{
+"voippppname",
+"voipppppassword"
+};
+if(FP_WAN_FLAG == 1)
+{
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, WAN_SETUP_OBJNAME, FP_WAN_INTER_IDENTITY);
+create_hidden_sep("interpppname", get_para(FP_HANDLE, "UserName"));
+if(get_para(FP_HANDLE, "UserName") == "")
+create_hidden_sep("interppppassword", "");
+else
+create_hidden_sep("interppppassword", "******");
+destroy_paralist(FP_HANDLE);
+FP_ERRORSTR = getDisplayInstError(FP_ERRORSTR);
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, WAN_SETUP_OBJNAME, FP_WAN_VOIP_IDENTITY);
+create_hidden_sep("voippppname", get_para(FP_HANDLE, "UserName"));
+if(get_para(FP_HANDLE, "UserName") == "")
+create_hidden_sep("voipppppassword", "");
+else
+create_hidden_sep("voipppppassword", "******");
+destroy_paralist(FP_HANDLE);
+FP_ERRORSTR = getDisplayInstError(FP_ERRORSTR);
+}
+create_form_end();
+if( FP_ACTION == "apply" && FP_ERRORSTR == "SUCC")
+{
+var IF_HN = request("hostname");
+header("Location: https://" + IF_HN + "/easySetup.ghtml");
+}
+%>

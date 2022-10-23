@@ -1,0 +1,117 @@
+<script language="javascript">
+var PARA = new Array(
+"DevIndex",
+"NetModeSelect"
+);
+function getmsg(id)
+{
+var str      = new Array();
+str[0]   = new Array(122, "&?error_122;");
+str[1]   = new Array(101, "&?error_101;");
+str[2]   = new Array(123, "&?error_123;");
+return getMsgFormArray(str, arguments);
+}
+function view2post()
+{
+var val = "";
+var netModeObj = document.fwork.Frm_mobile_net;
+var len = netModeObj.length;
+for (var i=0; i<len; i++)
+{
+if (netModeObj[i].checked)
+{
+val = netModeObj[i].value;
+break;
+}
+}
+switch(val)
+{
+case "default":
+val = 0;
+break;
+case "WCDMA_pre":
+val = 1;
+break;
+case "GSM_pre":
+val = 2;
+break;
+case "WCDMA_only":
+val = 3;
+break;
+case "GSM_only":
+val = 4;
+break;
+}
+return val;
+}
+function post2view()
+{
+var val = getValue("NetModeSelect");
+switch(val)
+{
+case "0":
+val = "default";
+break;
+case "1":
+val = "WCDMA_pre";
+break;
+case "2":
+val = "GSM_pre";
+break;
+case "3":
+val = "WCDMA_only";
+break;
+case "4":
+val = "GSM_only";
+break;
+}
+return val;
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+pageGetValue();
+}
+function pageGetValue()
+{
+var val = post2view();
+var netModeObj = document.fwork.Frm_mobile_net;
+var len = netModeObj.length;
+for (var i=0; i<len; i++)
+{
+if (netModeObj[i].value ==  val)
+{
+netModeObj[i].checked = true;
+}
+}
+}
+function pageCheckValue()
+{
+return true;
+}
+function pageSetValue()
+{
+var val = view2post();
+setValue("NetModeSelect", val);
+}
+function pageSubmit()
+{
+if (pageCheckValue()==true)
+{
+jslDisable("Btn_Submit", "Btn_Cancel");
+setValue("IF_ACTION", "apply");
+pageSetValue();
+DisableALL();
+getObj("fSubmit").submit();
+}
+}
+function pageCancel()
+{
+jslDisable("Btn_Submit","Btn_Cancel");
+DisableALL();
+location.href = getObj("fSubmit").action;
+}
+</script>

@@ -1,0 +1,23 @@
+<%
+IMPORT FILE "at_diag_gch.gch";
+IMPORT FILE "manager_at_diag_js.gch";
+%>
+<table class="table" width="450px" border="0">
+<!--等待过程的提示语-->
+<tr id="Tr_Tip" style="display:none">
+<td class="td3"  colspan="2" align="center">&?cmn12;&?pub004;</td>
+</tr>
+<tr>
+<td id="Fnt_AtCommd" class="td11">&?cmn14;</td>
+<td class="td2">
+<input id="Frm_AtCommd" name="textfield22" type="text" class="inputId8"  value="" size="15" /></td>
+</tr>
+<tr>
+<td colspan="2" >
+<textarea id="Frm_AtResult" cols="" rows="" class="textarea_1" readonly="readonly">
+<%=atResult;%>
+</textarea>
+</td>
+</tr>
+</table>
+<div id="div4"></div>

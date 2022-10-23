@@ -1,0 +1,38 @@
+<%
+IMPORT FILE "common_gch.gch";
+var FP_OBJNAME      = "OBJ_DHCPCLEANLINK_ID";
+var FP_MULTIDISPLAY = 0;
+var FP_PARANUM      = 2;
+var FP_ERRORSTR     = "SUCC";
+var FP_HANDLE;
+var PARA[2] =
+{
+"bSendRelease",
+"ZTE"
+};
+var FP_ACTION = request("IF_ACTION");
+create_form_start("fSubmit", "");
+createSubmitHidden(FP_MULTIDISPLAY, PARA, FP_PARANUM, "");
+var FP_IDENTITY     = "";
+
+if (FP_ACTION == "apply")
+{
+
+FP_HANDLE = create_paralist();
+for(var i=0; i< FP_PARANUM; i++)
+{
+setpara(FP_HANDLE, PARA[i]);
+}
+FP_IDENTITY = set_inst(FP_HANDLE, FP_OBJNAME, "IGD");
+}
+
+if (FP_MULTIDISPLAY == 0)
+{
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, FP_OBJNAME, "IGD");
+create_hidden_para(FP_HANDLE, PARA, FP_PARANUM);
+destroy_paralist(FP_HANDLE);
+}
+getDisplayInstError(FP_ERRORSTR);
+create_form_end();
+%>

@@ -1,0 +1,28 @@
+<%
+IMPORT FILE "common_gch.gch";
+function ftpserver_func(FP_ACTION,FP_INDEX,FP_ERRORSTR)
+{
+var FP_OBJNAME      = "OBJ_FMFTPSERVERCFG_ID";
+var FP_MULTIDISPLAY = 0;
+var FP_PARANUM      = 2;
+var PARA[2] =
+{
+"FtpEnable",
+"FtpAnon"
+};
+create_hidden_newpara(PARA, FP_PARANUM);
+if("apply" == FP_ACTION)
+{
+var FP_HANDLE = create_paralist();
+for(var i = 0; i < FP_PARANUM; i++)
+{
+setpara(FP_HANDLE, PARA[i]);
+}
+set_para(FP_HANDLE, "ServerPort", "21");
+set_inst(FP_HANDLE, FP_OBJNAME, "IGD");
+FP_ERRORSTR = getNewInstError(FP_ERRORSTR);
+}
+var FP_INSTNUM = displayInst(FP_OBJNAME, FP_MULTIDISPLAY, PARA, FP_PARANUM, FP_ERRORSTR);
+return getDisplayInstError(FP_ERRORSTR);
+}
+%>

@@ -1,0 +1,85 @@
+<%
+IMPORT FILE "common_gch.gch";
+var FP_OBJNAME      = "OBJ_FWDMZ_ID";
+var FP_MULTIDISPLAY = 0;
+var FP_PARANUM      = 8;
+var PARA[8] =
+{
+"ViewName",
+"Enable",
+"WANCViewName",
+"WANCName",
+"InternalHost",
+"DevUniqueNum",
+"InternalMacHost",
+"MacEnable"
+};
+var FP_INDEX    = ifIndexNULL("old", FP_INDEX);
+var FP_IDENTITY = getInstIdentity(FP_OBJNAME, FP_INDEX);
+var FP_ACTION   = request("IF_ACTION");
+var FP_ERRORSTR = "SUCC";
+create_form_start("fSubmit", "");
+createSubmitHidden(FP_MULTIDISPLAY, PARA, FP_PARANUM, FP_INDEX);
+FP_ERRORSTR = applyOrNewOrDelInst(FP_OBJNAME, FP_ACTION, FP_IDENTITY, PARA, FP_PARANUM, FP_ERRORSTR);
+var FP_INSTNUM = getInstNum(FP_OBJNAME);
+if(0 == FP_INSTNUM)
+{
+}
+else
+{
+FP_IDENTITY = getInstIdentity(FP_OBJNAME, 0);
+FP_ERRORSTR = displayOldSingleInst(FP_OBJNAME, FP_IDENTITY, PARA, FP_PARANUM, FP_ERRORSTR);
+}
+var IPv6DMZObjname = "OBJ_FWDMZ6_ID";
+var FP_ACTION_IPV6 = request("IF_ACTION_IPV6");
+if ( "apply" == FP_ACTION_IPV6 )
+{
+var IPv6AddrDelNUM = request("IF_IPv6AddrDelNUM");
+for ( var i=0; i<IPv6AddrDelNUM; i++ )
+{
+var IPvAddrDelID = request("IF_IPv6AddrDelID"+i);
+del_inst(IPv6DMZObjname, IPvAddrDelID);
+}
+var IPv6AddrModNUM = request("IF_IPv6AddrModNUM");
+for ( var i=0; i<IPv6AddrModNUM; i++ )
+{
+var IPvAddrModID = request("IF_IPv6AddrModID"+i);
+var enable = request("IF_IPv6AddrModEnable"+i);
+var InternalV6Host = request("IF_IPv6AddrModInternalV6Host"+i);
+var handle = create_paralist();
+set_para(handle, "Enable", enable);
+set_para(handle, "InternalV6Host", InternalV6Host);
+set_inst(handle, IPv6DMZObjname, IPvAddrModID);
+}
+var IPv6AddrAddNUM = request("IF_IPv6AddrAddNUM");
+for ( var i=0; i<IPv6AddrAddNUM; i++ )
+{
+var enable = request("IF_IPv6AddrAddEnable"+i);
+var InternalV6Host = request("IF_IPv6AddrAddInternalV6Host"+i);
+var handle = create_paralist();
+set_para(handle, "Enable", enable);
+set_para(handle, "InternalV6Host", InternalV6Host);
+set_inst(handle, IPv6DMZObjname, "");
+}
+}
+else
+{
+}
+FP_ERRORSTR = getDisplayInstError(FP_ERRORSTR);
+var ipv6AddrNum = query_list(IPv6DMZObjname, "IGD");
+create_hidden_sep("IF_IPv6AddrNUM", ipv6AddrNum);
+for ( var i=0; i<ipv6AddrNum; i++ )
+{
+var FP_HANDLE = create_paralist();
+var FP_IDENTITY   = query_identity(i);
+create_hidden_sep("IF_IPv6AddrID"+i, FP_IDENTITY);
+get_inst(FP_HANDLE, IPv6DMZObjname, FP_IDENTITY);
+var Enable = get_para(FP_HANDLE, "Enable");
+var InternalV6Host = get_para(FP_HANDLE, "InternalV6Host");
+create_hidden_sep("IF_IPv6AddrEnable"+i, Enable);
+create_hidden_sep("IF_IPv6AddrInternalV6Host"+i, InternalV6Host);
+destroy_paralist(FP_HANDLE);
+}
+FP_ERRORSTR = getDisplayInstError(FP_ERRORSTR);
+create_form_end();
+%>

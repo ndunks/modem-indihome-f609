@@ -1,0 +1,160 @@
+<%
+IMPORT FILE "common_gch.gch";
+IMPORT FILE "auth/api.gch";
+IMPORT FILE "auth/impl.gch";
+var sess_id = auth_sessid();
+session_start(sess_id, 0);
+puts("enter login.gch sess_id = "+sess_id);
+var view = "";
+var err_code            = auth_check(sess_id);
+var if_sess_exist       = 0;
+var login_err_type      = "";
+var preempt_err_type    = "";
+puts("auth_check err_code = "+err_code);
+if (err_code != 0)
+{
+switch (err_code)
+{
+case 100:
+break;
+case 101:
+login_err_type = "EXCEED_MAX_USER";
+break;
+case 102:
+login_err_type = "EXCEED_MAX_ATTEMPT";
+break;
+case 103:
+login_err_type = "EXCEED_MAX_SESSION";
+break;
+default:
+login_err_type = "UNKNOWN";
+break;
+}
+}
+else
+{
+if_sess_exist = 1;
+}
+var action = request("action");
+if (login_err_type == "")
+{
+switch (action)
+{
+case "logout":
+var succ = auth_logout();
+if (succ)
+{
+IMPORT FILE "auth/logout_ctl.gch";
+return;
+}
+break;
+case "login":
+var err_code = auth_login(sess_id);
+puts("auth_login err_code ="+err_code);
+if_sess_exist = 0;
+if (err_code == 0)
+{
+if_sess_exist = 1;
+var login_status  = auth_get_status("login");
+if ("preempt" == login_status || "logined" == login_status)
+{
+var chgpwd_status = auth_get_status("chgpwd");
+if (1 == chgpwd_status)
+{
+view = "login_chgpwd.gch";
+}
+else if ("preempt" == login_status)
+{
+view = "login_preempt.gch";
+}
+else
+{
+setenv("thaild3bb", 0);
+header("Location: /tr069");
+}
+}
+}
+else
+{
+switch (err_code)
+{
+case 200:
+login_err_type = "INVALID_USERNAME_PASSWORD";
+break;
+case 201:
+login_err_type = "INVALID_LOGIN_TICKET";
+break;
+case 202:
+login_err_type = "EXCEED_MAX_ATTEMPT";
+break;
+case 203:
+login_err_type = "EXCEED_MAX_USER";
+break;
+default:
+login_err_type = "UNKNOWN";
+break;
+}
+}
+break;
+case "preempt":
+var login_status = auth_get_status("login");
+if ("preempt" == login_status)
+{
+var err_code = auth_preempt(sess_id);
+if (err_code != 0)
+{
+switch (err_code)
+{
+case 400:
+preempt_err_type = "TARGET_SESSION_NOT_EXIST";
+break;
+default:
+preempt_err_type = "UNKNOWN";
+break;
+}
+view = "login_preempt.gch";
+}
+else
+{
+if ("logined" == auth_get_status("login"))
+{
+if_sess_exist = 1;
+}
+}
+}
+break;
+default :
+break;
+}
+}
+var login_monotonic_id = getenv("auth/login_monotonic_id");
+if (login_monotonic_id == "N/A" || login_monotonic_id == "")
+{
+login_monotonic_id = 0;
+}
+auth_env_sync();
+switch (view)
+{
+case "login_preempt.gch":
+setenv("request/preempt_err_type", preempt_err_type);
+IMPORT FILE view;
+break;
+case "frame.gch":
+header("Location: /start.ghtml");
+break;
+default:
+setenv("request/login_err_type", login_err_type);
+setenv("request/if_sess_exist", if_sess_exist);
+setenv("request/sess_id", sess_id);
+setenv("auth/login_ticket",  get_remote_addr());
+set_sess_cookie("_TESTCOOKIESUPPORT", "1");
+setenv("request/login_monotonic_id", login_monotonic_id);
+if(if_sess_exist == 1)
+{
+setenv("thaild3bb", 0);
+header("Location: /tr069");
+}
+break;
+}
+return;
+%>

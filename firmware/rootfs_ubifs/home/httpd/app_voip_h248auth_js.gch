@@ -1,0 +1,158 @@
+<script language="javascript">
+var H248MAIN_PARA = new Array(
+"MGMIDType",
+"MGMID",
+"LocalPort",
+"MGCAddr1",
+"MGCPort1",
+"MGCAddr2",
+"MGCPort2",
+"ServiceChangeType",
+"RestartInterval",
+"HeartBeatInterval",
+"HeartBeatMessageType",
+"ThreeHandShake",
+"LongTimer",
+"MaxExecTimer",
+"PendingTimerInit",
+"MaxPendingTimes",
+"PendingType",
+"RetranIntervalTimer",
+"MaxRetranCount",
+"RetranTimerType",
+"AuthenticationMethID",
+"MD5AuthMGIDType",
+"MD5AuthMGID",
+"InitPublicKey",
+"DhPara_P",
+"DhPara_G",
+"PhysicalTermIDConfigMethod",
+"PhysicalTermIDPrefix",
+"PhysicalTermIDAddLen",
+"EphemeralTermIDPrefix",
+"EphemeralTermIDAddLen",
+"EphemeralTermIDUniform",
+"EphemeralTermIDStart"
+);
+function getmsg(id)
+{
+var str      = new Array();
+str[0]   = new Array(101, "&?error_101;");
+str[1]   = new Array(102, "&?error_102;");
+str[2]   = new Array(103, "&?error_103;");
+str[3]   = new Array(115, "&?error_115;");
+str[4]   = new Array(116, "&?error_116;");
+str[5]   = new Array(117, "&?error_117;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+moveErrLayer(580,95);
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errparam = getValue("IF_ERRORPARAM");
+ProcessRet(errstr, errparam);
+moveErrLayer(592,20);
+pageGetValue();
+ChooseMD5AuthMGIDType();
+ChooseAuthenticationMethID();
+}
+function pageGetValue()
+{
+jslSetValue("Frm_AuthenticationMethID", "AuthenticationMethID");
+jslSetValue("Frm_MD5AuthMGIDType", "MD5AuthMGIDType");
+jslSetValue("Frm_MD5AuthMGID", "MD5AuthMGID");
+jslSetValue("Frm_InitPublicKey", "InitPublicKey");
+jslSetValue("Frm_DhPara_P", "DhPara_P");
+jslSetValue("Frm_DhPara_G", "DhPara_G");
+}
+function pageSetValue()
+{
+HiddenParaInit(H248MAIN_PARA);
+jslSetValue("AuthenticationMethID", "Frm_AuthenticationMethID");
+var AuthenticationMethID = getValue("Frm_AuthenticationMethID");
+if ( AuthenticationMethID == "100")
+{
+jslSetValue("MD5AuthMGIDType", "Frm_MD5AuthMGIDType");
+var MD5AuthMGIDType = getValue("Frm_MD5AuthMGIDType");
+if ( MD5AuthMGIDType == "2")
+{
+jslSetValue("MD5AuthMGID", "Frm_MD5AuthMGID");
+}
+jslSetValue("InitPublicKey", "Frm_InitPublicKey");
+jslSetValue("DhPara_P", "Frm_DhPara_P");
+jslSetValue("DhPara_G", "Frm_DhPara_G");
+}
+}
+function pageCheckValue()
+{
+var AuthenticationMethID = getValue("Frm_AuthenticationMethID");
+if ( AuthenticationMethID == "100")
+{
+var MD5AuthMGIDType = getValue("Frm_MD5AuthMGIDType");
+if ( MD5AuthMGIDType == "2")
+{
+var value = getValue("Frm_MD5AuthMGID");
+var check = checkStrLengthRange(value, 1, 63);
+if (check == -3)
+{
+msg = getmsg(102,0,63);
+ShowErrorForCom("Frm_MD5AuthMGID","Fnt_MD5AuthMGID",msg);
+return false;
+}
+}
+var value = getValue("Frm_InitPublicKey");
+var check = checkStrLengthRange(value, 1, 63);
+if (check == -3)
+{
+msg = getmsg(102,0,63);
+ShowErrorForCom("Frm_InitPublicKey","Fnt_InitPublicKey",msg);
+return false;
+}
+}
+return true;
+}
+function ChooseMD5AuthMGIDType()
+{
+var value = getValue("Frm_MD5AuthMGIDType");
+if(value == "2")
+{
+jslEnable("Frm_MD5AuthMGID");
+}
+else
+{
+jslDisable("Frm_MD5AuthMGID");
+}
+}
+function ChooseAuthenticationMethID()
+{
+var value = getValue("Frm_AuthenticationMethID");
+if(value == "100")
+{
+jslEnable("Frm_MD5AuthMGIDType", "Frm_InitPublicKey", "Frm_DhPara_P", "Frm_DhPara_G");
+ChooseMD5AuthMGIDType();
+}
+else
+{
+jslDisable("Frm_MD5AuthMGIDType", "Frm_MD5AuthMGID", "Frm_InitPublicKey", "Frm_DhPara_P", "Frm_DhPara_G");
+}
+}
+function pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+if(pageCheckValue() == true)
+{
+pageSetValue();
+setValue("IF_ACTION", "apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+else
+{
+}
+}
+</script>

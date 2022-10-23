@@ -1,0 +1,249 @@
+<%
+IMPORT FILE "common_gch.gch";
+create_form_start("fSubmit", "");
+var OPTICAL_HANDLE = create_paralist();
+get_inst(OPTICAL_HANDLE, "OBJ_PON_OPTICALPARA_ID", "");
+var Volt         = get_para(OPTICAL_HANDLE,"Volt");
+var RxPower      = get_para(OPTICAL_HANDLE,"RxPower");
+var TxPower      = get_para(OPTICAL_HANDLE,"TxPower");
+var Temp         = get_para(OPTICAL_HANDLE,"Temp");
+var Current      = get_para(OPTICAL_HANDLE,"Current");
+var RFTxPower    = get_para(OPTICAL_HANDLE,"RFTxPower");
+var VideoRxPower = get_para(OPTICAL_HANDLE,"VideoRxPower");
+destroy_paralist(OPTICAL_HANDLE);
+Volt    = Volt*1000;
+Temp    = Temp/1000;
+var LOSINFO_HANDLE = create_paralist();
+get_inst(LOSINFO_HANDLE, "OBJ_LOS_INFO_ID", "");
+var LosInfo = get_para(LOSINFO_HANDLE, "LosInfo");
+destroy_paralist(LOSINFO_HANDLE);
+var GPONREG_HANDLE = create_paralist();
+get_inst(GPONREG_HANDLE, "OBJ_GPONREGSTATUS_ID", "");
+var RegStatus = get_para(GPONREG_HANDLE,"RegStatus");
+var OnuId = get_para(GPONREG_HANDLE,"OnuId");
+destroy_paralist(GPONREG_HANDLE);
+var CATV_HANDLE = create_paralist();
+get_inst(CATV_HANDLE, "OBJ_PON_CATV_ID", "");
+var CatvEnable = get_para(CATV_HANDLE,"CatvEnable");
+destroy_paralist(CATV_HANDLE);
+var GPONTIME_HANDLE = create_paralist();
+get_inst(GPONTIME_HANDLE, "OBJ_POWERONTIME_ID", "");
+var GponOnTime = get_para(GPONTIME_HANDLE,"GponOnTime");
+destroy_paralist(GPONTIME_HANDLE);
+create_form_end();
+var cver = getenv("CurrentVersionInfo");
+%>
+<div class="space_0">
+<table  class="infor" id="TABLE_DEV" width="410" border="0" cellpadding="0" cellspacing="1" bgcolor="#979797">
+<tr class="white_1">
+<td class="tdleft">&?poninfo026;</td>
+<td id="Frm_RegStatus" name="Frm_RegStatus" class="tdright"><font id="Fnt_RegStatus"></font></td>
+</tr>
+</table>
+<table class="infor" id="TABLE_DEV_ADVANCE" width="410" border="0" cellpadding="0" cellspacing="1" bgcolor="#979797" style="display:none;">
+<tr class="blue_1">
+<td class="tdleft">&?poninfo004;(&?poninfo022;)</td>
+<td id="Frm_RxPower" name="Frm_RxPower" class="tdright">
+<font id="Fnt_RxPower" name="Fnt_RxPower"></font>
+</td>
+</tr>
+<tr class="white_1">
+<td class="tdleft">&?poninfo005;(&?poninfo022;)</td>
+<td id="Frm_TxPower" name="Frm_TxPower" class="tdright">
+<font id="Fnt_TxPower" name="Fnt_TxPower"></font>
+</td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft">&?poninfo003;(&?poninfo024;)</td>
+<td id="Frm_Volt" name="Frm_Volt" class="tdright"><%=Volt;%></td>
+</tr>
+<tr  class="white_1">
+<td class="tdleft">&?poninfo007;(&?poninfo025;)</td>
+<td id="Frm_Current" name="Frm_Current"  class="tdright"><%=Current;%></td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft">&?poninfo006;(&?poninfo023;)</td>
+<td id="Frm_Temp" name="Frm_Temp" class="tdright"><%=Temp;%></td>
+</tr>
+<%
+if(getenv("IsOnuCatv") != 0)
+{
+%>
+<tr class="white_1">
+<td class="tdleft">&?poninfo028;</td>
+<td id="Frm_VideoRxPower" name="Frm_VideoRxPower" class="tdright">
+<font id="Fnt_VideoRxPower" name="Fnt_VideoRxPower"></font>
+</td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft">
+<%
+if(cver == 54)
+{
+%>
+&?poninfo029;
+<%
+}
+else
+{
+%>
+&?poninfo027;
+<%
+}
+%>
+</td>
+<td id="Frm_RFTxPower" name="Frm_RFTxPower" class="tdright">
+<font id="Fnt_RFTxPower" name="Fnt_RFTxPower"></font>
+</td>
+</tr>
+<%
+}
+if(cver == 14)
+{
+%>
+<tr class="white_1">
+<td class="tdleft">&?poninfo030;</td>
+<td id="Frm_GpononTime" name="Frm_GpononTime" class="tdright">
+<font id="Fnt_GpononTime" name="Fnt_GpononTime"></font>
+</td>
+</tr>
+<%
+}
+%>
+</table>
+</div>
+<div id="div4"></div>
+<form id="fSubmit" method="post" action="">
+</form>
+<SCRIPT>
+var cver = "<%=cver;%>";
+var userright = "<%=getenv("Right");%>";
+function pageLoad(url)
+{
+document.getElementById("fSubmit").action = url;
+pageGetValue();
+doUserRightShow();   
+}
+function pageReFresh()
+{
+document.getElementById("fSubmit").submit();
+}
+function pageGetValue()
+{
+var GponRegStatus = "";
+var RegStatus = "<%=RegStatus;%>";
+switch(RegStatus)
+{
+
+case "1":                                GponRegStatus = "&?ponreg003;";break;
+case "2":                                GponRegStatus = "&?ponreg004;";break;
+case "3":                                GponRegStatus = "&?ponreg005;";break;
+case "4":                                GponRegStatus = "&?ponreg006;";break;
+case "5":                                GponRegStatus = "&?ponreg007;";break;
+case "6":                                GponRegStatus = "&?ponreg008;";break;
+case "7":                                GponRegStatus = "&?ponreg009;";break;
+default:                                 GponRegStatus = "&?ponreg002;";break;
+}
+document.getElementById("Fnt_RegStatus").innerHTML = GponRegStatus;
+doRxTxPowerShow();
+if(cver == "14")
+{
+var tmphour = 0;
+var tmpmon = 0;
+var tmpsec = 0;
+var GponOnTime = parseInt("<%=GponOnTime;%>");
+if(!isNaN(GponOnTime))
+{
+tmphour = parseInt(GponOnTime/3600);
+if(tmphour < 10)
+{
+tmphour ="0" + tmphour;
+}
+tmpmon = parseInt((GponOnTime%3600)/60);
+if(tmpmon < 10)
+{
+tmpmon ="0" + tmpmon;
+}
+tmpsec = parseInt((GponOnTime%3600)%60);
+if(tmpsec < 10)
+{
+tmpsec ="0" + tmpsec;
+}
+}
+document.getElementById("Fnt_GpononTime").innerHTML = tmphour+": "+tmpmon+": "+tmpsec;
+setTimeout("pageReFresh()", 10000);
+}
+}
+function doUserRightShow()
+{
+if( userright == "1" || cver == "14" || cver == "36" || cver == "56" || cver == "53" || cver == "73")
+{
+jslEnDisplay("TABLE_DEV_ADVANCE");
+}
+else
+{
+jslDiDisplay("TABLE_DEV_ADVANCE");
+}
+}
+function setFont(id,text)
+{
+document.getElementById(id).innerHTML = text;
+}
+function doRxTxPowerShow()
+{
+var LosInfo = "<%=LosInfo;%>";
+var RxPower = "<%=RxPower;%>";
+var TxPower = "<%=TxPower;%>";
+var RFTxPower = "<%=RFTxPower;%>"
+var VideoRxPower = "<%=VideoRxPower;%>";
+var CatvEnable = "<%=CatvEnable;%>";
+
+RxPower = parseFloat(RxPower/10000).toFixed(1);
+TxPower = parseFloat(TxPower/10000).toFixed(1);
+if(cver == "54")
+{
+RFTxPower = parseFloat(RFTxPower/10000).toFixed(2);
+}
+else
+{
+RFTxPower = parseFloat(RFTxPower/10000-60).toFixed(2);
+}
+VideoRxPower = parseFloat(VideoRxPower/10000 - 30).toFixed(2);
+if(LosInfo == "1")
+{
+setFont("Fnt_RxPower", "--");
+setFont("Fnt_TxPower", "--");
+<%
+if(getenv("IsOnuCatv") != 0)
+{
+%>
+setFont("Fnt_RFTxPower", "--");
+setFont("Fnt_VideoRxPower", "--");
+<%
+}
+%>
+}
+else
+{
+setFont("Fnt_RxPower", RxPower);
+setFont("Fnt_TxPower", TxPower);
+<%
+if(getenv("IsOnuCatv") != 0)
+{
+%>
+if(CatvEnable == "1")
+{
+setFont("Fnt_RFTxPower", RFTxPower);
+setFont("Fnt_VideoRxPower", VideoRxPower);
+}
+else
+{
+setFont("Fnt_RFTxPower", "N/A");
+setFont("Fnt_VideoRxPower", "N/A");
+}
+<%
+}
+%>
+}
+}
+</SCRIPT>

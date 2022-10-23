@@ -1,0 +1,16 @@
+<%
+IMPORT FILE "common_gch.gch";
+var FP_OBJNAME      = "OBJ_UPNPCONFIG_ID";
+var FP_MULTIDISPLAY = 0;
+var PARA[] =
+{
+"EnableUPnPIGD",
+"WanName",
+"Wanv6Name",
+"LanName",
+"ADPeriod",
+"TTL"
+};
+var FP_PARANUM = arrlen(PARA);
+getPageGCH(FP_OBJNAME, FP_MULTIDISPLAY, PARA, FP_PARANUM);
+%>

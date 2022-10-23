@@ -1,0 +1,90 @@
+<%
+IMPORT FILE "common_gch.gch";
+IMPORT FILE "IPv46_wancppp_gch.gch";
+IMPORT FILE "IPv46_wancip_gch.gch";
+IMPORT FILE "IPv46_wancbridge_gch.gch";
+var FP_INSTNUM, WANC_OBJNAME_TYPE;
+var FP_Uplink = 2;
+var WAN_ObjName = "OBJ_ETHWANC_ID";
+var FP_ERRORSTR = "SUCC";
+var FP_ACTION      = request("IF_ACTION");
+var R_FP_NAME      = raw_request("IF_NAME");
+var FP_IDENTITY    = request("IF_IDENTITY");
+var WANC_TYPE      = request("IF_WANCTYPE");
+var XMODE          = request("xDslMode");
+if ("NULL" == XMODE || "" == XMODE)
+{
+XMODE = -1;
+}
+if ("NULL" == FP_IDENTITY || "" == FP_IDENTITY)
+{
+FP_IDENTITY = -1;
+}
+create_form_start("fSubmit", "");
+createBasicHidden();
+create_hidden_sep("IF_NAME", R_FP_NAME);
+create_hidden_sep("IF_Uplink", FP_Uplink);
+if(FP_IDENTITY == -1)
+{
+FP_INSTNUM = query_list(WAN_ObjName, "IGD");
+for(var i = 0; i < FP_INSTNUM; i++ )
+{
+var wanc_identity = query_identity(i);
+WANC_TYPE  = query_wanctype(i);
+if("pppoe" == WANC_TYPE)
+WANC_OBJNAME_TYPE = "OBJ_ETHWANCPPP_ID";
+else if("dhcp/static" == WANC_TYPE)
+WANC_OBJNAME_TYPE = "OBJ_ETHWANCIP_ID";
+else if("bridge" == WANC_TYPE)
+WANC_OBJNAME_TYPE = "OBJ_ETHWANCBRIDGE_ID";
+var TYPE_HANDLE = create_paralist();
+get_inst(TYPE_HANDLE, WANC_OBJNAME_TYPE, wanc_identity);
+var ServList = get_para(TYPE_HANDLE, "ServList");
+destroy_paralist(TYPE_HANDLE);
+if(1 == ServList)
+{
+FP_ACTION   = "Reposition";
+FP_IDENTITY = wanc_identity;
+break;
+}
+}
+}
+create_hidden_sep("IF_WANCTYPE", WANC_TYPE);
+if ("NULL" == FP_ACTION || ""==FP_ACTION || ("pppoe" == WANC_TYPE && ("edit" == FP_ACTION ||"Reposition" == FP_ACTION)))
+{
+FP_ERRORSTR = PPP_func(FP_ACTION, FP_IDENTITY, FP_INSTNUM,FP_Uplink, FP_ERRORSTR,XMODE);
+if ((FP_ERRORSTR!="SUCC") && (-1 == FP_IDENTITY) )
+{
+FP_ACTION="NULL";
+}
+}
+if ("NULL" == FP_ACTION || ""==FP_ACTION || ("dhcp/static" == WANC_TYPE && ("edit" == FP_ACTION ||"Reposition" == FP_ACTION)))
+{
+FP_ERRORSTR = IP_func(FP_ACTION,FP_IDENTITY, FP_INSTNUM ,FP_Uplink,FP_ERRORSTR,XMODE);
+if ((FP_ERRORSTR!="SUCC") && (-1 == FP_IDENTITY))
+{
+FP_ACTION="NULL";
+FP_ERRORSTR = PPP_func(FP_ACTION, FP_IDENTITY, FP_INSTNUM,FP_Uplink, FP_ERRORSTR,XMODE);
+}
+}
+if("NULL" == FP_ACTION || ""==FP_ACTION || ("bridge" == WANC_TYPE && ("edit" == FP_ACTION ||"Reposition" == FP_ACTION)))
+{
+FP_ERRORSTR = BRIDGE_func(FP_ACTION,FP_IDENTITY, FP_INSTNUM ,FP_Uplink,FP_ERRORSTR,XMODE);
+if ((FP_ERRORSTR!="SUCC") && (-1 == FP_IDENTITY))
+{
+FP_ACTION="NULL";
+FP_ERRORSTR = PPP_func(FP_ACTION, FP_IDENTITY, FP_INSTNUM,FP_Uplink, FP_ERRORSTR,XMODE);
+FP_ERRORSTR = IP_func(FP_ACTION,FP_IDENTITY, FP_INSTNUM ,FP_Uplink,FP_ERRORSTR,XMODE);
+}
+}
+create_hidden_sep("xDslMode", XMODE);
+create_hidden_sep("IF_INSTNUM", FP_INSTNUM);
+set_hidden("IF_ACTION",  FP_ACTION);
+var HANDLE = create_paralist();
+get_inst(HANDLE, "OBJ_PPPOE_MAX_MTU_ID", "");
+var MaxPPPoEMTU = get_para(HANDLE, "MaxPPPoEMTU");
+create_hidden_sep("IF_MaxPPPoEMTU", MaxPPPoEMTU);
+destroy_paralist(HANDLE);
+
+create_form_end();
+%>

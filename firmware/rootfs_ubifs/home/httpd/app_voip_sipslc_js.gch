@@ -1,0 +1,198 @@
+
+<script language="javascript">
+var SLC_PARA = new Array(
+"PortVoltage",
+"PortCurrent",
+"RingVoltage"
+);
+var SICTime_PARA = new Array(
+"HookLow",
+"HookHigh",
+"FlashLowMin",
+"FlashLowMax",
+"FlashHighFix",
+"DialHighMin",
+"DialHighFix",
+"DialLowMin",
+"DialLowMax",
+"RingCeaseFix",
+"PreHookHigh"
+);
+<%
+var cver = getenv("CurrentVersionInfo");
+%>
+function getmsg(id)
+{
+var str  = new Array();
+str[0]   = new Array(101, "&?error_101;");
+str[1]   = new Array(115, "&?error_115;");
+str[2]   = new Array(116, "&?error_116;");
+str[3]   = new Array(117, "&?error_117;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errparam = getValue("IF_ERRORPARAM");
+ProcessRet(errstr, errparam);
+pageGetValue();
+}
+function pageGetValue()
+{
+jslSetValue("Frm_RingVoltage","RingVoltage");
+jslSetValue("Frm_PortVoltage","PortVoltage");
+jslSetValue("Frm_PortCurrent","PortCurrent");
+<%
+if ((cver == 74) || (cver == 85))
+{
+%>
+var lineNum = getValue("IF_INSTNUM");
+for(var i = 0; i < lineNum; i++)
+{
+jslSetValue("Frm_HookLow"+i,"HookLow"+i);
+<%
+if (cver == 85)
+{
+%>
+jslSetValue("Frm_hookflashlower"+i,"FlashLowMin"+i);
+<%
+}
+%>
+}
+<%
+}
+%>
+}
+function pageSetValue()
+{
+HiddenParaInit(SLC_PARA);
+jslSetValue("RingVoltage", "Frm_RingVoltage");
+jslSetValue("PortVoltage","Frm_PortVoltage");
+jslSetValue("PortCurrent","Frm_PortCurrent");
+var lineNum = getValue("IF_INSTNUM");
+for(var i = 0; i < lineNum; i++)
+{
+HiddenMultiInstParaInit(SICTime_PARA,i);
+<%
+if ((cver == 74) || (cver == 85))
+{
+%>
+jslSetValue("HookLow"+i, "Frm_HookLow"+i);
+<%
+if (cver == 85)
+{
+%>
+jslSetValue("FlashLowMin"+i,"Frm_hookflashlower"+i);
+<%
+}
+}
+%>
+}
+}
+function pageCheckValue()
+{
+var msg = "";
+
+var slctimeNum=getValue("IF_INSTNUM");
+var FlashLowMax_Result;
+var Hookflashlower_Result;
+<%
+if (cver == 74)
+{
+%>
+for(var i = 0;i < slctimeNum; i++)
+{
+
+FlashLowMax_Result = checkIntegerRange(getValue("Frm_HookLow"+i),31,100);
+if(FlashLowMax_Result == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_HookLow"+i,"Fnt_FlashLowMax"+i,msg);
+return false;
+}
+else if(FlashLowMax_Result == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_HookLow"+i,"Fnt_FlashLowMax"+i,msg);
+return false;
+}
+else if(FlashLowMax_Result == -3)
+{
+msg = getmsg(116,31,100);
+ShowErrorForCom("Frm_HookLow"+i,"Fnt_FlashLowMax"+i,msg);
+return false;
+}
+}
+<%
+}
+%>
+<%
+if ( cver == 85)
+{
+%>
+for(var i = 0;i < slctimeNum; i++)
+{
+FlashLowMax_Result = checkIntegerRange(getValue("Frm_HookLow"+i),4,250);
+if(FlashLowMax_Result == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_HookLow"+i,"Fnt_FlashLowMax"+i,msg);
+return false;
+}
+else if(FlashLowMax_Result == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_HookLow"+i,"Fnt_FlashLowMax"+i,msg);
+return false;
+}
+else if(FlashLowMax_Result == -3)
+{
+msg = getmsg(116,4,250);
+ShowErrorForCom("Frm_HookLow"+i,"Fnt_FlashLowMax"+i,msg);
+return false;
+}
+Hookflashlower_Result = checkIntegerRange(getValue("Frm_hookflashlower"+i),3,12);
+if(Hookflashlower_Result == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_hookflashlower"+i,"Fnt_hookflashlower"+i,msg);
+return false;
+}
+else if(Hookflashlower_Result == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_hookflashlower"+i,"Fnt_hookflashlower"+i,msg);
+return false;
+}
+else if(Hookflashlower_Result == -3)
+{
+msg = getmsg(116,3,12);
+ShowErrorForCom("Frm_hookflashlower"+i,"Fnt_hookflashlower"+i,msg);
+return false;
+}
+}
+<%
+}
+%>
+return true;
+}
+function pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+if(pageCheckValue() == true)
+{
+pageSetValue();
+setValue("IF_ACTION", "apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+else
+{
+}
+}
+</script>

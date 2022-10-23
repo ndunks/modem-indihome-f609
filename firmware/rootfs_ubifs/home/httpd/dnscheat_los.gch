@@ -1,0 +1,26 @@
+<%
+var FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, "OBJ_WAN_SETUP_ID", "Internet");
+var UserName    = get_para(FP_HANDLE,"UserName");
+destroy_paralist(FP_HANDLE);
+var message = "message page";
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<META HTTP-EQUIV="pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title><%=message;%></title>
+</HEAD>
+<BODY style="font-family:Times New Roman; font-size:20px; text-align:left;margin-right:25%;margin-left:25%;margin-top:3%;">
+<div>
+<span>
+<span id="lodmsg"></span><b><font color="red"><%=UserName;%></font></b>
+</span>
+</div>
+</BODY>
+<script>
+document.getElementById("lodmsg").innerHTML="&?dnscheat_01;";
+</script>
+</HTML>

@@ -1,0 +1,42 @@
+<%
+IMPORT FILE "port_locate_gch.gch";
+IMPORT FILE "net_port_locate_js.gch";
+%>
+<table id="TestContent"  class="table" width="450px" border="0">
+<tr>
+<td class="td1_1"><font id="Fnt_DhcpEnable">&?cportlocate3;</font></td>
+<td class="td2"><input id="Frm_DhcpEnable" name="Frm_DhcpEnable" type="checkbox"/></td>
+</tr>
+<tr>
+<td class="td1_1"><font id="Fnt_PppoeEnable">&?cportlocate4;</font></td>
+<td class="td2"><input id="Frm_PppoeEnable" name="Frm_PppoeEnable" type="checkbox"/></td>
+</tr>
+<tr>
+<td class="td1_1"><font id="Fnt_PortLocateFormatSelect">&?cportlocate5;</font></td>
+<td class="td2">
+<select class="list_1" size="1" id="Frm_PortLocateFormatSelect" onchange="cntrlFormat()">
+<!-- <option value="1:0">新加坡电信</option>  国家定制 -->
+<option value="">&?cportlocate6;</option> <!-- 自定义 -->
+</select>
+</td>
+</tr>
+<tr id="TR_PortLocateFormat" style="display:none">
+<td class="td1_1"><font id="Fnt_PortLocateFormat">&?cportlocate7;</font></td>
+<td class="td2">
+<input id="Frm_PortLocateFormat" name="Frm_PortLocateFormat" type="text" class="inputId" onfocus="formatFocus()" onblur="formatBlur()"  maxlength="60"/>
+(1 ~ 60 &?cportlocate8;)
+</td>
+</tr>
+<!-- 2012-2-6 FQS 613001204071 cvp-e 端口定位页面提示问题 -->
+<tr id="TR_PortLocateFormat_TIP" style="display:none">
+<td class="td1_1"></td>
+<td class="td2">
+<font id="Fnt_PortLocateFormat_TIP">&?cportlocate9;</font>
+</td>
+</tr>
+<tr>
+<td height="4"></td>
+<td></td>
+</tr>
+</table>
+<div id="div4"></div>

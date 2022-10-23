@@ -1,0 +1,103 @@
+<script language="javascript">
+var WWAN_PARA = new Array(
+"DevIndex",
+"AtCmd",
+"AtResult"
+);
+function getmsg(id)
+{
+var str      = new Array();
+str[0]   = new Array(101, "&?error_101;");
+str[1]   = new Array(102, "&?error_102;");
+str[2]   = new Array(103, "&?error_103;");
+str[3]   = new Array(118, "&?error_118;");
+str[4]   = new Array(122, "&?error_122;");
+str[5]   = new Array(123, "&?error_123;");
+return getMsgFormArray(str, arguments);
+}
+function Check_StrLengthRange(value,min,max,Frm,Fnt)
+{
+var temp = checkStrLengthRange(value,min,max);
+if(temp==-1)
+{
+msg = getmsg(101);
+ShowErrorForCom(Frm,Fnt,msg);
+return false;
+}
+else if(temp==-3)
+{
+msg =  getmsg(102,min,max);
+ShowErrorForCom(Frm,Fnt,msg);
+return false;
+}
+return true;
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+pageGetValue();
+}
+function refresh()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+function pageGetValue()
+{
+var atcmd = getValue("AtCmd");
+setValue("Frm_AtCommd", atcmd);
+if(getValue("Flag") == "0" && getValue("IF_ERRORSTR") != "&?cmret_260;")
+{
+var time = getValue("IF_TIME");
+if(time>0)
+{
+jslEnDisplay("Tr_Tip");
+jslDisable("Btn_Submit", "Btn_Cancel");
+setValue("IF_TIME",time-1);
+setTimeout("refresh()", 3000);
+}
+}
+}
+function pageCheckValue()
+{
+var atcommd = getValue("Frm_AtCommd");
+if (Check_StrLengthRange(atcommd,2,150,"Frm_AtCommd","Fnt_AtCommd") == false)
+{
+return false;
+}
+var head = atcommd.substring(0,2);
+head = head.toLowerCase();
+if (head != "at")
+{
+msg = getmsg(123);
+ShowErrorForCom("Frm_AtCommd", "Fnt_AtCommd", msg);
+return false;
+}
+return true;
+}
+function pageSetValue()
+{
+var AtCmd = getValue("Frm_AtCommd");
+setValue("DevIndex", "0");
+setValue("AtCmd", AtCmd);
+}
+function pageSubmit()
+{
+if(pageCheckValue() == true)
+{
+pageSetValue();
+setValue("IF_ACTION", "apply");
+setValue("IF_TIME", 9);
+DisableALL();
+getObj("fSubmit").submit();
+}
+}
+function pageCancel()
+{
+DisableALL();
+location.href = getObj("fSubmit").action;
+}
+</script>

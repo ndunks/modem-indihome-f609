@@ -1,0 +1,118 @@
+
+<script language="javascript">
+var USERINFO_PARA = new Array(
+"Username",
+"OldPassword",
+"Password"
+);
+var curright=<%=getenv("Right");%>;
+function getmsg(id)
+{
+var str  = new Array();
+str[0]   = new Array(102, "&?error_102;");
+str[1]   = new Array(103, "&?error_103;");
+str[2]   = new Array(114, "&?error_114;");
+str[3]   = new Array(118, "&?error_118;");
+str[4]   = new Array(119, "&?error_119;");
+str[5]   = new Array(122, "&?error_122;");
+str[6]   = new Array(123, "&?error_123;");
+str[7]   = new Array(124, "&?error_124;");
+str[8]   = new Array(101, "&?error_101;");
+str[9]   = new Array(235, "&?error_235;");
+str[10]  = new Array(236, "&?error_236;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var msg     = "";
+var errstr  = getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+var applyflag = getValue("IF_APPLYFLAG");
+if (applyflag == 1)
+{
+msg = getmsg(235);
+ShowNoteForCom(null, null, msg);
+}
+else if (applyflag == 2)
+{
+msg = getmsg(236);
+ShowNoteForCom(null, null, msg);
+}
+else
+{
+OldProcessRet(errstr, errpara);
+}
+CreatHaddin();
+pageGetValue();
+}
+function CreatHaddin()
+{
+var oNewNode = document.createElement("input");
+oNewNode.setAttribute("type",  "hidden");
+oNewNode.setAttribute("id",    "OldPassword");
+oNewNode.setAttribute("name",  "OldPassword");
+oNewNode.setAttribute("value", "");
+document.getElementById("fSubmit").appendChild(oNewNode);
+}
+function pageGetValue()
+{
+jslSetValue("Frm_Username", "Username");
+}
+function pageSetValue()
+{
+HiddenParaInit(USERINFO_PARA);
+jslSetValue("OldPassword", "Frm_OldPassword");
+jslSetValue("Password", "Frm_Password");
+}
+function pageCheckValue()
+{
+var msg = "";
+var Frm_Password = getValue("Frm_Password");
+var Frm_CfmPassword = getValue("Frm_CfmPassword");
+if(checkGenStringForASC(getValue("Frm_Password")) != true)
+{
+msg = getmsg(114);
+ShowErrorForCom("Frm_Password","Fnt_Password",msg);
+return false;
+}
+var value = getValue("Frm_Password");
+if(checkStrLengthRange(value, 0, 256) == -3)
+{
+msg = getmsg(102,0,256);
+ShowErrorForCom("Frm_Password","Fnt_Password",msg);
+return false;
+}
+if(checkGenStringForASC(getValue("Frm_CfmPassword")) != true)
+{
+msg = getmsg(114);
+ShowErrorForCom("Frm_CfmPassword","Fnt_CfmPassword",msg);
+return false;
+}
+if(Frm_Password != Frm_CfmPassword)
+{
+msg =getmsg(124);
+ShowErrorForCom("Frm_CfmPassword",null,msg);
+return false;
+}
+return true;
+}
+function pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+if(pageCheckValue() == true)
+{
+pageSetValue();
+setValue("IF_ACTION", "apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+else
+{
+}
+}
+</script>

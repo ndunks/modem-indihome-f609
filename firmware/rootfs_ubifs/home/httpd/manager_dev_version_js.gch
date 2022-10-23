@@ -1,0 +1,77 @@
+<script language="javascript">
+function getmsg(id)
+{
+var str  = new Array();
+str[0]   = new Array(165, "&?error_165;");
+str[1]   = new Array(110, "&?msg_110;");
+str[2]   = new Array(111, "&?msg_111;");
+str[3]   = new Array(116, "&?msg_116;");
+str[4]   = new Array(117, "&?msg_117;");
+return getMsgFormArray(str, arguments);
+}
+function msgCallback()
+{
+getObj("IF_UPLOADING").value = "1";
+jslDisable("upload");
+getObj("fUpload").action="getpage.gch?pid=100&&"+getValue("UPLOAD_SESSION_TOKEN")+"&nextpage=<%=encodeJS(request("nextpage"));%>";
+getObj("FileUploading").style.display = "";
+document.fUpload.submit();
+}
+function myUploadFile()
+{
+if (getObj("VersionUpload").value != "")
+{
+checkSessionToken(checkPassUploadFile);
+}
+else
+{
+getObj("FileUploading").style.display = "none";
+moveErrLayer(580,145);
+var msg = getmsg(165);
+ShowErrorForCom(null, null, msg);
+}
+}
+function checkPassUploadFile()
+{
+var msgshow = getmsg(111);
+var att     = getmsg(110);
+var msgcon  = getmsg(116);
+var msgcan  = getmsg(117);
+var msgJSONData = {
+title:att,
+content:msgshow,
+confirmLabel:msgcon,
+cancelLabel:msgcan,
+confirmCallback:'msgCallback()',
+cancelDisplay:'yes',
+focusButtun:'Cancel'
+};
+msgbox(msgJSONData);
+}
+function checkSessionToken(successCall)
+{
+var ajaxObj = new AJAXObj();
+ajaxObj.addPostItem("UPLOAD_ENV", getValue("UPLOAD_SESSION_TOKEN"));
+ajaxObj.post("checkSessionToken.gch", checkSessionTokenCallBack);
+function checkSessionTokenCallBack()
+{
+if ( ajaxObj.getReadyState() == xmlHTTPStatus['Loaded']
+&& 200 == ajaxObj.getStatus() )
+{
+var resultText = ajaxObj.getResponseText();
+if( -1 != resultText.indexOf("SUCC"))
+{
+successCall();
+}
+else
+{
+moveErrLayer(580,145);
+ShowErrorForCom(null, null, "&?csp_token_expired;");
+}
+}
+}
+}
+function pageLoad(url)
+{
+}
+</script>

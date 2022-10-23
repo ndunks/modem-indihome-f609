@@ -1,0 +1,101 @@
+<script language="javascript">
+var CALLLOG_PARA = new Array(
+"CallID",
+"BeginTime",
+"LocNumber",
+"RmtNumber",
+"Duration",
+"Result"
+);
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+ProcessRet(errstr, errpara);
+moveErrLayer(590,75);
+showTable();
+}
+function getNameValue(size, value)
+{
+return ("<input type=\"text\" class=\"uiNoBorder\" size=\""
++ size +"\" value=\""
++ HTMLEnCode(value) + "\"readonly>");
+}
+function addline(index)
+{
+var newline = getObj("Tbl_CALLLOG_Table").insertRow(-1);
+var cellSize = 0;
+var paraVal = "";
+newline.setAttribute("class", "white");
+newline.setAttribute("className", "white");
+for(var i=0; i<CALLLOG_PARA.length; i++)
+{
+paraVal = getValue(CALLLOG_PARA[i]+index);
+if ( "BeginTime" == CALLLOG_PARA[i] )
+{
+cellSize = 22;
+}
+else if ( ("LocNumber" == CALLLOG_PARA[i]) || ("RmtNumber" == CALLLOG_PARA[i]))
+{
+cellSize = 15;
+}
+else if ( "Result" == CALLLOG_PARA[i] )
+{
+cellSize = 18;
+if (parseInt(paraVal) == 1)
+{
+paraVal = "&?voipCalllog006;";
+}
+else if (parseInt(paraVal) == 2)
+{
+paraVal = "&?voipCalllog007;";
+}
+else if(parseInt(paraVal) == 3)
+{
+paraVal = "&?voipCalllog008;";
+}
+else if(parseInt(paraVal) == 4)
+{
+paraVal = "&?voipCalllog009;";
+}
+else
+{
+paraVal = "&?voipCalllog010;";
+}
+}else if ( "Duration" == CALLLOG_PARA[i])
+{
+cellSize = 8;
+}
+else
+{
+continue;
+}
+newline.insertCell(-1).innerHTML = getNameValue(cellSize, paraVal);
+}
+}
+function showTable()
+{
+var num = getValue("IF_DispNum");
+if(num == 0)
+{
+var newline = getObj("Tbl_CALLLOG_Table").insertRow(-1);
+newline.setAttribute("align", "center");
+newline.setAttribute("class", "white");
+newline.setAttribute("className", "white");
+var objcell =  newline.insertCell(-1);
+objcell.colSpan = 5;
+objcell.innerHTML= "&?note_008;";
+}
+for(var i=0; i<num; i++)
+{
+addline(i);
+}
+}
+function pageReFresh()
+{
+DisableALL();
+setValue("IF_ACTION", "");
+getObj("fSubmit").submit();
+}
+</script>

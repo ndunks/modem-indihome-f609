@@ -1,0 +1,34 @@
+<%
+IMPORT FILE "samba_cfg_gch.gch";
+IMPORT FILE "app_samba_cfg_js.gch";
+%>
+<table id="TestContent"  class="table" width="500px" border="0">
+<tr>
+<td class="td1">&?csa001;</td>
+<td class="td2"><input type="checkbox" id="Frm_EnableSmb" name="Frm_EnableSmb" onclick="PageEnableSmb()"></td>
+</tr>
+<tr>
+<td class="td1">&?csa002;</td>
+<td class="td2"><input type="checkbox" id="Frm_AutoRun" name="Frm_AutoRun" onclick="PageAutoRun()"></td>
+</tr>
+<tr>
+<td class="td1" ><font id="Fnt_NetbiosName">&?dena002;</font></td>
+<td class="td2"><input type="text"  class="inputId" id="Frm_NetbiosName" name="Frm_NetbiosName">&?csa003;</td>
+</tr>
+<tr>
+<td class="td1">&?csa005;</td>
+<td class="td2"><input type="checkbox" id="Frm_AuthType" name="Frm_AuthType" onclick="PageAuthType()"></td>
+</tr>
+<tr id="TR_SambaNAME" style="display:none">
+<td class="td1" id="Fnt_UserName">&?csa007;</td>
+<td class="td2">
+<input name="" id="Frm_UserName" type="text" class="inputId5"  value="" maxlength="32" />&?csa009;
+</td>
+</tr>
+<tr id="TR_SambaPWD" style="display:none">
+<td class="td1" id="Fnt_PassWord">&?csa008;</td>
+<td class="td2">
+<input name="" id="Frm_PassWord" type="password" class="inputId5"  value="" maxlength="32" autocomplete="off" />&?csa010;
+</td>
+</tr>
+</table>

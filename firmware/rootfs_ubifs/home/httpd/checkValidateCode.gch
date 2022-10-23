@@ -1,0 +1,19 @@
+<%
+var requsetCode = request("Validate_Code");
+var envCode = getenv("g_Validate");
+if(requsetCode IS NULL ||envCode IS NULL )
+{
+="FAIL";
+return ;
+}
+if(requsetCode == envCode )
+{
+puts("Validate_Code succ!");
+="SUCC";
+}
+else
+{
+puts("Validate_Code error!");
+="FAIL";
+}
+%>

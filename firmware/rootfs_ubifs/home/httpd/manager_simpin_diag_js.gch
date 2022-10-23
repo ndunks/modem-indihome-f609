@@ -1,0 +1,177 @@
+<script language="javascript">
+var opChkPin = 2;  
+var opChkPuk = 5;  
+var opDisPin = 4;  
+var opChgPin = 1;  
+var opEnbPin = 3;  
+var refresh_seconds = 2500;
+function getmsg(id)
+{
+var str      = new Array();
+str[0]   = new Array(101, "&?error_101;");
+str[1]   = new Array(102, "&?error_102;");
+str[2]   = new Array(103, "&?error_103;");
+str[3]   = new Array(118, "&?error_118;");
+str[4]   = new Array(122, "&?error_122;");
+str[5]   = new Array(543, "&?error_543;");
+str[6]   = new Array(544, "&?error_544;");
+str[7]   = new Array(545, "&?error_545;");
+str[8]   = new Array(546, "&?error_546;");
+return getMsgFormArray(str, arguments);
+}
+function Check_StrLengthRange(value,min,max,Frm,Fnt)
+{
+var temp = checkStrLengthRange(value,min,max);
+if(temp==-1)
+{
+msg = getmsg(101);
+ShowErrorForCom(Frm,Fnt,msg);
+return false;
+}
+else if(temp==-3)
+{
+msg =  getmsg(102,min,max);
+ShowErrorForCom(Frm,Fnt,msg);
+return false;
+}
+return true;
+}
+function isOnlyContainNum(value, Frm, Fnt)
+{
+var len = value.length;
+var ch = "";
+for (var i=0; i<len; i++)
+{
+ch = value.charAt(i);
+if (!((ch>='0')&&(ch<='9')))
+{
+msg =  getmsg(543);
+ShowErrorForCom(Frm,Fnt,msg);
+return false;
+}
+}
+return true;
+}
+function checkPinCode(value, Frm, Fnt)
+{
+var min = 4;
+var max = 8;
+if (Check_StrLengthRange(value, min, max, Frm, Fnt) == false)
+{
+return false;
+}
+if (isOnlyContainNum(value, Frm, Fnt) == false)
+{
+return false;
+}
+return true;
+}
+function checkPukCode(value, Frm, Fnt)
+{
+if (value.length != 8)
+{
+msg = getmsg(544);
+ShowErrorForCom(Frm, Fnt, msg);
+return false;
+}
+if (isOnlyContainNum(value, Frm, Fnt) == false)
+{
+return false;
+}
+return true;
+}
+
+function setFontValue(fontid, value)
+{
+document.getElementById(fontid).innerHTML = value;
+}
+function refreshPage()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+function getPINStatus()
+{
+var pinVal = getValue("PinStatus");
+var txt = "";
+if (pinVal == "0")
+{
+txt = "&?Disabled;";
+}
+else if (pinVal == "1")
+{
+txt = "&?wan049;";
+}
+return txt;
+}
+function pageSubmit()
+{
+if(pageCheckValue() == true)
+{
+pageSetValue();
+setValue("IF_ACTION", "apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+}
+function pageCancel()
+{
+DisableALL();
+location.href = getObj("fSubmit").action;
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+pageGetValue();
+jslSetValue("IF_SimPinStatus_PRE", "IF_SimPinStatus");
+jslSetValue("IF_PinRemain_PRE", "PinRemain");
+jslSetValue("IF_PukRemain_PRE", "PukRemain");
+}
+<%
+var SimPinStatus = getenv("SimPinStatus");
+if(SimPinStatus == "INPUT_PIN")
+{
+IMPORT FILE "manager_simpin_inputpin_js.gch";
+}
+else if(SimPinStatus == "INPUT_PUK")
+{
+IMPORT FILE "manager_simpin_inputpuk_js.gch";
+}
+else if(SimPinStatus == "DISABLE_PIN")
+{
+IMPORT FILE "manager_simpin_disablepin_js.gch";
+}
+else if(SimPinStatus == "ENABLE_PIN")
+{
+IMPORT FILE "manager_simpin_enablepin_js.gch";
+}
+else
+{
+%>
+function pageGetValue()
+{
+jslDiDisplay("Btn_Submit");
+getObj("Btn_Cancel").value = "&?btn001;";
+var refresh_flag = getValue("IF_REFRESH_FLAG");
+var refresh_num  = getValue("IF_REFRESH_NUM");
+if (refresh_flag==1 && refresh_num>0)
+{
+jslDisable("Btn_Cancel");
+jslEnDisplay("Frm_ConfigNote");
+setValue("IF_REFRESH_NUM", refresh_num-1);
+setTimeout("refreshPage()", refresh_seconds);
+}
+}
+function pageCancel()
+{
+setValue("IF_REFRESH_NUM", 10);
+DisableALL();
+getObj("fSubmit").submit();
+}
+<%
+}
+%>
+</script>

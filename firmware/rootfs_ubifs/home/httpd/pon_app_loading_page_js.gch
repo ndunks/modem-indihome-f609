@@ -1,0 +1,52 @@
+<script language="javascript">
+var LoadPage_PARA = new Array(
+"Enable",
+"PcUrl",
+"StbUrl"
+);
+function pageLoad(url)
+{
+moveErrLayer(580,95);
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+ProcessRet(errstr, errpara);
+pageGetValue();
+}
+function pageGetValue()
+{
+var Enable = getValue("Enable");
+if (Enable == 1)
+{
+setChecked("Frm_LoadPage_Enable", true);
+}
+else
+{
+setChecked("Frm_LoadPage_Enable", false);
+}
+}
+function pageSetValue()
+{
+HiddenParaInit(LoadPage_PARA);
+if (getChecked("Frm_LoadPage_Enable") == true)
+{
+setValue("Enable", 1);
+}
+else
+{
+setValue("Enable", 0);
+}
+}
+function pageSubmit()
+{
+pageSetValue();
+setValue("IF_ACTION", "apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+function pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+</script>

@@ -1,0 +1,14 @@
+<%
+IMPORT FILE "pon_manager_3g_gch.gch";
+IMPORT FILE "pon_manager_3g_js.gch";
+%>
+<table class="table" width="450px" border="0">
+<tr>
+<td class="td1"><font id="Fnt_3gEnable">&?pon3g_002;</font></td>
+<td class="td2"><input name="Frm_3gEnable" id="Frm_3gEnable" type="checkbox" value="" /></td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_AutoTransTime">&?pon3g_003;</font></td>
+<td class="td2"><input name="Frm_AutoTransTime" id="Frm_AutoTransTime" type="text" value="" class="inputId" />&?wan029;</td>
+</tr>
+</table>

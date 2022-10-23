@@ -1,0 +1,234 @@
+<%
+var head      = "<!DOCTYPE html PUBLIC \"-\/\/W3C\/\/DTD XHTML 1.0 Transitional\/\/EN\"";
+var head1     = "\"http:\/\/www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">";
+var head_html = "<html xmlns=\"http:\/\/www.w3.org/1999/xhtml\">";
+=head + head1;
+=head_html;
+IMPORT FILE "auth/api.gch";
+auth_expiretime_renew();
+%>
+<head>
+<META HTTP-EQUIV="pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+<meta http-equiv="Content-Type" content="text/html; charset=&?LANG;" />
+</head>
+<body>
+<script language="javascript">
+try
+{
+window.parent.callbackfuncReset();
+}
+catch(e){}
+function Transfer_meaning(id,value)
+{
+document.getElementById(id).value=value;
+}
+function setValue(id,value)
+{
+document.getElementById(id).value = value;
+}
+function getValue(id)
+{
+return(document.getElementById(id).value);
+}
+function jslDiDisplay(id)
+{
+var i;
+var num=arguments.length;
+if(num==0) return;
+for(i=0;i < num; i++)
+{
+document.getElementById(arguments[i]).style.display = "none";
+}
+}
+function jslEnDisplay(id)
+{
+var i;
+var num=arguments.length;
+if(num==0) return;
+for(i=0;i < num; i++)
+{
+document.getElementById(arguments[i]).style.display = "";
+}
+}
+function getObj(id)
+{
+return(document.getElementById(id));
+}
+</script>
+<style>
+.infor1
+{
+font-size: 12px;
+font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+}
+.tdleft_1{
+padding-right:5px;
+width:32%;
+height:24px;
+text-align:right;
+}
+.tdright {
+padding-left:5px;
+text-align:left;
+}
+.tdcenter{
+height:24px;
+text-align:center;
+}
+.white_1 {
+background-color:#FFFFFF;
+}
+.blue_1 {
+background-color:#f7f7f7;
+}
+.button2{
+height:20px;
+vertical-align:middle;
+text-align:center;
+font-size: 12px;
+font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+width:61px;
+}
+</style>
+<%
+IMPORT FILE "common_gch.gch";
+IMPORT FILE "testftp00_control_gch.gch";
+%>
+<table id="TestContent" class="infor1" width="430" border="0" cellpadding="0" cellspacing="1" bgcolor="#979797" style="margin-left:10px;display:none;">
+<tr class="white_1">
+<td class="tdleft_1">&?ftp008;</td>
+<td class="tdright"><font id="Frm_Curfile"></font></td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft_1">&?ftp009;</td>
+<td class="tdright"><font id="Frm_Ratio"></font>&nbsp;<img id="Frm_img" width="16px" height="16px" src="img/uploading.gif"/></td>
+</tr>
+<tr class="white_1">
+<td class="tdleft_1">&?ftp010;</td>
+<td class="tdright"><font id="Frm_Abbrevsize"></font></td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft_1">&?ftp011;</td>
+<td class="tdright"><font id="Frm_Remaining"></font></td>
+</tr>
+<tr class="white_1" id="TR_Result">
+<td class="tdcenter" colspan="2"><font id="Frm_Result"></font></td>
+</tr>
+</table>
+<div id="Table_Stop" style="width:450px;text-align:center;height:40px;padding-top:8px;display:none;">
+<input name="" type="submit" class="button2" id="but_stop" value="&?btn015;" onclick="PageStop()"/>
+</div>
+<script language="javascript">
+<%
+var FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, "OBJ_TESTFTP_ID", "");
+var ReceivedBytes = get_para(FP_HANDLE,"ReceivedBytes");
+var Pastseconds   = get_para(FP_HANDLE,"Pastseconds");
+var ByteSec       = get_para(FP_HANDLE,"ByteSec");
+var Flag          = get_para(FP_HANDLE,"Flag");
+var Curfile       = get_para(FP_HANDLE,"Curfile");
+var Ratio         = get_para(FP_HANDLE,"Ratio");
+var Abbrevsize    = get_para(FP_HANDLE,"Abbrevsize");
+var Remaining     = get_para(FP_HANDLE,"Remaining");
+destroy_paralist(FP_HANDLE);
+var cmapi_error;
+var FP_ERRORSTR = get_cmret();
+if (FP_ERRORSTR != "SUCC")
+{
+cmapi_error = "cmret_"+FP_ERRORSTR;
+Flag = -2;
+}
+%>
+PageGet();
+function PageFlash()
+{
+top.mainFrame.location.href = top.mainFrame.location.href;
+}
+function PageGet()
+{
+<%
+var ftptag = getenv("ftptag");
+%>
+<%
+var curfileAddBr;
+if(Curfile!=""||Curfile!="NULL")
+{
+curfileAddBr = straddbr(Curfile, 40);
+}
+else
+{
+curfileAddBr = "";
+}
+if( Flag == 1)
+{
+%>
+jslDiDisplay("TR_Result");
+jslEnDisplay("Table_Stop","TestContent","Frm_img");
+document.getElementById("Frm_Curfile").innerHTML = "<%=curfileAddBr;%>";
+if("<%=Ratio;%>" != "" )
+{
+document.getElementById("Frm_Ratio").innerHTML = "<%=Ratio;%>" +"%";
+}
+document.getElementById("Frm_Abbrevsize").innerHTML = "<%=Abbrevsize;%>";
+document.getElementById("Frm_Remaining").innerHTML = "<%=Remaining;%>";
+setTimeout("refresh()", 3000);
+<%
+}
+else if(Flag == 0 )
+{
+%>
+jslDiDisplay("Table_Stop","Frm_img");
+jslEnDisplay("TR_Result","TestContent");
+document.getElementById("Frm_Curfile").innerHTML = "<%=curfileAddBr;%>";
+document.getElementById("Frm_Ratio").innerHTML = "<%=Ratio;%>"+"%";
+document.getElementById("Frm_Abbrevsize").innerHTML = "<%=Abbrevsize;%>";
+document.getElementById("Frm_Remaining").innerHTML = "<%=Remaining;%>";
+var Result = "<%=ReceivedBytes;%>&nbsp;" +"&?ftpt001;"+ "&nbsp;<%=Pastseconds;%>&nbsp;" +"&?ftpt002;"+ "&nbsp;<%=ByteSec;%>&nbsp;" +"&?ftpt003;";
+document.getElementById("Frm_Result").innerHTML = Result;
+<%
+if( ftptag == "apply")
+{
+setenv("ftptag","N/A");
+%>
+PageFlash();
+<%
+}
+}
+else if(Flag == -1 )
+{
+%>
+jslDiDisplay("Table_Stop");
+if(getValue("IF_TAG") == "stop")
+{
+jslEnDisplay("TR_Result","TestContent");
+jslDiDisplay("Frm_Curfile","Frm_Ratio","Frm_Abbrevsize","Frm_Remaining");
+alert("&?fwpt010;");
+setTimeout("PageFlash()", 2000);
+}
+<%
+}
+else if (Flag == -2 )
+{
+%>
+jslEnDisplay("TR_Result");
+jslDiDisplay("Frm_Curfile","Frm_Ratio","Frm_Abbrevsize","Frm_Remaining");
+alert("<%=load_string(cmapi_error);%>");
+setTimeout("PageFlash()", 2000);
+<%}%>
+}
+function refresh()
+{
+getObj("fSubmit").submit();
+}
+function PageStop()
+{
+setValue("Control","0");
+setValue("IF_ACTION", "apply");
+setValue("IF_TAG", "stop");
+getObj("but_stop").disabled = true;
+getObj("fSubmit").submit();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<%
+IMPORT FILE "voip_sippro.gch";
+IMPORT FILE "app_voip_sippro_js.gch";
+%>
+<table id="TestContent"  class="table" width="480px" border="0">
+<tr style="display:none">
+<td id="Fnt_DNSMode" class="td11">&?vsp01;</td>
+<td class="td2">
+<select size="1" class="list_6" id="Frm_DNSMode" name="select2">
+<option value="0">&?item_045;</option>
+<option value="1">&?vsp010;</option>
+</select>
+</td>
+</tr>
+<tr>
+<td class="td11">&?vsp011;</td>
+<td class="td2">
+<input type="checkbox"  id="Frm_Opt120FlagControl" name="Frm_Opt120FlagControl" value="" />
+</td>
+</tr>
+<tr id="TR_VP">
+<td id="Fnt_VP" class="td11">&?pro_vp001;</td>
+<td class="td2">
+<select name="Frm_VP" id="Frm_VP" size="1" class="list_1" onchange="ChangeVP()">
+</select>
+</td>
+</tr>
+<tr>
+<td id="Fnt_UserAgentPort" class="td11">&?vsp02;</td>
+<td class="td2"><input name="" id="Frm_UserAgentPort" type="text" class="inputId9"  value="" size="15" />(1024 ~ 65535)</td>
+</tr>
+<tr>
+<td id="Fnt_RegisterServer1" class="td11">&?vsp012;</td>
+<td class="td2"><input name="" id="Frm_RegisterServer1" type="text" class="inputId5"  value="" size="15" /></td>
+</tr>
+<tr>
+<td id="Fnt_ProxyServer1" class="td11">&?vsp03;</td>
+<td class="td2"><input name="" id="Frm_ProxyServer1" type="text" class="inputId5"  value="" size="15" /></td>
+</tr>
+<tr>
+<td id="Fnt_OutboundProxy1" class="td11">&?vsp04;</td>
+<td class="td2"><input name="" id="Frm_OutboundProxy1" type="text" class="inputId5"  value="" size="15" /></td>
+</tr>
+<tr>
+<td id="Fnt_ProxyServerPort1" class="td11">&?vsp05;</td>
+<td class="td2"><input name="" id="Frm_ProxyServerPort1" type="text" class="inputId9"  value="" size="15" />(1024 ~ 65535)</td>
+</tr>
+<tr>
+<td id="Fnt_RegisterServer2" class="td11">&?vsp013;</td>
+<td class="td2"><input name="" id="Frm_RegisterServer2" type="text" class="inputId5"  value="" size="15" /></td>
+</tr>
+<tr>
+<td id="Fnt_ProxyServer2" class="td11">&?vsp06;</td>
+<td class="td2"><input name="" id="Frm_ProxyServer2" type="text" class="inputId5"  value="" size="15" /></td>
+</tr>
+<tr>
+<td id="Fnt_OutboundProxy2" class="td11">&?vsp07;</td>
+<td class="td2"><input name="" id="Frm_OutboundProxy2" type="text" class="inputId5"  value="" size="15" /></td>
+</tr>
+<tr>
+<td id="Fnt_ProxyServerPort2" class="td11">&?vsp08;</td>
+<td class="td2"><input name="" id="Frm_ProxyServerPort2" type="text" class="inputId9"  value="" size="15" />(1024 ~ 65535)</td>
+</tr>
+<tr>
+<td id="Fnt_RegisterExpires" class="td11">&?vsp09;</td>
+<td class="td2"><input name="" id="Frm_RegisterExpires" type="text" class="inputId5"  value="" size="15" /> &?wan029;</td>
+</tr>
+<tr id="TR_DeRegister">
+<td class="td6">&?vsp091;</td>
+<td class="td2">
+<input type="checkbox"  id="Frm_DeRegister" name="Frm_DeRegister"/>
+</td>
+</tr>
+<tr>
+<td class="td6">&?cvp02;</td>
+<td class="td2">
+<input type="checkbox"  id="Frm_LinkTest" name="Frm_LinkTest" value="" onclick="ChangeLinkValue();"/>
+</td>
+</tr>
+<tr>
+<td class="td6"><font id="Fnt_LinkTestInterval">&?cvp03;</font></td>
+<td class="td2"><input type="text" name="Frm_LinkTestInterval" id="Frm_LinkTestInterval" class="inputId9"/> &?wan029;</td>
+</tr>
+<tr id="TR_SessionExpireEnable" style="display:none">
+<td class="td6">&?vsp014;</td>
+<td class="td2">
+<input type="checkbox"  id="Frm_SessionExpireEnable" name="Frm_SessionExpireEnable" value="" onclick="ChangeSessionExpire();"/>
+</td>
+</tr>
+<tr id="TR_SessionExpire" style="display:none">
+<td class="td6"><font id="Fnt_SessionExpire">&?vsp015;</font></td>
+<td class="td2"><input type="text" name="Frm_SessionExpire" id="Frm_SessionExpire" class="inputId5"/> &?wan029;</td>
+</tr>
+</table>

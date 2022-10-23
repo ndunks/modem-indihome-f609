@@ -1,0 +1,41 @@
+<%
+IMPORT FILE "wlanm_assoc.gch";
+IMPORT FILE "net_wlanm_assoc_js.gch";
+%>
+<div id="t_warn" class="space_0" style="display:none;">
+<table width="450px" border="0" class="table">
+<tr>
+<td valign="top" style="width:30px;"><img src="img/info.gif"></td>
+<td height="18" align="left" style="padding-left:10px;" id="tipLi"></td>
+</tr>
+</table>
+</div>
+<div class="space_0">
+<table id="TestContent" class="table" width="450px" border="0">
+<tr>
+<td class="td1"></td>
+<td class="td2"></td>
+</tr>
+<tr>
+<td class="td1">&?wlan040;</td>
+<td class="td2">
+<select name="" size="1" tabIndex="1"  class="list_1" id="Frm_SSID_SET" onchange="ESSID_Choose()"/>
+</select></td>
+</tr>
+</table>
+</div>
+<div class="space_0">
+<table id="Assoc_Table" class="item"  border="0" cellpadding="0" cellspacing="1" bgcolor="#979797">
+<tr class="h2_s title_1">
+<!-- changed by zhanghongjun 将MAC与IPAddress调换位置 -->
+<td width="110">&?dhcp_d006;</td>
+<td width="90">&?wan035;</td>
+<!-- <td>&?wlan067;</td>-->
+<td width="40">&?wlan_assoc_001;</td>
+<td width="50">&?wlan_assoc_002;</td>
+<td width="50">&?wlan_assoc_003;</td>
+<td width="50">&?wlan_assoc_004;</td>
+<td width="50">&?wlan_assoc_005;</td>
+</tr>
+</table>
+</div>

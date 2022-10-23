@@ -1,0 +1,162 @@
+<%
+
+var FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, "OBJ_WWANMOBILEINFO_ID", "");
+var NetName    = get_para(FP_HANDLE, "MobileName");
+var SgnlVol    = get_para(FP_HANDLE, "SignalStrength");
+var NetMode    = get_para(FP_HANDLE, "NetWorkMode");
+var IMEI       = get_para(FP_HANDLE, "IMEI");
+var Alarm      = get_para(FP_HANDLE, "MobileAlarm");
+destroy_paralist(FP_HANDLE);
+var FP_DONGLE_HANDLE = create_paralist();
+get_inst(FP_DONGLE_HANDLE, "OBJ_WWANDONGLEINFO_ID", "");
+var DongleType    = get_para(FP_DONGLE_HANDLE, "DongleType");
+destroy_paralist(FP_DONGLE_HANDLE);
+%>
+<table id="TestContent" class="infor" cellpadding="0" cellspacing="1">
+<tr class="white_1">
+<td class="tdleft" >&?cmn4;(MCC/MNC)</td>
+<td class="tdright"><%=NetName;%></td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft">&?cmn5;</td>
+<td class="tdright"><%=NetMode;%></td>
+</tr>
+<tr class="white_1">
+<td class="tdleft">&?cmn6;</td>
+<td id="Frm_RSSI" name="Frm_RSSI" class="tdright">
+<table>
+<tr>
+<td valign="bottom">
+<div id="div_box0" class="divbox">&nbsp;</div>
+</td>
+<td valign="bottom">
+<div id="div_box1" class="divbox">&nbsp;</div>
+</td>
+<td valign="bottom">
+<div id="div_box2" class="divbox">&nbsp;</div>
+</td>
+<td valign="bottom">
+<div id="div_box3" class="divbox">&nbsp;</div>
+</td>
+<td valign="bottom">
+<div id="div_box4" class="divbox">&nbsp;</div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft">IMEI</td>
+<td class="tdright"><%=IMEI;%></td>
+</tr>
+<%
+if (Alarm != 0)
+{
+%>
+<tr class="white_1">
+<td class="tdleft">&?cmn7;</td>
+<td class="tdright"><font id="Fnt_Alarm"></font></td>
+</tr>
+<%
+}
+%>
+<tr class="blue_1">
+<td class="tdleft">&?cmn54;</td>
+<td class="tdright"><font id="Fnt_Dongle"></font></td>
+</tr>
+</table>
+<form id="fSubmit" method="post" action="">
+</form>
+<SCRIPT>
+function showAlarm()
+{
+<%
+if (Alarm != 0)
+{
+%>
+var alarm = "<%=Alarm;%>";
+var obj = getObj("Fnt_Alarm");
+var text = "";
+alarm = parseInt(alarm, 10);
+switch(alarm)
+{
+case 1:
+text = "&?cmn45;";
+break;
+case 2:
+text = "&?cmn46;";
+break;
+case 3:
+text = "&?cmn47;";
+break;
+case 4:
+text = "&?cmn48;";
+break;
+case 5:
+text = "&?cmn49;";
+break;
+case 6:
+text = "&?cmn50;";
+break;
+default:
+}
+obj.innerHTML = text;
+<%
+}
+%>
+}
+function showSigVol()
+{
+for (var i=0; i<5; i++)
+{
+var obj = getObj("div_box"+i);
+obj.style.backgroundColor = "rgb(183,183,183)";
+}
+var sigVol = "<%=SgnlVol;%>";
+var count = 0;
+sigVol = parseInt(sigVol, 10);
+count = sigVol/20;
+count = parseInt(count, 10);
+if (sigVol%20 != 0)
+{
+count ++;
+}
+for (var i=0; i<count; i++)
+{
+var obj = getObj("div_box"+i);
+obj.style.backgroundColor = "rgb(51,204,0)";
+}
+}
+function showDongleType()
+{
+var DongleType = "<%=DongleType;%>";
+var obj = getObj("Fnt_Dongle");
+var text = "";
+DongleType = parseInt(DongleType);
+switch(DongleType)
+{
+case 1:
+text = "&?cmn55;";
+break;
+case 2:
+text = "&?cmn56;";
+break;
+default:
+}
+obj.innerHTML = text;
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+showAlarm();
+showSigVol();
+showDongleType();
+colorizeInfoTbl("TestContent");
+}
+function pageReFresh()
+{
+jslDisable("Btn_ReFresh");
+getObj("fSubmit").submit();
+}
+</SCRIPT>

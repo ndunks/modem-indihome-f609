@@ -1,0 +1,374 @@
+<script language="javascript">
+var PREFIX_Manage_PARA = new Array(
+"ViewName",
+"Prefix",
+"PrefixLen",
+"BindWANCID",
+"WANCName",
+"Src",
+"PreferLifetime",
+"ValidLifetime",
+"Onlink",
+"Autoconf",
+"Delegation",
+"WorkIfID"
+);
+var PREFIX_PARA = new Array(
+"WANCName",
+"Src",
+"Prefix",
+"PreferLifetime",
+"ValidLifetime",
+"Onlink",
+"Autoconf",
+"Delegation"
+);
+function getmsg(id)
+{
+var str  = new Array();
+str[0]   = new Array(101, "&?error_101;");
+str[1]   = new Array(115, "&?error_115;");
+str[2]   = new Array(116, "&?error_116;");
+str[3]   = new Array(117, "&?error_117;");
+str[4]   = new Array(200, "&?error_200;");
+str[5]   = new Array(202, "&?error_202;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+moveErrLayer(595,93);
+jslDisable("Frm_Prefix","Frm_PrefixLen","Frm_Wan","Frm_Src",
+"Frm_PreferLifetime","Frm_ValidLifetime","Frm_RA","Frm_DHCPV6");
+showTable();
+}
+function getImage(src, strmethod, id)
+{
+return ("<input type=\"button\" id=\""+id+"\"  onclick=\""
++ strmethod +"\" style=\"width:20px;height:20px;border:0px;"
++ "padding:2px;cursor:pointer;background:url("+src+");\">");
+}
+function getNameValue(id, size, value)
+{
+return ("<input type=\"text\" class=\"uiNoBorder\" size=\"" + size +"\" value=\""
++ HTMLEnCode(value) + "\"  id=\"" + id + "\"  readonly>");
+}
+function addline(index)
+{
+var newline = getObj("Tbl_prefixList").insertRow(-1);
+newline.setAttribute("class", "white");
+newline.setAttribute("className", "white");
+for(var i = 0; i < PREFIX_PARA.length; i++)
+{
+cellId = "Line_" + index + "_" + PREFIX_PARA[i] + "_" + i;
+if(2 == i)
+{
+var PrefixTmp = getValue("Prefix" + index);
+var PrefixLenTmp = getValue("PrefixLen" + index);
+var tmp = "";
+if (PrefixTmp != "::")
+{
+tmp = PrefixTmp + "/" + PrefixLenTmp ;
+newline.insertCell(-1).innerHTML = getNameValue(cellId, 15,tmp);
+}
+else
+{
+PrefixTmp = "";
+PrefixLenTmp = "";
+tmp = PrefixTmp + PrefixLenTmp ;
+newline.insertCell(-1).innerHTML = getNameValue(cellId, 15, tmp);
+}
+}
+else if(3 == i || 5 == i || 6 == i)
+{
+continue;
+}
+else if (4 == i)
+{
+var PreferLifetimeTmp = "";
+var ValidLifetimeTmp  = "";
+if("4294967295" == getValue("PreferLifetime" + index))
+{
+PreferLifetimeTmp = "INFINITY";
+}
+else
+{
+PreferLifetimeTmp = getValue("PreferLifetime" + index);
+}
+if("4294967295" == getValue("ValidLifetime" + index))
+{
+ValidLifetimeTmp = "INFINITY";
+}
+else
+{
+ValidLifetimeTmp = getValue("ValidLifetime" + index);
+}
+var tmp = PreferLifetimeTmp + "/" + ValidLifetimeTmp;
+newline.insertCell(-1).innerHTML = getNameValue(cellId,20, tmp);
+}
+else
+{
+var valuetmp = getValue(PREFIX_PARA[i] + index);
+newline.insertCell(-1).innerHTML = getNameValue(cellId, 10, valuetmp);
+}
+}
+var btnimg = "";
+var modifyindex = "";
+if (getValue(PREFIX_PARA[1] + index) == "NONE")
+{
+btnimg = "multiImg_modifydis";
+modifyindex = "";
+}
+else
+{
+btnimg = "multiImg_modify";
+modifyindex = "Modify("+index+")";
+}
+var btntmp = "Btn_Modify"+index;
+newline.insertCell(-1).innerHTML=getImagefrmClass(btnimg,modifyindex,btntmp);
+}
+function showTable()
+{
+var num = getValue("IF_INSTNUM");
+if( num > 0)
+{
+for(var i = 0; i < num; i++)
+{
+addline(i);
+}
+}
+else
+{
+var newline = getObj("Tbl_prefixList").insertRow(-1);
+newline.setAttribute("align", "center");
+newline.setAttribute("class", "white");
+newline.setAttribute("className", "white");
+var objcell =  newline.insertCell(-1);
+objcell.colSpan = 6;
+objcell.innerHTML= "&?note_008;";
+}
+}
+function modifyGetValue(i)
+{
+var prefixSrc  = getValue("Src" + i);
+var delegation = getValue("Delegation" + i);
+if("::" == getValue("Prefix" + i))
+{
+setValue("Frm_Prefix", "");
+}
+else
+{
+jslSetValue("Frm_Prefix", "Prefix" + i);
+}
+if("0" == getValue("PrefixLen" + i))
+{
+setValue("Frm_PrefixLen", "");
+}
+else
+{
+jslSetValue("Frm_PrefixLen", "PrefixLen" + i);
+}
+jslSetValue("Frm_Wan", "WANCName" + i);
+jslSetValue("Frm_Src", "Src" + i);
+jslSetValue("Frm_PreferLifetime", "PreferLifetime" + i);
+jslSetValue("Frm_ValidLifetime", "ValidLifetime" + i);
+if("NONE" == delegation)
+{
+getObj("Frm_RA").checked = false;
+getObj("Frm_DHCPV6").checked = false;
+}
+else if("RA" == delegation)
+{
+getObj("Frm_RA").checked = true;
+getObj("Frm_DHCPV6").checked = false;
+}
+else if("DHCPv6" == delegation)
+{
+getObj("Frm_RA").checked = false;
+getObj("Frm_DHCPV6").checked = true;
+}
+else if("RA/DHCPv6" == delegation)
+{
+getObj("Frm_RA").checked = true;
+getObj("Frm_DHCPV6").checked = true;
+}
+else
+{
+getObj("Frm_RA").checked = false;
+getObj("Frm_DHCPV6").checked = false;
+}
+jslDisable("Frm_PreferLifetime","Frm_ValidLifetime");
+jslEnable("Frm_RA","Frm_DHCPV6");
+if ("NONE" == prefixSrc)
+{
+jslDisable("Frm_RA", "Frm_DHCPV6");
+}
+}
+function pageSetValue()
+{
+var RaChecked       = getChecked("Frm_RA");
+var DhcpCheckde     = getChecked("Frm_DHCPV6");
+HiddenParaInit(PREFIX_Manage_PARA);
+if(( getValue("Frm_Prefix") != "")&&( getValue("Frm_Prefix") != null ))
+{
+jslSetValue("Prefix","Frm_Prefix");
+}
+else
+{
+setValue( "Prefix", "::");
+}
+if(( getValue("Frm_PrefixLen") != "")&&( getValue("Frm_PrefixLen") != null))
+{
+jslSetValue("PrefixLen","Frm_PrefixLen");
+}
+else
+{
+setValue( "PrefixLen","0");
+}
+jslSetValue("WANCName","Frm_Wan");
+jslSetValue("Src","Frm_Src");
+jslSetValue("PreferLifetime", "Frm_PreferLifetime");
+jslSetValue("ValidLifetime", "Frm_ValidLifetime");
+if(false == RaChecked)
+{
+if(false == DhcpCheckde)
+{
+setValue("Delegation", "NONE");
+}
+else if(true == DhcpCheckde)
+{
+setValue("Delegation", "DHCPv6");
+}
+}
+else if(true == RaChecked)
+{
+if(false == DhcpCheckde)
+{
+setValue("Delegation", "RA");
+}
+else if(true == DhcpCheckde)
+{
+setValue("Delegation", "RA/DHCPv6");
+}
+}
+}
+function pageCheckValue(insId)
+{
+var prefixSrc  = getValue("Src" + insId);
+if("Static" == prefixSrc)
+{
+var PreferLifetime = getValue("Frm_PreferLifetime");
+if(Check_IntegerRange(PreferLifetime, 0, 4294967295,
+"Frm_PreferLifetime", "Fnt_PreferLifetime") != true)
+{
+return false;
+}
+var ValidLifetime = getValue("Frm_ValidLifetime");
+if(Check_IntegerRange(ValidLifetime, 0, 4294967295,
+"Frm_ValidLifetime", "Fnt_ValidLifetime") != true)
+{
+return false;
+}
+var PreferedTime = getValue("Frm_PreferLifetime");
+var ValidTime = getValue("Frm_ValidLifetime");
+if(Number(PreferedTime) > Number(ValidTime))
+{
+msg = getmsg(202);
+ShowErrorForCom("Frm_PreferLifetime", null, msg);
+return false;
+}
+}
+return true;
+}
+function Check_PrefixValue(FrmPrefix, FntPrefix, FrmPrefixLen, min, max)
+{
+var msg;
+var prefixValue = getValue(FrmPrefix);
+var prefixLenValue = getValue(FrmPrefixLen);
+if(false == checkNull(prefixValue))
+{
+msg = getmsg(101);
+ShowErrorForCom(FrmPrefix, FntPrefix, msg);
+return false;
+}
+if(false == checkNull(prefixLenValue))
+{
+msg = getmsg(101);
+ShowErrorForCom(FrmPrefixLen, FntPrefix, msg);
+return false;
+}
+if((false == checkIPV6Address(prefixValue)) || ("::" == prefixValue))
+{
+msg = getmsg(200);
+ShowErrorForCom(FrmPrefix, FntPrefix, msg);
+return false;
+}
+var ret = checkIntegerRange(prefixLenValue, 48, 64);
+if(-2 == ret)
+{
+msg = getmsg(115);
+ShowErrorForCom(FrmPrefixLen, FntPrefix, msg);
+return false;
+}
+else if(-3 == ret)
+{
+msg = getmsg(116, 48, 64);
+ShowErrorForCom(FrmPrefixLen, FntPrefix, msg);
+return false;
+}
+return true;
+}
+function Check_IntegerRange(value, min, max, Frm, Fnt)
+{
+var tem = checkIntegerRange(value, min, max);
+if(tem == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom(Frm,Fnt,msg);
+return false;
+}
+else if(tem == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom(Frm,Fnt,msg);
+return false;
+}
+else if(tem == -3)
+{
+msg = getmsg(116,min,max);
+ShowErrorForCom(Frm,Fnt,msg);
+return false;
+}
+return true;
+}
+function Modify(i)
+{
+jslEnDisplay("Btn_Edit","Btn_Back");
+modifyGetValue(i);
+index = i;
+}
+function pageEdit()
+{
+if(true == pageCheckValue(index))
+{
+pageSetValue();
+setValue("IF_ACTION", "apply");
+setValue("IF_IDENTITY", getValue("ViewName"+index));
+DisableALL();
+getObj("fSubmit").submit();
+}
+}
+function back4add()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+function pageReFresh()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+</script>

@@ -1,0 +1,149 @@
+<%
+IMPORT FILE "common_gch.gch";
+var SimPinStatus, SimStatus, PinStatus, PinRemain, PukRemain, Flag;
+var FP_ERRORSTR = "SUCC";
+var FP_OBJNAME = "OBJ_WWANPINCFG_ID";
+var FP_PARANUM = 11;
+var FP_MULTIDISPLAY = 0;
+var FP_INSTNUM = 0;
+var FP_IDENTITY = "";
+var FP_INDEX = 0; 
+var FP_ACTION = "";
+var FP_HANDLE;
+var PARA[11] =
+{
+"DevIndex",
+"Flag",
+"PinStatus",
+"PinRemain",
+"PukRemain",
+"SimStatus",
+"SimPin",
+"SimNewPin",
+"SimPuk",
+"RemPin",
+"SimPinOP"
+};
+FP_ACTION = request("IF_ACTION");
+FP_INSTNUM = query_list(FP_OBJNAME, "IGD");
+if (FP_INSTNUM != 888 && FP_INSTNUM >0 && FP_INDEX >=0)
+{
+FP_IDENTITY = query_identity(FP_INDEX);
+}
+FP_ERRORSTR = applyOrNewOrDelInst(FP_OBJNAME, FP_ACTION, FP_IDENTITY, PARA, FP_PARANUM, FP_ERRORSTR);
+undoDBSave();
+create_form_start("fSubmit", "");
+createBasicHidden();
+create_hidden_newpara(PARA, FP_PARANUM);
+if (FP_MULTIDISPLAY == 0)
+{
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+SimStatus = get_para(FP_HANDLE, "SimStatus");
+PinStatus = get_para(FP_HANDLE, "PinStatus");
+PinRemain = get_para(FP_HANDLE, "PinRemain");
+PukRemain = get_para(FP_HANDLE, "PukRemain");
+Flag      = get_para(FP_HANDLE, "Flag");
+
+cover_hidden(FP_HANDLE, PARA, FP_PARANUM);
+destroy_paralist(FP_HANDLE);
+}
+
+getDisplayInstError("SUCC");
+if ( SimStatus == 0 )
+{
+if ( PinStatus == 0 )
+{
+SimPinStatus = "ENABLE_PIN";
+}
+else if ( PinStatus == 1 )
+{
+SimPinStatus = "DISABLE_PIN";
+}
+}
+else if( SimStatus == 1 )
+{
+SimPinStatus = "INPUT_PIN";
+}
+else if( SimStatus == 2 )
+{
+SimPinStatus = "INPUT_PUK";
+}
+else if( SimStatus == 3 )
+{
+SimPinStatus = "SIM_BUSY";
+}
+else if ( SimStatus == 4 )
+{
+SimPinStatus = "SIM_FAILURE";
+}
+else
+{
+SimPinStatus = "OTHER_STATE";
+}
+if (Flag == -1)
+{
+SimPinStatus = "OTHER_STATE";
+}
+setenv("SimPinStatus", SimPinStatus);
+create_hidden_sep("IF_INDEX", FP_INDEX);
+create_hidden_sep("IF_INSTNUM", FP_INSTNUM);
+var PukRemain_PRE = request("IF_PukRemain_PRE");
+var PinRemain_PRE = request("IF_PinRemain_PRE");
+var SimPinStatus_PRE = request("IF_SimPinStatus_PRE");
+var pinFuncTag = request("IF_PIN_FUNC_TAG");
+var changePin_time = request("IF_ChangePin_Time");
+var refresh_num = request("IF_REFRESH_NUM");
+if(pinFuncTag == "NULL") pinFuncTag = "DisablePin"; 
+if (refresh_num IS NULL) refresh_num = 5;
+var refresh_flag = 1;
+if (SimPinStatus != SimPinStatus_PRE) 
+{
+if ( !(SimStatus==0 && PinStatus==2) )
+{
+refresh_flag = 0;
+}
+}
+else 
+{
+if (SimPinStatus != "INPUT_PUK")
+{
+
+if (PinRemain!=PinRemain_PRE && PinRemain!=0 && PinRemain!=3)
+{
+refresh_flag = 0;
+}
+else 
+{
+if (SimPinStatus == "DISABLE_PIN")
+{
+if (pinFuncTag=="ChangePin" && changePin_time<=0)
+{
+refresh_flag = 0;
+}
+}
+}
+}
+else 
+{
+
+if (PukRemain!=PukRemain_PRE && PukRemain!=0 && PukRemain!=10)
+{
+refresh_flag = 0;
+}
+}
+}
+if (Flag == -1)
+{
+refresh_flag = 0;
+}
+create_hidden_sep("IF_PukRemain_PRE", PukRemain_PRE);
+create_hidden_sep("IF_PinRemain_PRE", PinRemain_PRE);
+create_hidden_sep("IF_SimPinStatus", SimPinStatus);
+create_hidden_sep("IF_SimPinStatus_PRE", SimPinStatus_PRE);
+create_hidden_sep("IF_PIN_FUNC_TAG", pinFuncTag );
+create_hidden_sep("IF_ChangePin_Time", changePin_time); 
+create_hidden_sep("IF_REFRESH_NUM", refresh_num);
+create_hidden_sep("IF_REFRESH_FLAG", refresh_flag);
+create_form_end();
+%>

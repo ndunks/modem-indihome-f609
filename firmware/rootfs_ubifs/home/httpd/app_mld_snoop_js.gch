@@ -1,0 +1,68 @@
+<script language="javascript">
+var MLDBasic_PARA = new Array(
+"MldMode"
+);
+var MLDPROXY_PARA = new Array(
+"Enable"
+);
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+pageGetValue();
+}
+function pageGetValue()
+{
+if (getValue("Enable") == "1")
+{
+setChecked("Frm_ProxyEnable",true);
+}
+else
+{
+setChecked("Frm_ProxyEnable",false);
+}
+if (getValue("MldMode") == "1")
+{
+setChecked("Frm_MldMode",true);
+}
+else
+{
+setChecked("Frm_MldMode",false);
+}
+}
+function pageSetValue()
+{
+HiddenParaInit(MLDPROXY_PARA);
+if (getObj("Frm_ProxyEnable").checked == true)
+{
+setValue("Enable",1);
+}
+else
+{
+setValue("Enable",0);
+}
+HiddenParaInit(MLDBasic_PARA);
+if (getObj("Frm_MldMode").checked == true)
+{
+setValue("MldMode",1);
+}
+else
+{
+setValue("MldMode",0);
+}
+}
+function pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+pageSetValue();
+setValue("IF_ACTION", "apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+</script>

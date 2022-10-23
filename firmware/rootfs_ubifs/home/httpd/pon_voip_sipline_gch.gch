@@ -1,0 +1,59 @@
+<%
+IMPORT FILE "common_gch.gch";
+function sipline_func(FP_ACTION, FP_INDEX, FP_ERRORSTR)
+{
+var FP_OBJNAME = "OBJ_VOIPSIPLINE_ID";
+var FP_PARANUM = 6;
+var FP_MULTIDISPLAY = 1;
+var PARA[6] =
+{
+"AuthUserName",
+"AuthPassword",
+"DigestUserName",
+"DisplayName",
+"RegStatus",
+"DNSStatus"
+};
+create_hidden_newpara(PARA, FP_PARANUM);
+var FP_INSTNUM  = 0;
+var FP_IDENTITY = "";
+if(1 == FP_MULTIDISPLAY && (FP_ACTION == "apply" || FP_ACTION == "delete"))
+{
+FP_INSTNUM = query_list(FP_OBJNAME, "IGD");
+}
+if("apply" == FP_ACTION || "new" == FP_ACTION)
+{
+for(var j=0; j<FP_INSTNUM; j++)
+{
+if(1 == FP_MULTIDISPLAY && (FP_ACTION == "apply" || FP_ACTION == "delete"))
+{
+FP_INSTNUM = query_list(FP_OBJNAME, "IGD");
+if (FP_INSTNUM != 888 && FP_INSTNUM > 0 && j >= 0)
+{
+FP_IDENTITY = query_identity(j);
+}
+}
+var FP_HANDLE = create_paralist();
+for(var i = 0; i < FP_PARANUM; i++)
+{
+set_multiinst_para(FP_HANDLE, PARA[i],j);
+}
+FP_IDENTITY = set_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+}
+FP_ERRORSTR = getNewInstError(FP_ERRORSTR);
+}
+else if("delete" == FP_ACTION && "" != FP_IDENTITY)
+{
+del_inst(FP_OBJNAME, FP_IDENTITY);
+FP_ERRORSTR = getNewInstError(FP_ERRORSTR);
+}
+if("SUCC" != FP_ERRORSTR)
+{
+FP_INDEX    = -1;
+FP_IDENTITY = "";
+}
+FP_INSTNUM = displayInst(FP_OBJNAME, FP_MULTIDISPLAY, PARA, FP_PARANUM, FP_ERRORSTR);
+getDisplayInstError(FP_ERRORSTR);
+return FP_ERRORSTR;
+}
+%>

@@ -1,0 +1,46 @@
+
+<%
+IMPORT FILE "wlan_scan_gch.gch";
+IMPORT FILE "net_wlan_scan_js.gch";
+%>
+<div class="space_0">
+<table width="450px" border="0" class="table" style="margin-left: -40px; width: 550px;">
+<tbody>
+<tr>
+<td valign="top" style="width:30px;"><img src="img/info.gif"></td>
+<td height="18" align="left" style="padding-left:10px;">1. &?wlan_scan_007;</td>
+</tr>
+<tr></tr>
+<tr>
+<td valign="top" style="width:30px;"></td>
+<td height="18" align="left" style="padding-left:10px;">2. &?wlan_scan_008;</td>
+</tr>
+</tbody>
+</table>
+</div>
+<table id="TestContent"  class="table" width="450px" border="0">
+<tr>
+<td class="td3">
+<input id="Submit1" name="Submit1" type="button" class="button3" style="width: 180px;" value="&?wlan_scan_003;"  onClick="ScanSubmit();"/>
+</td>
+</tr>
+<tr>
+<td colspan="2" height="30px">
+</td>
+</tr>
+</table>
+<div style="overflow-x:scroll;width:99%;margin-left: 2px;">
+<table id="Scan_Table" width="990px" border="0" cellpadding="2" cellspacing="1" bgcolor="#979797">
+<tr class="h2_s title_1">
+<td style="width: 120px;">&?wlan_scan_004;</td>
+<td style="width: 120px;">&?dhcp_d006;</td>
+<td style="width: 60px;">&?wlan_scan_009;</td>
+<td style="width: 60px;">&?wlan015;</td>
+<td style="width: 90px;">&?wlan_scan_005;</td>
+<td style="width: 60px;">&?wlan_scan_010;</td>
+<td style="width: 60px;">&?wlan_scan_013;</td>
+<td style="width: 60px;">&?wlan_scan_011;</td>
+<td style="width: 100px;">&?wlan_scan_012;</td>
+</tr>
+</table>
+</div>

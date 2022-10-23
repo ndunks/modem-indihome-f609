@@ -1,0 +1,64 @@
+<%
+IMPORT FILE "remoteugr_gch.gch";
+IMPORT FILE "manager_dev_remoteugr_js.gch";
+var http_url = "http:\/\/ipaddress_or_domainname[:port]\/pathname\/filename";
+var ftp_url = "ftp:\/\/username:password@ipaddress_or_domainname[:port]\/pathname\/filename";
+%>
+<!--内容开始-->
+<div id="note" class="space_0">
+<table width="450px" border="0" class="table">
+<tbody><tr>
+<td valign="top" style="width:30px;"><img src="img/info.gif"></td>
+<td height="18" align="left" style="padding-left:10px;">&?dev_m005;</td>
+</tr></tbody>
+</table>
+</div>
+<div class="space_0">
+<br>
+<table id="note_url" style="text-align:left;width:450px;">
+<tr><td>&?dev_m024;</td></tr>
+<tr><td><%=http_url;%></td></tr>
+<tr><td>&?dev_m025;</td></tr>
+<tr><td><%=straddbr(ftp_url, 47);%></td></tr>
+</table>
+</div>
+<div id="div4"></div>
+<table id="ftable1" class="table" width="450px"  border="0">
+<tr>
+<td class="td1" width="50%" id="Fnt_UserCfgUrl">&?dev_m022;</td>
+<td class="td2" width="50%"><input name="Frm_UserCfgUrl" id="Frm_UserCfgUrl" type="text" class="inputId6"  value="" size="15" onchange="myDoChange(0);" /></td>
+</tr>
+<%
+var buttoncss   = "button3";
+if(getenv("LanguageCtr") == "rus")
+{
+buttoncss   = "button4";
+}
+%>
+<tr>
+<td class="td3" colspan="2" align="center">
+<input class="<%=buttoncss;%>" type="button" name="Btn_UserCfg" id="Btn_UserCfg" value="&?dev_m007;"  onclick="myRemoteCfgUpgrade();">
+</td>
+</tr>
+</table>
+<table id="ftable2" class="table" width="450px"  border="0">
+<tr>
+<td class="td1" width="50%"></td>
+<td class="td2" width="50%"></td>
+</tr>
+<tr>
+<td class="td1" id="Fnt_FirmwareUrl">&?dev_m023;</td>
+<td class="td2"><input name="Frm_FirmwareUrl" id="Frm_FirmwareUrl" type="text" class="inputId6"  value="" size="15" onchange="myDoChange(1);"  /></td>
+</tr>
+<tr>
+<td class="td3" colspan="2" align="center">
+<input class="<%=buttoncss;%>" type="button" name="Btn_Firmware" id="Btn_Firmware" value="&?dev_m007;"  onclick="myRemoteFmwUpgrade();">
+</td>
+</tr>
+</table>
+<div id="FileUploading" align="center" style="display:none">
+<span><img src="img/uploading.gif"></span>
+<span style="padding-left:15px;">&?dev_m014;</span>
+</div>
+<iframe name="upload_query" id="upload_query" width="500" src="manager_remoteugr_query_t.gch?pid=1002&callPage=<%=encodeHTML(request("nextpage"));%>" style="display: none;" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+<!--内容结束-->

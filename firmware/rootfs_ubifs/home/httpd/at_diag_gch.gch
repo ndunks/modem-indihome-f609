@@ -1,0 +1,35 @@
+<%
+IMPORT FILE "common_gch.gch";
+var FP_ERRORSTR = "SUCC";
+var FP_OBJNAME = "OBJ_AT_DIAG_ID";
+var FP_IDENTITY = "";
+var FP_MULTIDISPLAY = 0;
+var FP_HANDLE;
+var FP_PARANUM = 3;
+var PARA[3] =
+{
+"DevIndex",
+"Flag",
+"AtCmd"
+
+};
+create_form_start("fSubmit", "");
+createBasicHidden();
+var FP_ACTION = request("IF_ACTION");
+FP_ERRORSTR = applyOrNewOrDelInst(FP_OBJNAME, FP_ACTION, FP_IDENTITY, PARA, FP_PARANUM, FP_ERRORSTR);
+undoDBSave();
+var atResult = "";
+if (FP_MULTIDISPLAY == 0)
+{
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+atResult = get_para(FP_HANDLE, "AtResult");
+create_hidden_para(FP_HANDLE, PARA, FP_PARANUM);
+destroy_paralist(FP_HANDLE);
+}
+
+getDisplayInstError(FP_ERRORSTR);
+create_hidden_sep("IF_TIME", request("IF_TIME"));
+
+create_form_end();
+%>

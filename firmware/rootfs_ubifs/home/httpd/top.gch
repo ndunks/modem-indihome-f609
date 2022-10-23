@@ -1,0 +1,65 @@
+<%
+IMPORT FILE "global.gch";
+var head      = "<!DOCTYPE html PUBLIC \"-\/\/W3C\/\/DTD XHTML 1.0 Transitional\/\/EN\"";
+var head1     = "\"http:\/\/www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">";
+var head_html = "<html xmlns=\"http:\/\/www.w3.org/1999/xhtml\">";
+=head + head1;
+=head_html;
+%>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=&?LANG;" />
+<title><%=getenv("WEBTitle");%></title>
+<LINK REL="stylesheet" HREF='<%=getenv("css_path_template");%>' TYPE="text/css" />
+<LINK REL="stylesheet" HREF="&?csslang;" TYPE="text/css" />
+</head>
+<%
+var idStr = "banner";
+var cssStr = "type";
+var cver = getenv("CurrentVersionInfo");
+if(cver == 52)
+{
+idStr = "banner_new";
+}
+else if(cver == 36)
+{
+idStr = "banner_tot";
+}
+else if(cver == 54)
+{
+idStr = "banner_viet";
+}
+else if(cver == 45)
+{
+idStr = "banner_Linkstar";
+}
+else if(cver == 59)
+{
+idStr = "banner_st";
+}
+else if(cver == 75)
+{
+idStr = "banner_maxcom";
+cssStr = "maxcomtype";
+}
+else if(cver == 85)
+{
+idStr = "banner_3bb";
+}
+%>
+<body>
+<div id="container">
+<div id="head">
+<%
+if(cver == "59")
+{
+%>
+<div class="comtype"><font id="">&?pon_SeteTec;</font></div>
+<%
+}
+%>
+<div class="<%=cssStr;%>"><font id=""><%=getenv("WEBTitle");%></font></div>
+<div id="<%=idStr;%>"></div>
+</div>
+</div>
+</body>
+</html>

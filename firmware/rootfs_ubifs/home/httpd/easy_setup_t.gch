@@ -1,0 +1,306 @@
+<%
+IMPORT FILE "global.gch";
+IMPORT FILE "auth/api.gch";
+var sess_id = auth_sessid();
+var is_login = 0;
+var is_banned = 0;
+session_start(sess_id, 0);
+if( getenv("elogin") != 1 && auth_check(sess_id) == 0 )
+{
+var login_status = auth_get_status("login");
+if (login_status == "logined")
+{
+is_login = 1;
+}
+else if (login_status == "banned")
+{
+auth_logout();
+is_banned = 1;
+}
+}
+if (is_login == 0)
+{
+setenv("request/is_banned", is_banned);
+IMPORT FILE "auth/timeout_ctl.gch";
+return;
+}
+else
+{
+session_start(sess_id, -1);
+}
+auth_env_sync();
+if( request("IF_ACTION") == "detail_setup")
+{
+header("Location: /start.ghtml");
+return;
+}
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<META HTTP-EQUIV="pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title><%=getenv("WEBTitle");%></title>
+<LINK REL="stylesheet" HREF='<%=getenv("css_path_template");%>' TYPE="text/css" />
+<LINK REL="stylesheet" HREF="&?csslang;" TYPE="text/css" />
+<script src="js/common.js"></script>
+<script language="javascript">
+<%
+setenv("request/callback", "relogin()");
+IMPORT FILE "auth/timeout_ctl_js.gch";
+IMPORT FILE "js/common_check.js";
+IMPORT FILE "js/pro_commom.js";
+IMPORT FILE "pagefunc_js.gch";
+IMPORT FILE "js/menu.js";
+%>
+function relogin()
+{
+alert("&?note_003;");
+setValue("logout",1);
+document.flogout.submit();
+}
+</script>
+<% IMPORT FILE "easy_setup_js.gch";%>
+</head>
+<body onload="pageLoad();">
+<div id="container">
+<%IMPORT FILE "easy_setup_gch.gch";%>
+<!--head部分开始-->
+<div id="head">
+<div class="type"><font id=""><%=getenv("WEBTitle");%></font></div>
+<div id="banner_viet"></div>
+</div>
+<form name="flogout" id="flogout" method="post"  onsubmit="return false;" action="/" target="_top">
+<input type="hidden" name="logout" id="logout" value="" >
+</form>
+<!--head部分结束-->
+<!--content部分开始-->
+<div class="content" id="content">
+<div class="title" style="width:776px;">
+<div class="title_left" id="title_path" style="width:576px;">
+<H1>&?easysetup001;</H1>
+</div>
+<div class="title_log">
+<a href="#" onclick="BtnDetailClick();">Advanced Setup</a>
+</div>
+</div>
+<!--导航条结束-->
+<!--内容开始-->
+<div id="div1" style="min-height:275px;height: auto !important;">
+<table id="WizardTable1"  class="table" width="700px" border="0" cellpadding="0" cellspacing="10px" style="margin-top:20px;margin-left:40px;">
+<tr>
+<td colspan="2">
+<font>&?easysetup002;</font>
+</td>
+</tr>
+<tr>
+<td class="td1">&?easysetup003;:</td>
+<td class="td2"><font id="Fnt_internetwan">PPPoE</font></td>
+</tr>
+<tr>
+<td class="td1">&?wan019;</td>
+<td class="td2"><input type="text" id="Frm_wan_username" name="Frm_wan_username" class="inputId" /></td>
+</tr>
+<tr>
+<td class="td1">&?va02;</td>
+<td class="td2"><input type="password" id="Frm_wan_password" name="Frm_wan_password" class="inputId" /></td>
+</tr>
+<tr>
+<td class="td1"></td>
+<td class="td2"></td>
+</tr>
+<tr>
+<td class="td1">&?easysetup004;:</td>
+<td class="td2"><font id="Fnt_voipwan">PPPoE</font></td>
+</tr>
+<tr>
+<td class="td1">&?wan019;</td>
+<td class="td2"><input type="text" id="Frm_voip_username" name="Frm_voip_username" class="inputId" /></td>
+</tr>
+<tr>
+<td class="td1">&?va02;</td>
+<td class="td2"><input type="password" id="Frm_voip_password" name="Frm_voip_password" class="inputId" /></td>
+</tr>
+<tr>
+<tr>
+<td colspan="2" class="hreftext">
+<font>&?easysetup005;</font>
+<a href="javascript:void(0)" onclick="BtnHereClick();">&?easysetup006;</a>
+</td>
+</tr>
+<tr>
+<td height="5">&nbsp;</td>
+</tr>
+</table>
+<table id="WizardTable2" class="table" width="700px" border="0" cellpadding="0" cellspacing="10px" style="margin-top:20px;margin-left:40px;">
+<tr>
+<td colspan="2">
+<font>&?easysetup013;</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" align="center">&?dhcp_d001; <input type="checkbox" id="Frm_ServerEnable" name="Frm_ServerEnable" value="" /></td>
+</tr>
+<tr>
+<td colspan="2">
+<table id="LAN_Table"  class="item" border="0" cellpadding="0" cellspacing="1" bgcolor="#979797">
+<tr class="h2_s title_1">
+<td width="">LAN1</td>
+<td width="">LAN2</td>
+<td width="">LAN3</td>
+<td width="">LAN4</td>
+</tr>
+<tr>
+<td id="img_lan_0" width="" class="white"><img src="img/lan.gif" alt="LAN1"></td>
+<td id="img_lan_1" width="" class="white"><img src="img/lan.gif" alt="LAN2"></td>
+<td id="img_lan_2" width="" class="white"><img src="img/lan.gif" alt="LAN3"></td>
+<td id="img_lan_3" width="" class="white"><img src="img/lan.gif" alt="LAN4"></td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td height="5">&nbsp;</td>
+</tr>
+</table>
+<table id="WizardTable3" class="table" width="700px" border="0" cellpadding="0" cellspacing="10px" style="margin-top:20px;margin-left:40px;">
+<tr>
+<td colspan="2">
+<font>&?easysetup009;</font>
+</td>
+</tr>
+<tr>
+<td class="td1">&?easysetup010;</td>
+<td class="td2"><input type="text" id="Frm_ssid_name" name="Frm_ssid_name" class="inputId" /> &?wlan078;</td>
+</tr>
+<tr>
+<td class="td1">&?va02;</td>
+<td class="td2"><input type="password" id="Frm_ssid_password" name="Frm_ssid_password" class="inputId" /> &?wlan032;</td>
+</tr>
+<tr>
+<td height="5">&nbsp;</td>
+</tr>
+</table>
+<table id="WizardTable4" class="table" width="700px" border="0" cellpadding="0" cellspacing="10px" style="margin-top:20px;margin-left:40px;">
+<tr>
+<td colspan="2">
+<font>&?easysetup011;</font>
+</td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_Username">&?easysetup012;</font></td>
+<td class="td2"><input type="checkbox" id="Frm_modify_enable" name="Frm_modify_enable" onclick="Enable_passchg();" value="" /></td>
+</tr>
+<tr id="InputPassword" >
+<td class="td1"><font id="Fnt_OldPassword">&?user_m002;</font></td>
+<td class="td2"><input name="" type="password" class="inputId"  name="Frm_OldPassword" id="Frm_OldPassword" value="" size="15" autocomplete="off" /></td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_Password">&?user_m003;</font></td>
+<td class="td2"><input name="" type="password" class="inputId"  name="Frm_Password" id="Frm_Password" value="" size="15" autocomplete="off" /></td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_CfmPassword">&?user_m004;</font></td>
+<td class="td2"><input name="" type="password" class="inputId" name="Frm_CfmPassword" id="Frm_CfmPassword" value="" size="15" autocomplete="off" /></td>
+</tr>
+<tr>
+<td height="5">&nbsp;</td>
+</tr>
+<tr>
+<td class="td1"><img src="img/info.gif"></td>
+<td height="18" align="left" style="padding-left:10px;">&?dev_m001;</td>
+</tr>
+<tr>
+<td class="td7" colspan="2">
+<input id="Submit1" name="Submit1" type="button" class="button3" value="&?dev_001;"  onClick="DevRestartSubmit();"/>
+</td>
+</tr>
+<tr>
+<td height="5">&nbsp;</td>
+</tr>
+</table>
+<table id="WizardTable5" class="table" width="700px" border="0" cellpadding="0" cellspacing="10px" style="margin-top:20px;margin-left:40px;">
+<tr>
+<td colspan="2">
+<font>&?easysetup014;</font>
+</td>
+</tr>
+<tr>
+<td class="td1" id="Fnt_AgcOffset">&?poncatv003;</td>
+<td class="td2"><input name="Frm_AgcOffset" id="Frm_AgcOffset" class="inputId9" size="15" type="text" value=""/> (-12.8~12.7dB &?poncatv004;:0.1dB)</td>
+</tr>
+<tr>
+<td height="5">&nbsp;</td>
+</tr>
+</table>
+</div>
+<!--内容结束-->
+<div class="bottom_div" id="bottom">
+<table class='bottom_table' border='0' cellpadding='0' cellspacing='0'>
+<tr>
+<td class='bottom_td1'></td>
+<td class='bottom_td2'></td>
+<td class='bottom_td3'>
+<input name="BtnExit" type="button" id="BtnExit" onclick="easypageSubmit();" value="&?btn005;">
+&nbsp;&nbsp;&nbsp;
+</td>
+</tr>
+</table>
+</div>
+<!--content部分结束-->
+<!--bottom部分开始-->
+</div>
+<div class="copyright">
+</div>
+<div class="bottom_line"></div>
+<div id="bottomx"></div>
+<!--bottom部分结束-->
+</div>
+</body>
+<script language="javascript">
+<%
+var session_token = get_csrf_session_token();
+session_set("_SESSION_TOKEN", session_token);
+setenv("_SESSION_TOKEN", session_token);
+%>
+function addToken2AllForms()
+{
+function doAddLogic()
+{
+var session_token = "<%=encodeJS(session_token);%>";
+var forms = document.getElementsByTagName("form");
+for ( var i=0; i<forms.length; i++ )
+{
+var tempform = forms[i];
+var sEnctype = tempform.getAttribute("enctype");
+if ( sEnctype != null &&
+"multipart/form-data" == sEnctype.toLowerCase() )
+{
+continue;
+}
+var tokenInput = document.createElement("input");
+tokenInput.setAttribute("id", "_SESSION_TOKEN");
+tokenInput.setAttribute("name", "_SESSION_TOKEN");
+tokenInput.setAttribute("type", "hidden");
+tokenInput.setAttribute("value", session_token);
+tempform.appendChild(tokenInput);
+}
+}
+if( window.onload == null )
+{
+window.onload=function(){
+doAddLogic();
+}
+}
+else
+{
+var tempfunction = window.onload;
+window.onload=function(){
+tempfunction();
+doAddLogic();
+}
+}
+}
+addToken2AllForms();
+</script>
+</html>

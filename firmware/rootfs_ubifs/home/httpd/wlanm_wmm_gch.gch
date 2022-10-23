@@ -1,0 +1,38 @@
+<%
+IMPORT FILE "common_gch.gch";
+function wmm_func(FP_ACTION, FP_TAG, FP_INDEX, FP_VIEWID, FP_ERRORSTR)
+{
+var FP_OBJNAME      = "OBJ_WLANWMM_ID";
+var FP_PARANUM      = 8;
+var FP_IDENTITY     = "";
+var FP_MULTIDISPLAY = 0;
+var PARA[8] =
+{
+"AIFSN",
+"ECWMin",
+"ECWMax",
+"TXOP",
+"Type",
+"Qlength",
+"SRL",
+"LRL"
+};
+
+FP_INDEX = ifIndexNULL("old", FP_INDEX);
+var FP_INSTNUM = query_list(FP_OBJNAME, FP_VIEWID);
+
+if (FP_INSTNUM != 888 && FP_INSTNUM >0 && FP_INDEX >=0 && FP_ACTION != "new")
+{
+FP_IDENTITY = query_identity(FP_INDEX);
+}
+FP_ERRORSTR = getDisplayInstError(FP_ERRORSTR);
+create_hidden_newpara(PARA, FP_PARANUM);
+
+if (FP_TAG == "Y")
+{
+FP_ERRORSTR = applyOrNewOrDelInst(FP_OBJNAME, FP_ACTION, FP_IDENTITY, PARA, FP_PARANUM, FP_ERRORSTR);
+}
+FP_ERRORSTR = displayOldSingleInst(FP_OBJNAME, FP_IDENTITY, PARA, FP_PARANUM, FP_ERRORSTR);
+return FP_ERRORSTR;
+}
+%>

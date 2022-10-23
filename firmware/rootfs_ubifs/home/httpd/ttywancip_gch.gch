@@ -1,0 +1,126 @@
+<%
+IMPORT FILE "common_gch.gch";
+function ttyIP_func(FP_ACTION,FP_IDENTITY,FP_INSTNUM,FP_MULTIDISPLAY,FP_INDEX,FP_ERRORSTR)
+{
+var FP_HANDLE, FP_OBJNAME, FP_ERRORTYPE;
+var FP_PARANUM, FP_ERRORPARAM;
+var PARA[24] =
+{
+"Enable",
+"WANCName",
+"ConnType",
+"LANDViewName",
+"StrServList",
+"ServList",
+"IsNAT",
+"IsDefGW",
+"IsForward",
+"DSCP",
+"VLANID",
+"Priority",
+"WBDMode",
+"IPAddress",
+"SubnetMask",
+"GateWay",
+"DNS1",
+"DNS2",
+"DNS3",
+"UpTime",
+"ConnStatus",
+"ConnError",
+"MTU",
+"DongleType"
+};
+FP_OBJNAME = "OBJ_TTYWANCIP_ID";
+FP_PARANUM = 24;
+
+if (FP_ACTION=="new")            
+{
+FP_HANDLE = create_paralist();
+FP_INDEX  = FP_INSTNUM;
+for(var i=0; i< FP_PARANUM; i++)
+{
+set_multiinst_para(FP_HANDLE, PARA[i], FP_INDEX);
+}
+FP_IDENTITY = set_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+
+if(FP_IDENTITY == "")
+{
+FP_INDEX=-1;
+}
+}
+else if (FP_ACTION == "apply")               
+{
+
+if (FP_INSTNUM == 888 )
+{
+
+FP_HANDLE = create_paralist();
+for(var i=0; i< FP_PARANUM; i++)
+{
+setpara(FP_HANDLE, PARA[i]);
+}
+FP_IDENTITY = set_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+}
+
+else
+{
+FP_HANDLE = create_paralist();
+for(var i=0; i< FP_PARANUM; i++)
+{
+set_multiinst_para(FP_HANDLE, PARA[i], FP_INDEX);
+}
+FP_IDENTITY = set_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+}
+}
+else if (FP_ACTION == "delete")            
+{
+del_inst(FP_OBJNAME, FP_IDENTITY);
+FP_INSTNUM = query_list(FP_OBJNAME, "IGD");
+if (FP_INSTNUM > 0)
+{
+FP_INDEX = 0;
+}
+else
+{
+FP_INDEX = -1;
+}
+}
+
+FP_HANDLE = create_paralist();
+
+if(FP_INSTNUM == 888)
+{
+get_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+filter_create_hidden_para(FP_HANDLE, PARA, MASK_PARA, FP_PARANUM);
+}
+
+else
+{
+FP_INSTNUM = query_list("OBJ_TTYWANCIP_ID", "IGD");
+
+if(FP_MULTIDISPLAY==0 && FP_INSTNUM!=0)
+{
+get_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+create_hidden_multiinstpara(FP_HANDLE, PARA, FP_INDEX, FP_PARANUM);
+}
+
+else
+{
+if(FP_INDEX == -1)
+{
+create_hidden_multiinstnewpara(FP_HANDLE, PARA, FP_INSTNUM, FP_PARANUM);
+}
+}
+}
+
+destroy_paralist(FP_HANDLE);
+create_hidden_sep("IF_INDEX", FP_INDEX);
+create_hidden_sep("IF_IDENTITY", FP_IDENTITY);
+if(FP_ERRORSTR == "SUCC" )
+{
+return getDisplayInstError("SUCC");
+}
+return FP_ERRORSTR;
+}
+%>

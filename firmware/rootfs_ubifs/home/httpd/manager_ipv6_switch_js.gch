@@ -1,0 +1,45 @@
+<script language="javascript">
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+pageGetValue();
+}
+function pageGetValue()
+{
+jslSetValue("Frm_Enable", "Enable");
+if ( 0 == getValue("Effect") )
+{
+getObj("Fnt_IPv6Function").innerHTML = "&?Disabled;";
+}
+else
+{
+getObj("Fnt_IPv6Function").innerHTML = "&?wan049;";
+}
+}
+function pageSetValue()
+{
+jslSetValue("Enable", "Frm_Enable");
+}
+function pageCheckValue()
+{
+return true;
+}
+function pageSubmit()
+{
+if(pageCheckValue() == true)
+{
+pageSetValue();
+setValue("IF_ACTION", "apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+}
+function pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+</script>

@@ -1,0 +1,24 @@
+<%
+IMPORT FILE "voip_switch_gch.gch";
+IMPORT FILE "manager_voip_switch_js.gch";
+%>
+<div id="note" class="space_0">
+<table width="450px" border="0" class="table">
+<tr>
+<td valign="top" style="width:30px;"><img src="img/info.gif"></td>
+<td height="18" align="left" style="padding-left:10px;">&?cvoip3;</td>
+</tr>
+</table>
+</div>
+<div id="div4"></div>
+<table id="TestContent" class="table" width="450px" border="0">
+<tr>
+<td class="td1">&?cvoip4;</td>
+<td class="td2">
+<select class="list_1" size="1" id="Frm_ProtocolSet" name="Frm_ProtocolSet">
+<option value="1">H248</option>
+<option value="4">SIP</option>
+</select>
+</td>
+</tr>
+</table>

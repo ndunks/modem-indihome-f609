@@ -1,0 +1,291 @@
+<script language="javascript">
+var H248TIMER_PARA = new Array(
+"RestartInterval",
+"RestartIntervalMin",
+"RegMsgRetranTimer",
+"RegMsgRetranCount",
+"TotalRetranTime",
+"RetranType",
+"ReRegTimerMin",
+"ReRegTimerMax",
+"HeartBeatFailMax",
+"HeartBeatType"
+);
+function getmsg(id)
+{
+var str  = new Array();
+str[0]   = new Array(118, "&?error_118;");
+str[1]   = new Array(119, "&?error_119;");
+str[2]   = new Array(122, "&?error_122;");
+str[3]   = new Array(101, "&?error_101;");
+str[4]   = new Array(115, "&?error_115;");
+str[5]   = new Array(116, "&?error_116;");
+str[6]   = new Array(117, "&?error_117;");
+str[7]   = new Array(159, "&?error_159;");
+str[8]   = new Array(001, "&?h248timer_001;");
+str[9]   = new Array(002, "&?h248timer_002;");
+str[10]   = new Array(003, "&?h248timer_003;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+ProcessRet(errstr, errpara);
+pageGetValue();
+}
+function ChangeType()
+{
+if(getValue("Frm_RetranType") == "0")
+{
+jslDisable("Frm_TotalRetranTime");
+jslEnable("Frm_RegMsgRetranCount");
+}
+else if(getValue("Frm_RetranType") == "1")
+{
+jslDisable("Frm_RegMsgRetranCount");
+jslEnable("Frm_TotalRetranTime");
+}
+}
+function pageGetValue()
+{
+jslSetValue("Frm_MaxRestartInterval", "RestartInterval");
+jslSetValue("Frm_MinRestartInterval", "RestartIntervalMin");
+jslSetValue("Frm_RegMsgRetranTimer", "RegMsgRetranTimer");
+jslSetValue("Frm_RegMsgRetranCount", "RegMsgRetranCount");
+jslSetValue("Frm_TotalRetranTime", "TotalRetranTime");
+jslSetValue("Frm_RetranType", "RetranType");
+jslSetValue("Frm_HeartBeatType", "HeartBeatType");
+if(getValue("Frm_RetranType") == "0")
+{
+jslDisable("Frm_TotalRetranTime");
+}
+else if(getValue("Frm_RetranType") == "1")
+{
+jslDisable("Frm_RegMsgRetranCount");
+}
+jslSetValue("Frm_MinReRegTimer", "ReRegTimerMin");
+jslSetValue("Frm_MaxReRegTimer", "ReRegTimerMax");
+jslSetValue("Frm_HeartBeatFailMax", "HeartBeatFailMax");
+}
+function pageSetValue()
+{
+HiddenParaInit(H248TIMER_PARA);
+jslSetValue("RestartInterval", "Frm_MaxRestartInterval");
+jslSetValue("RestartIntervalMin", "Frm_MinRestartInterval");
+if(getValue("Frm_RetranType") == "1")
+{
+jslSetValue("TotalRetranTime", "Frm_TotalRetranTime");
+}
+else if(getValue("Frm_RetranType") == "0")
+{
+jslSetValue("RegMsgRetranCount", "Frm_RegMsgRetranCount");
+}
+jslSetValue("RegMsgRetranTimer", "Frm_RegMsgRetranTimer");
+jslSetValue("RetranType", "Frm_RetranType");
+jslSetValue("ReRegTimerMin", "Frm_MinReRegTimer");
+jslSetValue("ReRegTimerMax", "Frm_MaxReRegTimer");
+jslSetValue("HeartBeatFailMax", "Frm_HeartBeatFailMax");
+jslSetValue("HeartBeatType", "Frm_HeartBeatType");
+}
+function pageCheckValue()
+{
+var cResult;
+cResult = checkIntegerRange(getValue("Frm_MinRestartInterval"), 0, 50000);
+if(cResult == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_MinRestartInterval", "Fnt_MinRestartInterval", msg);
+return false;
+}
+else if(cResult == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_MinRestartInterval", "Fnt_MinRestartInterval", msg);
+return false;
+}
+else if(cResult == -3)
+{
+msg = getmsg(116,0,50000);
+ShowErrorForCom("Frm_MinRestartInterval", "Fnt_MinRestartInterval", msg);
+return false;
+}
+cResult = checkIntegerRange(getValue("Frm_MaxRestartInterval"), 0, 50000);
+if(cResult == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_MaxRestartInterval", "Fnt_MaxRestartInterval", msg);
+return false;
+}
+else if(cResult == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_MaxRestartInterval", "Fnt_MaxRestartInterval", msg);
+return false;
+}
+else if(cResult == -3)
+{
+msg = getmsg(116,0,50000);
+ShowErrorForCom("Frm_MaxRestartInterval", "Fnt_MaxRestartInterval", msg);
+return false;
+}
+if(parseInt(getValue("Frm_MaxRestartInterval")) < parseInt(getValue("Frm_MinRestartInterval")))
+{
+msg = getmsg(001);
+ShowErrorForCom(null, null, msg);
+return false;
+}
+cResult = checkIntegerRange(getValue("Frm_MinReRegTimer"), 0, 50000);
+if(cResult == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_MinReRegTimer", "Fnt_MinReRegTimer", msg);
+return false;
+}
+else if(cResult == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_MinReRegTimer", "Fnt_MinReRegTimer", msg);
+return false;
+}
+else if(cResult == -3)
+{
+msg = getmsg(116,0,50000);
+ShowErrorForCom("Frm_MinReRegTimer", "Fnt_MinReRegTimer", msg);
+return false;
+}
+cResult = checkIntegerRange(getValue("Frm_MaxReRegTimer"), 0, 50000);
+if(cResult == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_MaxReRegTimer", "Fnt_MaxReRegTimer", msg);
+return false;
+}
+else if(cResult == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_MaxReRegTimer", "Fnt_MaxReRegTimer", msg);
+return false;
+}
+else if(cResult == -3)
+{
+msg = getmsg(116,0,50000);
+ShowErrorForCom("Frm_MaxReRegTimer", "Fnt_MaxReRegTimer", msg);
+return false;
+}
+if(parseInt(getValue("Frm_MinReRegTimer")) > parseInt(getValue("Frm_MaxReRegTimer")))
+{
+msg = getmsg(002);
+ShowErrorForCom(null, null, msg);
+return false;
+}
+cResult = checkIntegerRange(getValue("Frm_HeartBeatFailMax"), 1, 10);
+if(cResult == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_HeartBeatFailMax", "Fnt_HeartBeatFailMax", msg);
+return false;
+}
+else if(cResult == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_HeartBeatFailMax", "Fnt_HeartBeatFailMax", msg);
+return false;
+}
+else if(cResult == -3)
+{
+msg = getmsg(116,1,10);
+ShowErrorForCom("Frm_HeartBeatFailMax", "Fnt_HeartBeatFailMax", msg);
+return false;
+}
+if(getValue("Frm_RetranType") == "0")
+{
+cResult = checkIntegerRange(getValue("Frm_RegMsgRetranCount"), 0, 20);
+if(cResult == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_RegMsgRetranCount", "Fnt_RegMsgRetranCount", msg);
+return false;
+}
+else if(cResult == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_RegMsgRetranCount", "Fnt_RegMsgRetranCount", msg);
+return false;
+}
+else if(cResult == -3)
+{
+msg = getmsg(116,0,20);
+ShowErrorForCom("Frm_RegMsgRetranCount", "Fnt_RegMsgRetranCount", msg);
+return false;
+}
+}
+cResult = checkIntegerRange(getValue("Frm_RegMsgRetranTimer"),10, 5000);
+if(cResult == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_RegMsgRetranTimer", "Fnt_RegMsgRetranTimer", msg);
+return false;
+}
+else if(cResult == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_RegMsgRetranTimer", "Fnt_RegMsgRetranTimer", msg);
+return false;
+}
+else if(cResult == -3)
+{
+msg = getmsg(116,10,5000);
+ShowErrorForCom("Frm_RegMsgRetranTimer", "Fnt_RegMsgRetranTimer", msg);
+return false;
+}
+if(getValue("Frm_RetranType") == "1")
+{
+cResult = checkIntegerRange(getValue("Frm_TotalRetranTime"), 10, 50000);
+if(cResult == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_TotalRetranTime", "Fnt_TotalRetranTime", msg);
+return false;
+}
+else if(cResult == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_TotalRetranTime", "Fnt_TotalRetranTime", msg);
+return false;
+}
+else if(cResult == -3)
+{
+msg = getmsg(116,10,50000);
+ShowErrorForCom("Frm_TotalRetranTime", "Fnt_TotalRetranTime", msg);
+return false;
+}
+if(parseInt(getValue("Frm_TotalRetranTime")) < parseInt(getValue("Frm_RegMsgRetranTimer")))
+{
+msg = getmsg(003);
+ShowErrorForCom(null, null, msg);
+return false;
+}
+}
+return true;
+}
+function pageCancel()
+{
+jslDisable("Btn_Submit","Btn_Cancel");
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+if(pageCheckValue() == true)
+{
+jslDisable("Btn_Submit","Btn_Cancel");
+pageSetValue();
+setValue("IF_ACTION", "apply");
+getObj("fSubmit").submit();
+}
+else
+{
+}
+}
+</script>

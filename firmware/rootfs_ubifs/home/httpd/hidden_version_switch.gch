@@ -1,0 +1,647 @@
+<%
+IMPORT FILE "pageinfo_func.gch";
+var webtitle = getDevModeName();
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<META HTTP-EQUIV="pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title><%=getenv("WEBTitle");%></title>
+<LINK REL="stylesheet" HREF='<%=getenv("css_path_login");%>' TYPE="text/css" />
+<LINK REL="stylesheet" HREF="&?csslang;" TYPE="text/css" />
+<style>
+.textarea_1 {
+height:370px;
+width:610px;
+border:1px solid #7F9DB7;
+font-size: 12px;
+font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+text-align:left;
+}
+#container {
+margin: 0 auto;
+width: 778px;
+text-align: left;
+position: relative;
+min-height: 530px;
+height: 530px;
+height: 530px;
+}
+.bottom_td3 {height:370px; width:774px;background-color:#eeeeee;margin-right:2px;text-align:right;}
+.copyright {float:left;display:block;height:16px;width:776px; padding-top:10px; border-left:1px solid #B1B1B1; border-right:1px solid #B1B1B1; text-align:center;}
+.bottom_line {float:left;display:block;background-color:#5aa929;height:8px; width:778px;}
+.bottom_line_e {float:left;display:block;background-color:#2d7ddc;height:8px; width:778px;}
+table.table td.td11 {
+width:30%;
+height:24px;
+text-align:right;
+}
+.login_li_0 { width:100px;height:17px;float:left;text-align:right;padding-top:3px; margin-left:15px;}
+.login_li_3 { width:78px;height:20px;float:left; }
+.login_li_9 { width:110px;height:17px;float:left;text-align:right;padding-top:3px; margin-left:5px;}
+.login_li_8 { width:220px;height:20px;float:left;padding-left:4px;margin-left:4px; }
+.login_li_7 { width:280px;height:17px;float:left;text-align:left;padding-top:3px;margin-left:8px}
+.login_frame { width:480px;height:110px;position:absolute;top:155px;left:192px; }
+.login_ul_1 { width:430px;height:20px;list-style:none; }
+.login_content { width:435px;height:87px;background-color:#f8fff3;list-style:none;border:1px solid #69ce28; }
+.login_content_e { width:435px;height:87px;background-color:#f8fff3;list-style:none;border:1px solid #2d7ddc; }
+</style>
+<script language="javascript">
+
+function getObj(id)
+{
+return(document.getElementById(id));
+}
+
+function jslSetValue(src, dst)
+{
+var ss = document.getElementById(dst).value;
+document.getElementById(src).value= ss;
+}
+
+function setValue(id,value)
+{
+document.getElementById(id).value = value;
+}
+
+function Transfer_meaning(id,value)
+{
+document.getElementById(id).value=value;
+}
+function getValue(id)
+{
+return(document.getElementById(id).value);
+}
+
+function jslDisable(id)
+{
+var i;
+var num=jslDisable.arguments.length;
+if(num==0) return;
+for(i=0;i < num; i++)
+{
+document.getElementById(arguments[i]).disabled=true;
+}
+}
+function pageSetValue()
+{
+jslSetValue("CountryCode","Frm_DefConfFileCapabilitySet");
+}
+function pageCheckValue()
+{
+var type = getValue("Frm_DefConfFileCapabilitySet");
+if(type == -1)
+{
+return false;
+}
+return true;
+}
+function pageSubmit()
+{
+if(pageCheckValue() == true)
+{
+jslDisable("Btn_Submit");
+pageSetValue();
+setValue("IF_ACTION","apply");
+getObj("fSubmit").submit();
+}
+else
+{
+jslDisable("Btn_Submit");
+getObj("fSubmit").submit();
+}
+}
+function pageLoad()
+{
+var errstr = getValue("IF_ERRORSTR");
+if( errstr != "SUCC")
+{
+if( errstr == "&?cmret_260;")
+{
+errstr = "&?cmret_2600;";
+}
+alert(errstr);
+}
+}
+</script>
+<%
+IMPORT FILE "common_gch.gch";
+var FP_ERRORSTR     = "SUCC";
+var FP_PARANUM      = 2;
+var FP_HANDLE;
+var FP_INSTNUM = 1;
+var FP_IDENTITY = "";
+var FP_OBJNAME = "OBJ_PON_VERSION_SWITCH_ID";
+var PARA[2] =
+{
+"CountryCode",
+"DefConfFileCapabilitySet"
+};
+
+create_form_start("fSubmit", "'/hidden_version_switch.gch'");
+createBasicHidden();
+create_hidden_newpara(PARA, FP_PARANUM);
+FP_INSTNUM = query_list(FP_OBJNAME, "IGD");
+var CountryCode = request("CountryCode");
+var FP_ACTION = request("IF_ACTION");
+if(FP_ACTION == "apply")
+{
+FP_HANDLE = create_paralist();
+for(var i=0; i< FP_PARANUM; i++)
+{
+setpara(FP_HANDLE, PARA[i]);
+}
+FP_IDENTITY = set_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+if(CountryCode == 2)
+{
+var LANG_HANDLE = create_paralist();
+set_para(LANG_HANDLE, "Language", "English");
+set_inst(LANG_HANDLE, "OBJ_USERIF_ID", "");
+}
+}
+FP_HANDLE = create_paralist();
+
+get_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+create_hidden_para(FP_HANDLE, PARA, FP_PARANUM);
+var CurrentVersion = get_para(FP_HANDLE,"CountryCode");
+var SupportVersion = get_para(FP_HANDLE,"DefConfFileCapabilitySet");
+
+destroy_paralist(FP_HANDLE);
+getDisplayInstError(FP_ERRORSTR);
+
+create_form_end();
+%>
+</head>
+<body onload="pageLoad();">
+<div id="container"  style="background-color:#eeeeee;">
+<div id="head">
+<div class="type"><font id=""><%=getenv("WEBTitle");%></font></div>
+<div id="banner" style="background-image:url(/skin/priorgreen/img/banner.gif);"></div>
+</div>
+<div id="loginArea">
+<!--内容开始-->
+<div class="login_frame">
+<div
+<%
+if(CurrentVersion == 53)
+{
+%>
+class="content login_content_e"
+<%
+}
+else
+{
+%>
+class="content login_content"
+<%
+}
+%>
+>
+<ul class="login_blank"></ul>
+<ul class="login_ul_1">
+<li class="login_li_9">Current Version:</li>
+<%
+var CurrentVersionText = "Unknown Version";
+switch (CurrentVersion)
+{
+case "0":
+CurrentVersionText = "Default Version";
+break;
+case "1":
+CurrentVersionText = "Russia Version";
+break;
+case "2":
+CurrentVersionText = "Lithuania Version";
+break;
+case "3":
+CurrentVersionText = "Romania Version";
+break;
+case "4":
+CurrentVersionText = "Singapore Version";
+break;
+case "5":
+CurrentVersionText = "Italy Version";
+break;
+case "6":
+CurrentVersionText = "United Arab Emirates Version";
+break;
+case "7":
+CurrentVersionText = "England Version";
+break;
+case "8":
+CurrentVersionText = "Libya Version";
+break;
+case "9":
+CurrentVersionText = "Germany Version";
+break;
+case "10":
+CurrentVersionText = "Brazil Version";
+break;
+case "11":
+CurrentVersionText = "Telefonica Version";
+break;
+case "12":
+CurrentVersionText = "PuertoRico Version";
+break;
+case "14":
+CurrentVersionText = "Thailand Version";
+break;
+case "17":
+CurrentVersionText = "Mexico Version";
+break;
+case "18":
+CurrentVersionText = "Belarus Version";
+break;
+case "19":
+CurrentVersionText = "Turkey Version";
+break;
+case "20":
+CurrentVersionText = "FT Romania Version";
+break;
+case "21":
+CurrentVersionText = "Antel Version";
+break;
+case "23":
+CurrentVersionText = "PCCW Version";
+break;
+case "25":
+CurrentVersionText = "Chile Version";
+break;
+case "27":
+CurrentVersionText = "Colombia Version";
+break;
+case "28":
+CurrentVersionText = "Georgia Version";
+break;
+case "33":
+CurrentVersionText = "Datacom Version";
+break;
+case "35":
+CurrentVersionText = "India Version";
+break;
+case "36":
+CurrentVersionText = "ThailandToT Version";
+break;
+case "38":
+CurrentVersionText = "Czechia_OFA Version";
+break;
+case "39":
+CurrentVersionText = "Telkom Version";
+break;
+case "73":
+CurrentVersionText = "Indosat Version";
+break;
+case "41":
+CurrentVersionText = "Hotwire Version";
+break;
+case "45":
+CurrentVersionText = "Singapore_LinkStar Version";
+break;
+case "48":
+CurrentVersionText = "Srilanka Version";
+break;
+case "52":
+CurrentVersionText = "MNC Version";
+break;
+case "53":
+CurrentVersionText = "Bolivia Version";
+break;
+case "54":
+CurrentVersionText = "Viettel Version";
+break;
+case "56":
+CurrentVersionText = "VNPT Version";
+break;
+case "58":
+CurrentVersionText = "Poland Version";
+break;
+case "59":
+CurrentVersionText = "SeteTec Version";
+break;
+case "60":
+CurrentVersionText = "Access Version";
+break;
+case "61":
+CurrentVersionText = "TEDATA Version";
+break;
+case "63":
+CurrentVersionText = "AIS Version";
+break;
+case "64":
+CurrentVersionText = "CIANET Version";
+break;
+case "67":
+CurrentVersionText = "MTN Version";
+break;
+case "69":
+CurrentVersionText = "FranceReunicable Version";
+break;
+case "70":
+CurrentVersionText = "RTC Version";
+break;
+case "74":
+CurrentVersionText = "Claro Version";
+break;
+case "75":
+CurrentVersionText = "MAXCom Version";
+break;
+case "80":
+CurrentVersionText = "ThailandGmesh Version";
+break;
+case "82":
+CurrentVersionText = "Peru Version";
+break;
+case "85":
+CurrentVersionText = "3BB Version";
+break;
+case "91":
+CurrentVersionText = "COBERTO Version";
+break;
+default:
+break;
+}
+%>
+<li class="login_li_7"><%=CurrentVersionText;%></li>
+</ul>
+<ul class="login_blank"></ul>
+<ul class="login_ul_1">
+<li class="login_li_9">Version Type:</li>
+<li class="login_li_8">
+<select id="Frm_DefConfFileCapabilitySet" name="Frm_DefConfFileCapabilitySet" size="1" class="list_7">
+<option value="-1"></option>
+<script language="javascript">
+var SupportVersionSet = "";
+SupportVersionSet = "<%=SupportVersion;%>";
+var arraySupportVersion = new Array();
+arraySupportVersion = SupportVersionSet.split(",");
+if(SupportVersionSet == "" || SupportVersionSet == null)
+{
+
+}
+else
+{
+var SupportVersionValue = "";
+var SupportVersionText  = "";
+var i = 0;
+var DefConfFileCapabilitySetObj = getObj("Frm_DefConfFileCapabilitySet");
+for( var j=0 ; j< arraySupportVersion.length ; j++)
+{
+if(arraySupportVersion[j] == "" || arraySupportVersion[j] == null)
+{
+break;
+}
+SupportVersionValue = arraySupportVersion[j];
+if(SupportVersionValue != "0" && SupportVersionValue != "1" && SupportVersionValue != "54")
+{
+continue;
+}
+switch(SupportVersionValue)
+{
+case "0":
+SupportVersionText = "Default Version";
+break;
+case "1":
+SupportVersionText = "Russia Version";
+break;
+case "2":
+SupportVersionText = "Lithuania Version";
+break;
+case "3":
+SupportVersionText = "Roumania Version";
+break;
+case "4":
+SupportVersionText = "Singapore Version";
+break;
+case "5":
+SupportVersionText = "Italy Version";
+break;
+case "6":
+SupportVersionText = "United Arab Emirates Version";
+break;
+case "7":
+SupportVersionText = "England Version";
+break;
+case "8":
+SupportVersionText = "Libya Version";
+break;
+case "9":
+SupportVersionText = "Germany Version";
+break;
+case "10":
+SupportVersionText = "Brazil Version";
+break;
+case "11":
+SupportVersionText = "Telefonica Version";
+break;
+case "12":
+SupportVersionText = "PuertoRico Version";
+break;
+case "14":
+SupportVersionText = "Thailand Version";
+break;
+case "17":
+SupportVersionText = "Mexico Version";
+break;
+case "18":
+SupportVersionText = "Belarus Version";
+break;
+case "19":
+SupportVersionText = "Turkey Version";
+break;
+case "20":
+SupportVersionText = "FT Romania Version";
+break;
+case "21":
+SupportVersionText = "Antel Version";
+break;
+case "23":
+SupportVersionText = "PCCW Version";
+break;
+case "25":
+SupportVersionText = "Chile Version";
+break;
+case "27":
+SupportVersionText = "Colombia Version";
+break;
+case "28":
+SupportVersionText = "Georgia Version";
+break;
+case "33":
+SupportVersionText = "Datacom Version";
+break;
+case "35":
+SupportVersionText = "India Version";
+break;
+case "36":
+SupportVersionText = "ThailandToT Version";
+break;
+case "38":
+SupportVersionText = "Czechia_OFA Version";
+break;
+case "39":
+SupportVersionText = "Telkom Version";
+break;
+case "73":
+SupportVersionText = "Indosat Version";
+break;
+case "41":
+SupportVersionText = "Hotwire Version";
+break;
+case "45":
+SupportVersionText = "Singapore_LinkStar Version";
+break;
+case "48":
+SupportVersionText = "Srilanka Version";
+break;
+case "52":
+SupportVersionText = "MNC Version";
+break;
+case "53":
+SupportVersionText = "Bolivia Version";
+break;
+case "54":
+SupportVersionText = "Viettel Version";
+break;
+case "56":
+SupportVersionText = "VNPT Version";
+break;
+case "58":
+SupportVersionText = "Poland Version";
+break;
+case "59":
+SupportVersionText = "SeteTec Version";
+break;
+case "60":
+SupportVersionText = "Access Version";
+break;
+case "61":
+SupportVersionText = "TEDATA Version";
+break;
+case "63":
+SupportVersionText = "AIS Version";
+break;
+case "64":
+SupportVersionText = "CIANET Version";
+break;
+case "67":
+SupportVersionText = "MTN Version";
+break;
+case "69":
+SupportVersionText = "FranceReunicable Version";
+break;
+case "70":
+SupportVersionText = "RTC Version";
+break;
+case "74":
+SupportVersionText = "Claro Version";
+break;
+case "75":
+SupportVersionText = "MAXCom Version";
+break;
+case "80":
+SupportVersionText = "ThailandGmesh Version";
+break;
+case "82":
+SupportVersionText = "Peru Version";
+break;
+case "85":
+SupportVersionText = "3BB Version";
+break;
+case "91":
+SupportVersionText = "COBERTO Version";
+break;
+default:
+SupportVersionText = "Version_"+SupportVersionValue;
+break;
+}
+if(SupportVersionValue == "0" || SupportVersionValue == "<%=CurrentVersion;%>")
+{
+DefConfFileCapabilitySetObj.options[i+1] = new Option(SupportVersionText,SupportVersionText);
+DefConfFileCapabilitySetObj.options[i+1].value = SupportVersionValue;
+i++;
+}
+}
+}
+</script>
+</select>
+</li>
+<li class="login_li_3">
+<input name='Submit' type='button' id='Btn_Submit' onclick=pageSubmit()  class='button' value='Submit' />
+</li>
+</ul>
+</div>
+</div>
+<!--内容结束-->
+</form>
+</div>
+<!--bottom部分开始-->
+<div class="content" style="text-align:center;"> Copyright &copy; <%=getenv("VerDate");%> ZTE Corporation. All rights reserved.</div>
+<div
+<%
+if(CurrentVersion == 53)
+{
+%>
+class="bottom_line_e"
+<%
+}
+else
+{
+%>
+class="bottom_line"
+<%
+}
+%>
+></div>
+<div id="bottomx"></div>
+<!--bottom部分结束-->
+</div>
+</body>
+<script language="javascript">
+<%
+IMPORT FILE "auth/api.gch";
+var session_token = get_csrf_session_token();
+session_set("_SESSION_TOKEN", session_token);
+setenv("_SESSION_TOKEN", session_token);
+%>
+function addToken2AllForms()
+{
+function doAddLogic()
+{
+var session_token = "<%=encodeJS(session_token);%>";
+var forms = document.getElementsByTagName("form");
+for ( var i=0; i<forms.length; i++ )
+{
+var tempform = forms[i];
+var sEnctype = tempform.getAttribute("enctype");
+if ( sEnctype != null &&
+"multipart/form-data" == sEnctype.toLowerCase() )
+{
+continue;
+}
+var tokenInput = document.createElement("input");
+tokenInput.setAttribute("id", "_SESSION_TOKEN");
+tokenInput.setAttribute("name", "_SESSION_TOKEN");
+tokenInput.setAttribute("type", "hidden");
+tokenInput.setAttribute("value", session_token);
+tempform.appendChild(tokenInput);
+}
+}
+if( window.onload == null )
+{
+window.onload=function(){
+doAddLogic();
+}
+}
+else
+{
+var tempfunction = window.onload;
+window.onload=function(){
+tempfunction();
+doAddLogic();
+}
+}
+}
+addToken2AllForms();
+</script>
+</html>

@@ -1,0 +1,28 @@
+<%
+IMPORT FILE "common_gch.gch";
+var FP_OBJNAME      = "OBJ_SAMBACFG_ID";
+var FP_IDENTITY     = "";
+var FP_MULTIDISPLAY = 0;
+var FP_PARANUM      = 6;
+var PARA[6] =
+{
+"NetbiosName",
+"EnableSmb",
+"AutoRun",
+"UserName",
+"AuthType",
+"PassWord"
+};
+var FP_ACTION   = request("IF_ACTION");
+var FP_ERRORSTR = "SUCC";
+create_form_start("fSubmit", "");
+createBasicHidden();
+FP_ERRORSTR = applyOrNewOrDelInst(FP_OBJNAME, FP_ACTION, FP_IDENTITY, PARA, FP_PARANUM, FP_ERRORSTR);
+var FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+create_hidden_para(FP_HANDLE, PARA, FP_PARANUM-1);
+create_hidden_sep("PassWord", "******");
+destroy_paralist(FP_HANDLE);
+getDisplayInstError(FP_ERRORSTR);
+create_form_end();
+%>

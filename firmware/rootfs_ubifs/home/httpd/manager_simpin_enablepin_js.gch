@@ -1,0 +1,58 @@
+function pageGetValue()
+{
+setFontValue("Fnt_PinStatusValue", getPINStatus());
+setFontValue("Fnt_PinRemain", getValue("PinRemain"));
+var refresh_flag = getValue("IF_REFRESH_FLAG");
+if (refresh_flag == 1)
+{
+jslDisable("Btn_Submit", "Btn_Cancel");
+jslEnDisplay("Frm_ConfigNote");
+setTimeout("refreshPage()", refresh_seconds);
+}
+var rempin = getValue("RemPin");
+if (rempin == 1)
+{
+setChecked("Frm_RemPin", true);
+}
+else
+{
+setChecked("Frm_RemPin", false);
+}
+}
+function pageCheckValue()
+{
+var pinCode    = getValue("Frm_PinCode");
+var pinCode_cf = getValue("Frm_PinCode_cf");
+
+if (checkPinCode(pinCode, "Frm_PinCode", "Fnt_PinCode") == false)
+{
+return false;
+}
+
+if (checkPinCode(pinCode_cf, "Frm_PinCode_cf", "Fnt_PinCode_cf") == false)
+{
+return false;
+}
+
+if (pinCode != pinCode_cf)
+{
+msg = getmsg(546);
+ShowErrorForCom("Frm_NewPin_cf", null, msg);
+return false;
+}
+return true;
+}
+function pageSetValue()
+{
+jslSetValue("SimPin", "Frm_PinCode");
+setValue("SimPinOP", opEnbPin);
+var tmp = getChecked("Frm_RemPin");
+if (tmp == true)
+{
+setValue("RemPin", 1);
+}
+else
+{
+setValue("RemPin", 0);
+}
+}

@@ -1,0 +1,89 @@
+<%
+IMPORT FILE "wlanm_wds_gch.gch";
+IMPORT FILE "net_wlanm_wds_js.gch";
+%>
+<div id="t_warn" class="space_0">
+<table width="450px" border="0" class="table">
+<tr id="trFst" style="display:none;">
+<td valign="top" style="width:30px;"><img src="img/info.gif"></td>
+<td height="18" align="left" style="padding-left:10px;" id="tipTdFst"></td>
+</tr>
+<tr id="trSec" style="display:none;">
+<td valign="top" style="width:30px;"></td>
+<td height="18" align="left" style="padding-left:10px;" id="tipTdSec"></td>
+</tr>
+</table>
+</div>
+<div id="div4"></div>
+<table id="TestContent" class="table" width="450px" border="0">
+<tr>
+<td class="td9">&?WDS001;</td>
+<td class="td2">
+<select name="Frm_WDS_Mode" id="Frm_WDS_Mode" size="1" class="list_2" onchange="WDS_Mode_switch()">
+<option value="WDS_Disable">&?wlan048;</option>
+<option value="WDS_Root">WDS+Root</option>
+<option value="WDS_Repeater">WDS+Repeater</option>
+</select>
+</td>
+</tr>
+<!--WDS Interface Mac-->
+<tr id="tr_wds_interface" style="display:none">
+<td class="td9"><font id="Fnt_wds_interface_mac_label">&?WDS002;</font></td>
+<td class="td2"><font id="Fnt_wds_interface_mac_value"></font></td>
+</tr>
+<!--WDS Mac 1-->
+<tr id="tr_wds_first_mac" style="display:none">
+<td class="td9"><font id="Fnt_wds_mac_label1"></td>
+<td class="td2">
+<input name="mac11" type="text" class="inputId3"   size="15" maxlength="2" id="mac11" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac12" type="text" class="inputId3"   size="15" maxlength="2" id="mac12" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac13" type="text" class="inputId3"   size="15" maxlength="2" id="mac13" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac14" type="text" class="inputId3"   size="15" maxlength="2" id="mac14" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac15" type="text" class="inputId3"   size="15" maxlength="2" id="mac15" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac16" type="text" class="inputId3"   size="15" maxlength="2" id="mac16" onkeyup="CheckLen(this,this.value)"  />
+</td>
+</tr>
+<!--Repeater Mac 2-->
+<tr id="tr_wds_second_mac" style="display:none">
+<td class="td9"><font id="Fnt_wds_mac_label2">&?WDS003;-2</td>
+<td class="td2">
+<input name="mac21" type="text" class="inputId3"   size="15" maxlength="2" id="mac21" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac22" type="text" class="inputId3"   size="15" maxlength="2" id="mac22" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac23" type="text" class="inputId3"   size="15" maxlength="2" id="mac23" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac24" type="text" class="inputId3"   size="15" maxlength="2" id="mac24" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac25" type="text" class="inputId3"   size="15" maxlength="2" id="mac25" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac26" type="text" class="inputId3"   size="15" maxlength="2" id="mac26" onkeyup="CheckLen(this,this.value)"  />
+</td>
+</tr>
+<!--Repeater Mac 3-->
+<tr id="tr_wds_third_mac" style="display:none">
+<td class="td9"><font id="Fnt_wds_mac_label3">&?WDS003;-3</td>
+<td class="td2">
+<input name="mac31" type="text" class="inputId3"   size="15" maxlength="2" id="mac31" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac32" type="text" class="inputId3"   size="15" maxlength="2" id="mac32" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac33" type="text" class="inputId3"   size="15" maxlength="2" id="mac33" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac34" type="text" class="inputId3"   size="15" maxlength="2" id="mac34" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac35" type="text" class="inputId3"   size="15" maxlength="2" id="mac35" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac36" type="text" class="inputId3"   size="15" maxlength="2" id="mac36" onkeyup="CheckLen(this,this.value)"  />
+</td>
+</tr>
+<!--Repeater Mac 4-->
+<tr id="tr_wds_fourth_mac" style="display:none">
+<td class="td9"><font id="Fnt_wds_mac_label4">&?WDS003;-4</td>
+<td class="td2">
+<input name="mac41" type="text" class="inputId3"   size="15" maxlength="2" id="mac41" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac42" type="text" class="inputId3"   size="15" maxlength="2" id="mac42" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac43" type="text" class="inputId3"   size="15" maxlength="2" id="mac43" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac44" type="text" class="inputId3"   size="15" maxlength="2" id="mac44" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac45" type="text" class="inputId3"   size="15" maxlength="2" id="mac45" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac46" type="text" class="inputId3"   size="15" maxlength="2" id="mac46" onkeyup="CheckLen(this,this.value)"  />
+</td>
+</tr>
+<tr id="tr_wds_mac_set" style="display:none">
+<td class="td9"></td>
+<td class="td2">
+<input type="button" name="Frm_WDS_set" id="Frm_WDS_set" class="button4" value="&?WDS008;" onclick="wds_mac_set();"/>
+</td>
+</tr>
+</table>
+<div id="div4"></div>

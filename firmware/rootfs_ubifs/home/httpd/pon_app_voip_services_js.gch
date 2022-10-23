@@ -1,0 +1,727 @@
+<script language="javascript">
+var VPCALLFEATURE_PARA = new Array(
+"CallWaitingEnable",
+"AntiPole",
+"CallForwardUnconditionalEnable",
+"CallForwardUnconditionalNumber",
+"CallForwardOnBusyEnable",
+"CallForwardOnBusyNumber",
+"CallForwardOnNoAnswerEnable",
+"CallForwardOnNoAnswerNumber",
+"SoftSwitchUnconditionalEnable",
+"SoftSwitchOnBusyEnable",
+"SoftSwitchOnNoReachable",
+"OneNumber",
+"CidDisplayEnable",
+"CallerIDEnable",
+"CallerIDNameEnable",
+"CallerIDName",
+"MWIEnable",
+"MessageWaiting",
+
+"CallHoldFlag",
+"CallTransfer",
+"3WayTalkingBySelf",
+"3WayTalkingBySS",
+"DoNotDisturbEnable",
+"TTYDevice",
+"SipDelayHookonFlag",
+"HotLine",
+"HLNumber",
+"ConfUri",
+"ServInfoReport"
+);
+var VPCALLTIMER_PARA = new Array(
+"CfnrTimer",
+"AlertingTimer",
+"CallWaitingTimer",
+"ProceedingTimer",
+"BusyToneTimer",
+"HaulToneTimer",
+"DhlTimer",
+"CallerTimer",
+"VoiceMessageTimer"
+);
+var DMTIMER_PARA=  new Array(
+"StartTimer",
+"ShortTimer",
+"LongTimer"
+);
+var SIPLINE_PARA = new Array(
+"AuthUserName",
+"AuthPassword",
+"DigestUserName",
+"DisplayName",
+"RegStatus",
+"DNSStatus"
+);
+function getmsg(id)
+{
+var str = new Array();
+str[0] = new Array(101, "&?error_101;");
+str[1] = new Array(102, "&?error_102;");
+str[2] = new Array(103, "&?error_103;");
+str[3] = new Array(115, "&?error_115;");
+str[4] = new Array(116, "&?error_116;");
+str[5] = new Array(117, "&?error_117;");
+str[6] = new Array(118, "&?error_118;");
+str[7] = new Array(119, "&?error_119;");
+str[8] = new Array(122, "&?error_122;");
+str[9] = new Array(805, "&?error_805;");
+str[10] = new Array(202, "&?pon_error_202;");
+return getMsgFormArray(str, arguments);  
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+ProcessRet(errstr, errpara);
+pageGetValue();
+}
+function pageGetValue()
+{
+var index = getValue("IF_INDEX");
+if (index == "" || index == "NULL")
+{
+setValue("Frm_TermNumber", 0);
+}
+else
+{
+setValue("Frm_TermNumber", index);
+}
+
+TermNumberChange();
+}
+function TermNumberChange()
+{
+
+var index = getValue("Frm_TermNumber");
+if(getValue("Frm_TermNumber") == "" || getValue("Frm_TermNumber") == null)
+{
+jslDisable("Frm_CallForwardUnconditionalEnable", "Frm_CallForwardOnBusyEnable", "Frm_CallForwardOnNoAnswerEnable", "Frm_CfnrTimer", "Frm_CallForwardUnconditionalNumber", "Frm_CallForwardOnBusyNumber","Frm_CallForwardOnNoAnswerNumber");
+jslDisable("Frm_CallWaitingEnable", "Frm_CallTransfer", "Frm_CallHoldFlag","Frm_HookDelay");
+jslDisable("Frm_InfoReportFlag");
+jslDisable("Frm_3WayTalkingBySelf", "Frm_ConfUri");
+jslDisable("Frm_HotLine","Frm_HLNumber","Frm_DhlTimer");
+jslDisable("Frm_AntiPole");
+return;
+}
+else
+{
+jslEnable("Frm_CallForwardUnconditionalEnable", "Frm_CallForwardOnBusyEnable", "Frm_CallForwardOnNoAnswerEnable", "Frm_CallForwardUnconditionalNumber", "Frm_CallForwardOnBusyNumber","Frm_CallForwardOnNoAnswerNumber");
+jslEnable("Frm_CallWaitingEnable", "Frm_CallTransfer", "Frm_CallHoldFlag", "Frm_HookDelay");
+jslEnable("Frm_InfoReportFlag");
+jslEnable("Frm_3WayTalkingBySelf", "Frm_ConfUri");
+jslEnable("Frm_HotLine","Frm_HLNumber","Frm_DhlTimer");
+jslEnable("Frm_AntiPole");
+document.getElementById("Fnt_AuthUserName").innerHTML=HTMLEnCode(getValue("AuthUserName"+index));
+document.getElementById("Fnt_DigestUserName").innerHTML=HTMLEnCode(getValue("DigestUserName"+index));
+if(getValue("HotLine"+index) == 2)
+{
+jslEnable("Frm_DhlTimer");
+}
+else
+{
+jslDisable("Frm_DhlTimer");
+}
+if(0==getValue("HotLine"+index)) 
+{
+jslDisable("Frm_HLNumber");
+}
+else
+{
+jslEnable("Frm_HLNumber");
+}
+<%
+if(getenv("CurrentVersionInfo") == 39)
+{
+%>
+jslDisable("Frm_CallForwardUnconditionalEnable", "Frm_CallForwardOnBusyEnable", "Frm_CallForwardOnNoAnswerEnable", "Frm_CfnrTimer", "Frm_CallForwardUnconditionalNumber", "Frm_CallForwardOnBusyNumber","Frm_CallForwardOnNoAnswerNumber");
+jslDisable("Frm_CallWaitingEnable", "Frm_HotLine", "Frm_HLNumber", "Frm_DhlTimer");
+<%
+}
+%>
+}
+
+if(getValue("CallForwardUnconditionalEnable"+index) == 1)
+{
+setChecked("Frm_CallForwardUnconditionalEnable", true);
+}
+else
+{
+setChecked("Frm_CallForwardUnconditionalEnable", false);
+}
+
+if(getValue("CallForwardOnBusyEnable"+index) == 1)
+{
+setChecked("Frm_CallForwardOnBusyEnable", true);
+}
+else
+{
+setChecked("Frm_CallForwardOnBusyEnable", false);
+}
+
+if(getValue("CallForwardOnNoAnswerEnable"+index) == 1)
+{
+setChecked("Frm_CallForwardOnNoAnswerEnable", true);
+}
+else
+{
+setChecked("Frm_CallForwardOnNoAnswerEnable", false);
+}
+
+jslSetValue("Frm_CallForwardUnconditionalNumber", "CallForwardUnconditionalNumber"+index);
+jslSetValue("Frm_CallForwardOnBusyNumber", "CallForwardOnBusyNumber"+index);
+jslSetValue("Frm_CallForwardOnNoAnswerNumber", "CallForwardOnNoAnswerNumber"+index);
+
+jslSetValue("Frm_CfnrTimer", "CfnrTimer");
+
+if(getValue("CallWaitingEnable"+index) == 1)
+{
+setChecked("Frm_CallWaitingEnable", true);
+}
+else
+{
+setChecked("Frm_CallWaitingEnable", false);
+}
+
+if(getValue("CallTransfer"+index) == 1)
+{
+setChecked("Frm_CallTransfer", true);
+}
+else
+{
+setChecked("Frm_CallTransfer", false);
+}
+
+if(getValue("ServInfoReport"+index) == 1)
+{
+setChecked("Frm_InfoReportFlag", true);
+}
+else
+{
+setChecked("Frm_InfoReportFlag", false);
+}
+
+if(getValue("CallHoldFlag"+index) == 1)
+{
+setChecked("Frm_CallHoldFlag", true);
+}
+else
+{
+setChecked("Frm_CallHoldFlag", false);
+}
+
+
+if(getValue("SipDelayHookonFlag"+index) == 1)
+{
+setChecked("Frm_HookDelay", true);
+}
+else
+{
+setChecked("Frm_HookDelay", false);
+}
+
+if(getValue("3WayTalkingBySelf"+index) == 1 || getValue("3WayTalkingBySS"+index) == 1)
+{
+setChecked("Frm_3WayTalkingBySelf", true);
+}
+else
+{
+setChecked("Frm_3WayTalkingBySelf", false);
+}
+
+jslSetValue("Frm_ConfUri", "ConfUri"+index);
+Enable_CallForwardUnconditionalEnable();
+Enable_CallForwardOnBusyEnable();
+Enable_3WayTalkingBySS();
+
+if(getValue("HotLine"+index) == 0 ||getValue("HotLine"+index) == 1 ||getValue("HotLine"+index) == 2)
+{
+jslDoShowComboBox("Frm_HotLine","HotLine"+index);
+}
+jslSetValue("Frm_HLNumber","HLNumber"+index);
+jslSetValue("Frm_DhlTimer","DhlTimer");
+
+if (getValue("AntiPole"+index) == 1)
+{
+setChecked("Frm_AntiPole", true);
+}
+else
+{
+setChecked("Frm_AntiPole", false);
+}
+}
+function Enable_CallForwardUnconditionalEnable()
+{
+var index = getValue("Frm_TermNumber");
+if (getChecked("Frm_CallForwardUnconditionalEnable") == true)
+{
+setChecked("Frm_CallForwardOnBusyEnable", false);
+setChecked("Frm_CallForwardOnNoAnswerEnable", false);
+jslEnable("Frm_CallForwardUnconditionalNumber");
+jslDisable("Frm_CallForwardOnBusyNumber", "Frm_CallForwardOnNoAnswerNumber");
+jslSetValue("Frm_CallForwardUnconditionalNumber", "CallForwardUnconditionalNumber"+index);
+}
+else
+{
+jslDisable("Frm_CallForwardUnconditionalNumber");
+}
+Enable_CallForwardNumber();
+}
+function Enable_CallForwardOnBusyEnable()
+{
+var index = getValue("Frm_TermNumber");
+if (getChecked("Frm_CallForwardOnBusyEnable") == true )
+{
+setChecked("Frm_CallForwardUnconditionalEnable", false);
+jslDisable("Frm_CallForwardUnconditionalNumber");
+jslSetValue("Frm_CallForwardOnBusyNumber", "CallForwardOnBusyNumber"+index);
+jslEnable("Frm_CallForwardOnBusyNumber");
+}
+else
+{
+jslDisable("Frm_CallForwardOnBusyNumber");
+}
+if ( getChecked("Frm_CallForwardOnNoAnswerEnable") == true)
+{
+setChecked("Frm_CallForwardUnconditionalEnable", false);
+jslDisable("Frm_CallForwardUnconditionalNumber");
+jslSetValue("Frm_CallForwardOnNoAnswerNumber", "CallForwardOnNoAnswerNumber"+index);
+jslEnable("Frm_CallForwardOnNoAnswerNumber");
+}
+else
+{
+jslDisable("Frm_CallForwardOnNoAnswerNumber");
+}
+Enable_CallForwardNumber();
+}
+function Enable_CallForwardNumber()
+{
+if (getChecked("Frm_CallForwardOnNoAnswerEnable") == true)
+{
+jslEnable("Frm_CfnrTimer");
+}
+else
+{
+jslDisable("Frm_CfnrTimer");
+}
+if (getChecked("Frm_CallForwardOnNoAnswerEnable") == true || getChecked("Frm_CallForwardUnconditionalEnable") == true || getChecked("Frm_CallForwardOnBusyEnable") == true)
+{
+setChecked("Frm_CallWaitingEnable", false);
+}
+}
+function Enable_CallWaitingEnable()
+{
+if (getChecked("Frm_CallWaitingEnable") == true)
+{
+if (getChecked("Frm_InfoReportFlag") == true)
+{
+setChecked("Frm_InfoReportFlag", false);
+}
+setChecked("Frm_CallForwardUnconditionalEnable", false);
+setChecked("Frm_CallForwardOnBusyEnable", false);
+setChecked("Frm_CallForwardOnNoAnswerEnable", false);
+jslDisable("Frm_CallForwardUnconditionalNumber", "Frm_CallForwardOnBusyNumber", "Frm_CallForwardOnNoAnswerNumber", "Frm_CfnrTimer");
+}
+}
+function Enable_3WayTalkingBySS()
+{
+if (getChecked("Frm_3WayTalkingBySelf") == true)
+{
+jslEnable("Frm_ConfUri");
+if (getChecked("Frm_InfoReportFlag") == true)
+{
+setChecked("Frm_InfoReportFlag", false);
+}
+}
+else
+{
+jslDisable("Frm_ConfUri");
+}
+}
+
+function Enable_InfoReport()
+{
+if(getChecked("Frm_InfoReportFlag") == true)
+{
+if (getChecked("Frm_CallWaitingEnable") == true)
+{
+setChecked("Frm_CallWaitingEnable", false);
+}
+if (getChecked("Frm_CallTransfer") == true)
+{
+setChecked("Frm_CallTransfer", false);
+}
+if (getChecked("Frm_CallHoldFlag") == true)
+{
+setChecked("Frm_CallHoldFlag", false);
+}
+if (getChecked("Frm_3WayTalkingBySelf") == true)
+{
+setChecked("Frm_3WayTalkingBySelf", false);
+}
+setChecked("Frm_InfoReportFlag", true);
+}
+else
+{
+setChecked("Frm_InfoReportFlag", false);
+}
+}
+
+function DisableInfoReport()
+{
+if (getChecked("Frm_CallHoldFlag") == true || getChecked("Frm_CallTransfer") == true)
+{
+if (getChecked("Frm_InfoReportFlag") == true)
+{
+setChecked("Frm_InfoReportFlag", false);
+}
+}
+}
+function HotLineChange()
+{
+var HotLineValue=getValue("Frm_HotLine");
+if(2==HotLineValue) 
+{
+jslEnable("Frm_DhlTimer");
+}
+else
+{
+jslDisable("Frm_DhlTimer");
+}
+if(0==HotLineValue) 
+{
+jslDisable("Frm_HLNumber");
+}
+else
+{
+jslEnable("Frm_HLNumber");
+}
+}
+function pageCheckValue()
+{
+var msg = "";
+var srvValue = "";
+
+srvValue = getValue("Frm_TermNumber");
+if(checkNull(srvValue) == false)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_TermNumber", "Fnt_TermNumber", msg);
+return false;
+}
+
+if (getChecked("Frm_CallForwardUnconditionalEnable") == true )
+{
+srvValue = getValue("Frm_CallForwardUnconditionalNumber");
+if (checkNull(srvValue) != true)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_CallForwardUnconditionalNumber", "Fnt_CallForwardUnconditionalNumber", msg);
+return false;
+}
+if(checkStrLengthRange(srvValue, 1, 32) != true)
+{
+msg = getmsg(102, 1, 32);
+ShowErrorForCom("Frm_CallForwardUnconditionalNumber", "Fnt_CallForwardUnconditionalNumber", msg);
+return false;
+}
+var CallForwardUnconditionalNumber_Result = Validation(srvValue);
+if(!CallForwardUnconditionalNumber_Result) 
+{
+msg = getmsg(202);
+ShowErrorForCom("Frm_CallForwardUnconditionalNumber", "Fnt_CallForwardUnconditionalNumber", msg);
+return false;
+}
+}
+
+if (getChecked("Frm_CallForwardOnBusyEnable") == true)
+{
+srvValue = getValue("Frm_CallForwardOnBusyNumber");
+if (checkNull(srvValue) != true)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_CallForwardOnBusyNumber", "Fnt_CallForwardOnBusyNumber", msg);
+return false;
+}
+if(checkStrLengthRange(srvValue, 1, 32) != true)
+{
+msg = getmsg(102, 1, 32);
+ShowErrorForCom("Frm_CallForwardOnBusyNumber", "Fnt_CallForwardOnBusyNumber", msg);
+return false;
+}
+var CallForwardOnBusyNumber_Result = Validation(srvValue);
+if(!CallForwardOnBusyNumber_Result) 
+{
+msg = getmsg(202);
+ShowErrorForCom("Frm_CallForwardOnBusyNumber", "Fnt_CallForwardOnBusyNumber", msg);
+return false;
+}
+}
+
+if (getChecked("Frm_CallForwardOnNoAnswerEnable") == true)
+{
+srvValue = getValue("Frm_CallForwardOnNoAnswerNumber");
+if (checkNull(srvValue) != true)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_CallForwardOnNoAnswerNumber", "Fnt_CallForwardOnNoAnswerNumber", msg);
+return false;
+}
+if(checkStrLengthRange(srvValue, 1, 32) != true)
+{
+msg = getmsg(102, 1, 32);
+ShowErrorForCom("Frm_CallForwardOnNoAnswerNumber", "Fnt_CallForwardOnNoAnswerNumber", msg);
+return false;
+}
+var CallForwardOnNoAnswerNumber_Result = Validation(srvValue);
+if(!CallForwardOnNoAnswerNumber_Result) 
+{
+msg = getmsg(202);
+ShowErrorForCom("Frm_CallForwardOnNoAnswerNumber", "Fnt_CallForwardOnNoAnswerNumber", msg);
+return false;
+}
+}
+
+if (getChecked("Frm_CallForwardOnNoAnswerEnable") == true)
+{
+if (checkNull(getValue("Frm_CfnrTimer")) != true)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_CfnrTimer", "Fnt_CfnrTimer", msg);
+return false;
+}
+if(checkInteger(getValue("Frm_CfnrTimer")) != true)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_CfnrTimer", "Fnt_CfnrTimer", msg);
+return false;
+}
+if(checkIntegerRange(getValue("Frm_CfnrTimer"), 500, 6000) != true)
+{
+msg = getmsg(116, 500, 6000);
+ShowErrorForCom("Frm_CfnrTimer", "Fnt_CfnrTimer", msg);
+return false;
+}
+}
+
+if (getChecked("Frm_3WayTalkingBySelf") == true)
+{
+srvValue = getValue("Frm_ConfUri");
+if(checkStrLengthRange(srvValue, 1, 31) != true&&checkNull(srvValue) == true)
+{
+msg = getmsg(102, 1, 31);
+ShowErrorForCom("Frm_ConfUri", "Fnt_ConfUri", msg);
+return false;
+}
+}
+
+
+var index = getValue("Frm_TermNumber");
+if(getValue("Frm_HotLine") == 1 ||getValue("Frm_HotLine") == 2)
+{
+
+if(checkNull(getValue("Frm_HLNumber")) == false)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_HLNumber", "Fnt_HLNumber", msg);
+return false;
+}
+if(checkStrLengthRange(getValue("Frm_HLNumber"),1,32) != true) 
+{
+msg = getmsg(102,1,32);
+ShowErrorForCom("Frm_HLNumber","Fnt_HLNumber",msg);
+return false;
+}
+var HLNumber_Result = Validation(getValue("Frm_HLNumber"));
+if(!HLNumber_Result) 
+{
+msg = getmsg(202);
+ShowErrorForCom("Frm_HLNumber","Fnt_HLNumber",msg);
+return false;
+}
+}
+
+if("2" == getValue("Frm_HotLine"))
+{
+var iStartTimer=getValue("StartTimer");
+var iDhlTimer = checkIntegerRange(getValue("Frm_DhlTimer"),1,parseInt(iStartTimer)); 
+if(iDhlTimer == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_DhlTimer","Fnt_DhlTimer",msg);
+return false;
+}
+else if(iDhlTimer == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_DhlTimer","Fnt_DhlTimer",msg);
+return false;
+}
+else if(iDhlTimer == -3)
+{
+msg = getmsg(116,1,iStartTimer);
+ShowErrorForCom("Frm_DhlTimer","Fnt_DhlTimer",msg);
+return false;
+}
+}
+return true;
+}
+
+function Validation(str)
+{
+var checkStr="0123456789";
+checkStr+="#*";
+if(str=="nodial")
+{
+return true;    
+}
+for(var i=0;i < str.length; i++)
+{
+var c = str.charAt(i);
+if(checkStr.indexOf(c) == -1)   
+{
+
+return false;
+}
+}
+return true;
+}
+function pageSetValue()
+{
+var index = getValue("Frm_TermNumber");
+
+HiddenMultiInstParaInit(VPCALLFEATURE_PARA, index);
+HiddenParaInit(VPCALLTIMER_PARA);
+
+if(getChecked("Frm_CallForwardUnconditionalEnable") == true)
+{
+setValue("CallForwardUnconditionalEnable"+index, "1");
+jslSetValue("CallForwardUnconditionalNumber"+index, "Frm_CallForwardUnconditionalNumber");
+}
+else
+{
+setValue("CallForwardUnconditionalEnable"+index, "0");
+}
+
+if(getChecked("Frm_CallForwardOnBusyEnable") == true)
+{
+setValue("CallForwardOnBusyEnable"+index, "1");
+jslSetValue("CallForwardOnBusyNumber"+index, "Frm_CallForwardOnBusyNumber");
+}
+else
+{
+setValue("CallForwardOnBusyEnable"+index, "0");
+}
+
+if(getChecked("Frm_CallForwardOnNoAnswerEnable") == true)
+{
+setValue("CallForwardOnNoAnswerEnable"+index, "1");
+jslSetValue("CfnrTimer", "Frm_CfnrTimer");
+jslSetValue("CallForwardOnNoAnswerNumber"+index, "Frm_CallForwardOnNoAnswerNumber");
+}
+else
+{
+setValue("CallForwardOnNoAnswerEnable"+index, "0");
+}
+
+if(getChecked("Frm_CallWaitingEnable") == true)
+{
+setValue("CallWaitingEnable"+index, "1");
+}
+else
+{
+setValue("CallWaitingEnable"+index, "0");
+}
+
+if(getChecked("Frm_CallTransfer") == true)
+{
+setValue("CallTransfer"+index, "1");
+}
+else
+{
+setValue("CallTransfer"+index, "0");
+}
+
+if(getChecked("Frm_CallHoldFlag") == true)
+{
+setValue("CallHoldFlag"+index, "1");
+}
+else
+{
+setValue("CallHoldFlag"+index, "0");
+}
+
+
+if(getChecked("Frm_HookDelay") == true)
+{
+setValue("SipDelayHookonFlag"+index, "1");
+}
+else
+{
+setValue("SipDelayHookonFlag"+index, "0");
+}
+
+if(getChecked("Frm_InfoReportFlag")==true)
+{
+setValue("ServInfoReport"+index, "1");
+}
+else
+{
+setValue("ServInfoReport"+index, "0");
+}
+
+if(getChecked("Frm_3WayTalkingBySelf") == true)
+{
+setValue("3WayTalkingBySelf"+index, "1");
+setValue("3WayTalkingBySS"+index, "1");
+}
+else
+{
+setValue("3WayTalkingBySelf"+index, "0");
+setValue("3WayTalkingBySS"+index, "0");
+}
+setValue("ConfUri"+index,getValue("Frm_ConfUri"));
+setValue("HotLine"+index,getValue("Frm_HotLine"));
+if("1" == getValue("Frm_HotLine") || "2" == getValue("Frm_HotLine"))
+{
+setValue("HLNumber"+index,getValue("Frm_HLNumber"));
+}
+if("2" == getValue("Frm_HotLine"))
+{
+setValue("DhlTimer",getValue("Frm_DhlTimer"));
+}
+
+if(getChecked("Frm_AntiPole")==true)
+{
+setValue("AntiPole"+index, "1");
+}
+else
+{
+setValue("AntiPole"+index, "0");
+}
+}
+function pageSubmit()
+{
+
+if (getChecked("Frm_CallForwardOnNoAnswerEnable") == true)
+{
+ReSetIpRmZero("Frm_CfnrTimer");
+}
+if(pageCheckValue() == true)
+{
+jslDisable("Btn_Submit", "Btn_Cancel");
+pageSetValue();
+setValue("IF_ACTION", "apply");
+setValue("IF_INDEX", getValue("Frm_TermNumber"));
+getObj("fSubmit").submit();
+}
+}
+function pageCancel()
+{
+jslDisable("Btn_Submit", "Btn_Cancel");
+getObj("fSubmit").submit();
+}
+</script>

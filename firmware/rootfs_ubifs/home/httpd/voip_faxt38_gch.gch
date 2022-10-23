@@ -1,0 +1,42 @@
+<%
+IMPORT FILE "common_gch.gch";
+function fax38_func(FP_ACTION,FP_INDEX,FP_ERRORSTR)
+{
+var FP_OBJNAME      = "OBJ_VOIPFAXT38_ID";
+var FP_MULTIDISPLAY = 0;
+var FP_PARANUM      = 9;
+var cver = getenv("CurrentVersionInfo");
+var T38_PARA[9] =
+{
+"Enable",
+"PLC",
+"HighSpeedRedundancy",
+"LowSpeedRedundancy",
+"BitRate",
+"TCFMethod",
+"NumOfFEC",
+"NumOfIFP",
+"ERM"
+};
+FP_ERRORSTR = getOldFunctionGCH(FP_OBJNAME, FP_MULTIDISPLAY, T38_PARA, FP_PARANUM, FP_ACTION, FP_INDEX, FP_ERRORSTR);
+if(cver == 85)
+{
+FP_OBJNAME = "OBJ_VFAXMODEMRPTCTRL_ID";
+FP_PARANUM      = 8;
+FP_MULTIDISPLAY = 0;
+var FAXMODE_PARA[8] =
+{
+"MGInteract",
+"CNGRpt",
+"CEDRpt",
+"V21Rpt",
+"CNGCtrl",
+"ModemToneRpt",
+"FaxPassThrough",
+"ModemPassThrough"
+};
+FP_ERRORSTR = getOldFunctionGCH(FP_OBJNAME, FP_MULTIDISPLAY, FAXMODE_PARA, FP_PARANUM, FP_ACTION, FP_INDEX, FP_ERRORSTR);
+}
+return FP_ERRORSTR;
+}
+%>

@@ -1,0 +1,56 @@
+<%
+IMPORT FILE "testftp_total_gch.gch";
+IMPORT FILE "app_test_ftp_js.gch";
+%>
+<div class="space_0">
+<div id="t_tip" style="width:450px;text-align:center;">
+<ul>
+<li style="padding-top:8px;text-align:left; margin-left:70px;">
+<span style="width:70px;display:inline-block;margin-left:-70px;text-align:right;">&?cwn2;&nbsp;</span>1&?cordersym;&nbsp;&?ctf001;
+</li>
+</ul>
+<ul>
+<li style="padding-top:8px;text-align:left; margin-left:70px;">2&?cordersym;&nbsp;&?ctf002;</li>
+</ul>
+</div>
+</div>
+<br>
+<table id="TestContent"  class="table" width="450px" border="0">
+<tr>
+<td class="td1" id="Fnt_Host">&?wan035;</td>
+<td class="td2"><input type="text" class="inputId" name="Frm_Host" id="Frm_Host" value=""/></td>
+</tr>
+<tr>
+<td class="td1" id="Fnt_Port">&?dhcp_d014;</td>
+<td class="td2"><input type="text" class="inputId5" name="Frm_Port" id="Frm_Port" value="21"/>&?ftp005;</td>
+</tr>
+<tr>
+<td class="td1" id="Fnt_User">&?wan019;</td>
+<td class="td2"><input type="text" class="inputId" name="Frm_User" id="Frm_User" value=""/>&?ftp006;</td>
+</tr>
+<tr>
+<td class="td1" id="Fnt_Pass">&?va02;</td>
+<td class="td2"><input type="password" class="inputId" name="Frm_Pass" id="Frm_Pass" value="" autocomplete="off"/>&?ftp006;</td>
+</tr>
+<tr>
+<td class="td1" id="Fnt_FilePath">&?ftpt004;</td>
+<td class="td2"><input type="text" class="inputId" name="Frm_FilePath" id="Frm_FilePath" value=""/>&?ftp007;</td>
+</tr>
+<tr>
+<td class="td1"></td>
+<td class="td2"><input name="" type="submit" class="button3" id="Btn_Download" value="&?btn014;" onclick="PageDownLoad()"/></td>
+</tr>
+<tr>
+<td class="td1"></td>
+<td class="td2"></td>
+</tr>
+</table>
+<iframe name="ftp_fresh" id="ftp_fresh" width="480px" height="250px" src="" scrolling="no" frameborder="0" allowTransparency="true" />
+</iframe>
+<script language="javascript">
+var IF_ERRORSTR = getValue("IF_ERRORSTR");
+if (IF_ERRORSTR == "SUCC" || IF_ERRORSTR == "" )
+getObj("ftp_fresh").src = "app_ftp_fresh_t.gch";
+else
+getObj("ftp_fresh").src = "";
+</script>

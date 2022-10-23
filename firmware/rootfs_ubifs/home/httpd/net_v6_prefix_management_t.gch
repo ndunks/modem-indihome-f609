@@ -1,0 +1,88 @@
+<%
+IMPORT FILE "prefix_management_gch.gch";
+IMPORT FILE "net_v6_prefix_management_js.gch";
+%>
+<table id="Tbl_prefixConf"  class="table" width="450px" border="0">
+<!-- 广域网连接 -->
+<tr>
+<td class="td1">
+<font id="Fnt_Wan">&?v6prefix_001;</font>
+</td>
+<td class="td2">
+<input name="Frm_Wan" id="Frm_Wan" type="text" class="inputId" value="" size="15" />
+</td>
+</tr>
+<!-- 前缀来源 -->
+<tr>
+<td class="td1">
+<font id="Fnt_Src">&?v6prefix_002;</font>
+</td>
+<td class="td2">
+<input name="Frm_Src" id="Frm_Src" type="text" class="inputId" value="" size="15" />
+</td>
+</tr>
+<!--前缀 -->
+<tr>
+<td id="Fnt_Prefix" class="td1">&?v6prefix_003;</td>
+<td class="td2">
+<input name="Frm_Prefix" id="Frm_Prefix" type="text" class="inputId" value="" size="15" />
+/ <input name="Frm_PrefixLen" id="Frm_PrefixLen" type="text" value="" class="inputId7" />
+</td>
+</tr>
+<!-- 首选时间 -->
+<tr>
+<td id="Fnt_PreferLifetime" class="td1">&?v6prefix_004;</td>
+<td class="td2">
+<input name="Frm_PreferLifetime" id="Frm_PreferLifetime" type="text" class="inputId"  value="" size="15" /> &?wan029;
+</td>
+</tr>
+<!-- 有效时间 -->
+<tr>
+<td id="Fnt_ValidLifetime" class="td1">&?v6prefix_005;</td>
+<td class="td2">
+<input name="Frm_ValidLifetime" id="Frm_ValidLifetime" type="text" class="inputId"  value="" size="15" /> &?wan029;
+</td>
+</tr>
+<!--    在链判断与自动地址配置暂且注释掉，待功能实现后再加入
+<tr>
+<td id="Fnt_Onlink" class="td1">&?v6prefix_006;</td>
+<td class="td2">
+<input name="Frm_Onlink" id="Frm_Onlink" type="checkbox"  value="" size="15" />
+</td>
+</tr>
+<tr>
+<td id="Fnt_AutoConf" class="td1">&?v6prefix_007;</td>
+<td class="td2">
+<input name="Frm_AutoConf" id="Frm_AutoConf" type="checkbox"  value="" size="15" />
+</td>
+</tr>
+-->
+<!-- 下发方式 -->
+<tr>
+<td id="Fnt_Delegation" class="td1">&?v6prefix_008;</td>
+<td class="td2"><input name="Frm_RA" id="Frm_RA" type="checkbox"  value="" size="15" /> &?v6prefix_013;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input name="Frm_DHCPV6" id="Frm_DHCPV6" type="checkbox"  value="" size="15" /> &?v6prefix_014;
+</td>
+</tr>
+<!-- 修改与取消按钮 -->
+<tr>
+<td class="td1"></td>
+<td class="td2">
+<input name="Btn_Edit" type="button" id="Btn_Edit" value="&?btn003;" onclick="pageEdit()" class="button2"  style="display:none"/>
+<input name="Btn_Back" type="button" id="Btn_Back" value="&?btn004;"  class="button2" onclick="back4add()" style="display:none"/>
+</td>
+</tr>
+</table>
+<!-- 前缀规则列表 -->
+<table id="Tbl_prefixList" class="item" border="0" cellpadding="0" cellspacing="1" bgcolor="#979797" style="width: 500px;">
+<tr class="h2_s title_1">
+<td width="80">&?comm002;</td>
+<td width="60">&?v6prefix_002;</td>
+<td width="60">&?v6prefix_003;</td>
+<td width="90">&?v6prefix_011;</td>
+<!-- <td width="60">&?v6prefix_012;</td> -->
+<td width="60">&?v6prefix_008;</td>
+<td width="40">&?va04;</td>
+</tr>
+</table>
+<div id="div4"></div>

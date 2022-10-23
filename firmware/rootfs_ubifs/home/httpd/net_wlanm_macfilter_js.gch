@@ -1,0 +1,252 @@
+<script language="javascript">
+var MAC_PARA = new Array
+(
+"ViewName",
+"Interface",
+"MACAddress"
+);
+var BASIC_PARA = new Array
+(
+"ACLPolicy"
+);
+function getmsg(id)
+{
+var str = new Array();
+str[0]  = new Array(101, "&?error_101;");
+str[1]  = new Array(105, "&?error_105;");
+str[2]  = new Array(118, "&?error_118;");
+str[3]  = new Array(119, "&?error_119;");
+str[4]  = new Array(122, "&?error_122;");
+str[5]  = new Array(127, "&?error_127;");
+str[6]  = new Array(143, "&?error_143;");
+str[7]  = new Array(102, "&?error_102;");
+str[8]  = new Array(103, "&?error_103;");
+str[9]  = new Array(110, "&?error_110;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+pageGetValue();
+moveErrLayer(570,4);
+}
+function Wireless_switch()
+{
+var RealRF = getValue("RealRF");
+if( RealRF== "1")
+{
+if ( "0" == getValue("CardIsIn") )
+{
+getObj("tipLi").innerHTML = "&?cwt024;";
+}
+else
+{
+getObj("tipLi").innerHTML = "&?cwm1;&?pub000;";
+}
+jslEnDisplay("t_warn");
+}
+else
+{
+getObj("tipLi").innerHTML = "&?wlan079;";
+jslEnDisplay("t_warn");
+DisableALL();
+}
+}
+function pageGetValue()
+{
+var instNum = getValue("WLAN_INSTNUM");
+for (var i=0; i<instNum; i++)
+{
+var ident = getValue("WLAN_SSID"+i);
+addSelectOption("Frm_SSID_SET", ident, "SSID"+ident.match(/\d+$/));
+<%
+if((getenv("CurrentVersionInfo") == 3) && (getenv("Right") == 2))
+{
+%>
+i = instNum;
+<%
+}
+%>
+}
+jslSetValue( "Frm_Mode","ACLPolicy");
+jslSetValue( "Frm_SSID_SET","IF_VIEWID");
+showTable();
+Wireless_switch();
+<%
+var userright = getenv("Right");
+var cver = getenv("CurrentVersionInfo");
+%>
+}
+function showTable()
+{
+var newline = getObj("MAC_Table").insertRow(-1);
+newline.setAttribute("align", "center");
+newline.setAttribute("class", "white");
+newline.setAttribute("className", "white");
+newline.setAttribute("id", "nodata");
+var objcell =  newline.insertCell(-1);
+objcell.colSpan = 3;
+objcell.innerHTML= "&?note_007;";
+var viewid = getValue("Frm_SSID_SET");
+var reg = new RegExp('[0-9]+$');
+iface = reg.exec(viewid) - 1;
+var num = getValue("IF_INSTNUM");
+for(var i = 0; i < num; i++)
+{
+if(iface != getValue("Interface"+i))
+{
+continue;
+}
+else
+{
+jslDiDisplay("nodata");
+addline(i);
+}
+}
+}
+function addline(index)
+{
+var newline = getObj("MAC_Table").insertRow(-1);
+newline.setAttribute("class", "white");
+newline.setAttribute("className", "white");
+newline.setAttribute("id", "line"+index);
+jslEnDisplay("line" + index);
+var ssidName = "SSID" + (parseInt(getValue("Interface"+index)) + parseInt(1));
+cellId = "Line_" + index + "_" + MAC_PARA[1] + "_" + 0;
+newline.insertCell(-1).innerHTML = getNameValue(cellId, 10, ssidName);
+cellId = "Line_" + index + "_" + MAC_PARA[2] + "_" + 1;
+newline.insertCell(-1).innerHTML = getNameValue(cellId, 25, getValue("MACAddress"+index));
+newline.insertCell(-1).innerHTML = getImagefrmClass("multiImg_delete", "Delete("+index+")", "Btn_Delete"+index);
+}
+function getNameValue(id, size, value)
+{
+return ("<input type=\"text\" class=\"uiNoBorder\" size=\"" + size +"\" value=\""
++ HTMLEnCode(value) + "\"  id=\"" + id + "\"  readonly>");
+}
+function Add()
+{
+if(pageCheckValue() == true)
+{
+pageSetValue();
+setValue("IF_ACTION", "new");
+setValue("IF_INDEX", "-1");
+DisableALL();
+getObj("fSubmit").submit();
+}
+else
+{
+}
+}
+function pageCheckValue()
+{
+var msg = "";
+var value = MacSetValue();
+if(value == "")
+{
+msg = getmsg(101);
+ShowErrorForCom("mac1","Frm_MAC",msg);
+return false;
+}
+if((CheckMac(value) != true)&&(value !=""))
+{
+msg = getmsg(110);
+ShowErrorForCom("mac1","Frm_MAC",msg);
+return false;
+}
+if ( value.toLowerCase() == "ff:ff:ff:ff:ff:ff" )
+{
+msg = getmsg(110);
+ShowErrorForCom("mac1","Frm_MAC",msg);
+return false;
+}
+if ( value.toLowerCase() == "00:00:00:00:00:00" )
+{
+msg = getmsg(110);
+ShowErrorForCom("mac1","Frm_MAC",msg);
+return false;
+}
+return true;
+}
+function pageSetValue()
+{
+HiddenParaInit(MAC_PARA);
+var value = MacSetValue();
+setValue("MACAddress",value);
+var viewid = getValue("Frm_SSID_SET");
+var reg = new RegExp('[0-9]+$');
+setValue("Interface", reg.exec(viewid) - 1);
+setValue("IF_VIEWID", getValue("Frm_SSID_SET"));
+}
+function toNext(obj)
+{
+}
+function MacSetValue()
+{
+var value = getValue("mac1");
+value += ":" + getValue("mac2");
+value += ":" + getValue("mac3");
+value += ":" + getValue("mac4");
+value += ":" + getValue("mac5");
+value += ":" + getValue("mac6");
+if( ":::::" == value)
+{
+value = "";
+}
+return value;
+}
+function Delete(i)
+{
+var number = getValue("IF_INSTNUM");
+setValue("IF_ACTION", "delete");
+setValue("IF_INDEX",i);
+DisableALL();
+getObj("fSubmit").submit();
+}
+function Slect_Mode()
+{
+HiddenParaInit(BASIC_PARA);
+jslSetValue("IF_VIEWID","Frm_SSID_SET");
+jslSetValue("ACLPolicy", "Frm_Mode");
+setValue("IF_ACTION", "apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+function CheckMac(Addr)
+{
+var c = '';
+var i = 0, j = 0;
+var addrParts = Addr.split(':');
+if ( addrParts.length != 6 )
+{
+return false;
+}
+for (i = 0; i < 6; i++)
+{
+if (addrParts[i].length != 2)
+{
+return  false;
+}
+for ( j = 0; j < addrParts[i].length; j++ )
+{
+c = addrParts[i].toLowerCase().charAt(j);
+if ( (c >= '0' && c <= '9') ||(c >= 'a' && c <= 'f') )
+{
+continue;
+}
+else
+{
+return false;
+}
+}
+}
+return true;
+}
+function ESSID_Choose()
+{
+DisableALL();
+location.href = getObj("fSubmit").action + "&IF_VIEWID=" + getValue("Frm_SSID_SET");
+}
+</script>

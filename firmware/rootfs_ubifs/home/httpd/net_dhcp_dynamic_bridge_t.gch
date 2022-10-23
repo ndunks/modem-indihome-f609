@@ -1,0 +1,14 @@
+<%
+IMPORT FILE "host_second_gch.gch";
+IMPORT FILE "net_dhcp_dynamic_bridge_js.gch";
+%>
+<table id="TestContent"  class="table" width="450px" border="0">
+<tr>
+<td class="td1"><font id="Fnt_BasicIPAddr">&?dhcp_b000;</font></td>
+<td class="td2"><input type="text" class="inputId" name="Frm_BasicIPAddr" id="Frm_BasicIPAddr" /></td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_SubnetMask">&?dhcp_b002;</font></td>
+<td class="td2"><input type="text" class="inputId"  id="Frm_SubnetMask" name="Frm_SubnetMask" size="15" /></td>
+</tr>
+</table>

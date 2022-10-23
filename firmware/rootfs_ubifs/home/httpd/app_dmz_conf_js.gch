@@ -1,0 +1,546 @@
+
+<script language="javascript">
+var USERIF_PARA = new Array(
+"ViewName",
+"Enable",
+"WANCViewName",
+"WANCName",
+"InternalHost",
+"DevUniqueNum",
+"InternalMacHost",
+"MacEnable"
+);
+function getmsg(id)
+{
+var str      = new Array();
+str[0]   = new Array(101, "&?error_101;");
+str[1]   = new Array(108, "&?error_108;");
+str[2]   = new Array(118, "&?error_118;");
+str[3]   = new Array(119, "&?error_119;");
+str[4]   = new Array(122, "&?error_122;");
+str[5]   = new Array(141, "&?error_141;");
+str[6]   = new Array(155, "&?error_155;");
+str[7]   = new Array(156, "&?error_156;");
+str[8]   = new Array(110, "&?error_110;");
+str[9]   = new Array(100, "&?error_100;");
+str[10]   = new Array(200, "&?error_200;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+moveErrLayer(580,95);
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+pageGetValue();
+}
+function setSelOtherValue(obj, value, id)
+{
+var flag = 0;
+var mm = getValue("WANCViewName");
+if (("" == mm) || ("N/A" == mm) || (null == mm))
+{
+var num = obj.length;
+for (var i = num ;i > 0 ;i-- )
+{
+var name = obj.options[i-1].value;
+var text = obj.options[i-1].text;
+obj.options[i] = new Option(text, text);
+obj.options[i].value = name;
+}
+obj.options[0] = new Option(value,value);
+obj.options[0].value = value;
+flag = 1;
+}
+return flag;
+}
+function ctrlIPv4Item()
+{
+var wancid = getValue("Frm_WanName");
+if ( "" == wancid )
+{
+setValue("Frm_InternalHost", "");
+setValue("mac1", "");
+setValue("mac2", "");
+setValue("mac3", "");
+setValue("mac4", "");
+setValue("mac5", "");
+setValue("mac6", "");
+setChecked("Frm_MacEnable", false);
+jslDisable("Frm_MacEnable", "Frm_InternalHost",
+"mac1", "mac2", "mac3", "mac4", "mac5", "mac6");
+}
+else
+{
+jslEnable("Frm_MacEnable", "Frm_InternalHost",
+"mac1", "mac2", "mac3", "mac4", "mac5", "mac6");
+}
+}
+function IPv6AddrTRGen(ipv6AddrNum, ipv6Addr, ipv6AddrID)
+{
+var objIPv6Table = getObj("TestContentIPv6");
+var objTr = objIPv6Table.insertRow(-1);
+var objTdLeft   = objTr.insertCell(0);
+objTdLeft.setAttribute("class", "td1");
+objTdLeft.setAttribute("className", "td1");
+objTdLeft.innerHTML = "<font id='Fnt_InternalHost" + ipv6AddrNum + "' "
++ ">&?cfwdmz2;</font>";
+var objTdRight  = objTr.insertCell(1);
+objTdRight.setAttribute("class", "td2");
+objTdRight.setAttribute("className", "td2");
+objTdRight.innerHTML = "<input id='Frm_InternalHost" + ipv6AddrNum + "' "
++ "name='Frm_InternalHost" + ipv6AddrNum + "' "
++ "value='" + ipv6Addr + "' "
++ "_ipv6AddrID='" + ipv6AddrID + "' "
++ "class='inputId' size='15' type='text'>&nbsp;"
++ "<input id='BtnDelIPv6Addr" + ipv6AddrNum + "' "
++ "value='&?sr08;' "
++ "onclick='delIPv6Addr(" + ipv6AddrNum + ")' "
++ "class='button' size='15' type='button'>";
+}
+function addIPv6Addr()
+{
+var objIPv6Table = getObj("TestContentIPv6");
+var objIPv6TableTrs = objIPv6Table.getElementsByTagName("tr");
+var ipv6AddrNum = objIPv6TableTrs.length;
+var maximum = 8;
+if ( ipv6AddrNum >= maximum )
+{
+jslDisable("BtnAddIPv6Addr");
+getObj("divMaxIPv6Addr").style.color = "red";
+return ;
+}
+else
+{
+}
+IPv6AddrTRGen(ipv6AddrNum, "", "");
+}
+var ipv6AddrDelCount = 0;
+function delIPv6Addr(i)
+{
+var InternalHost = getObj("Frm_InternalHost"+i);
+var _ipv6AddrID  = InternalHost.getAttribute("_ipv6AddrID");
+if ( _ipv6AddrID != "" )
+{
+appendHiddenInput("fSubmit",
+"IF_IPv6AddrDelID"+ipv6AddrDelCount, _ipv6AddrID);
+ipv6AddrDelCount++;
+}
+else
+{
+}
+var objDelBtn = getObj("BtnDelIPv6Addr"+i);
+var objTr = objDelBtn.parentNode.parentNode;
+objTr.parentNode.removeChild(objTr);
+getObj("divMaxIPv6Addr").style.color = "black";
+jslEnable("BtnAddIPv6Addr");
+}
+function ipv6DMZGetValue()
+{
+var wancid = getValue("Frm_WanName");
+var ipv6AddrNum = getValue("IF_IPv6AddrNUM");
+if ( "" == wancid && ipv6AddrNum > 0 )
+{
+var enable = getValue("IF_IPv6AddrEnable0");
+if (enable == 0)
+{
+setChecked("Frm_Enable", false);
+}
+else
+{
+setChecked("Frm_Enable", true);
+}
+}
+else
+{
+}
+var maximum = 8;
+getObj("divMaxIPv6Addr").innerHTML = "&?cfwdmz;" + maximum + "&?cfwdmz1;";
+for (var i=0; i<ipv6AddrNum; i++ )
+{
+var InternalV6Host = getValue("IF_IPv6AddrInternalV6Host"+i);
+var ipv6AddrID = getValue("IF_IPv6AddrID"+i);
+if ( "::" == InternalV6Host )
+{
+InternalV6Host = "";
+}
+else
+{
+}
+IPv6AddrTRGen(i, InternalV6Host, ipv6AddrID);
+if ( 0 == i )
+{
+jslDiDisplay("BtnDelIPv6Addr"+i);
+}
+else
+{
+}
+}
+if ( 0 == ipv6AddrNum )
+{
+IPv6AddrTRGen(0, "", "");
+jslDiDisplay("BtnDelIPv6Addr0");
+}
+else
+{
+}
+}
+function ipv6DMZSetValue()
+{
+appendHiddenInput("fSubmit", "IF_IPv6AddrDelNUM", ipv6AddrDelCount);
+var IPv6AddrModNUM = 0;
+var IPv6AddrAddNUM = 0;
+var enable = 0;
+if (getChecked("Frm_Enable") == true)
+{
+enable = 1;
+}
+else
+{
+enable = 0;
+}
+var objIPv6Table = getObj("TestContentIPv6");
+var objIPv6TableInputs = objIPv6Table.getElementsByTagName("input");
+var IPv6TableInputsNum = objIPv6TableInputs.length;
+for ( var i=0; i<IPv6TableInputsNum; i++ )
+{
+var objInput = objIPv6TableInputs[i];
+if ( "text" == objInput.type )
+{
+var _ipv6AddrID = objInput.getAttribute("_ipv6AddrID");
+var ipv6Addr    = objInput.value;
+if ( "" == ipv6Addr )
+{
+ipv6Addr = "::";
+}
+else
+{
+}
+if ( "" != _ipv6AddrID )
+{
+appendHiddenInput("fSubmit",
+"IF_IPv6AddrModEnable"+IPv6AddrModNUM, enable);
+appendHiddenInput("fSubmit",
+"IF_IPv6AddrModInternalV6Host"+IPv6AddrModNUM, ipv6Addr);
+appendHiddenInput("fSubmit",
+"IF_IPv6AddrModID"+IPv6AddrModNUM, _ipv6AddrID);
+IPv6AddrModNUM++;
+}
+else
+{
+appendHiddenInput("fSubmit",
+"IF_IPv6AddrAddEnable"+IPv6AddrAddNUM, enable);
+appendHiddenInput("fSubmit",
+"IF_IPv6AddrAddInternalV6Host"+IPv6AddrAddNUM, ipv6Addr);
+IPv6AddrAddNUM++;
+}
+}
+else
+{
+}
+}
+appendHiddenInput("fSubmit", "IF_IPv6AddrModNUM", IPv6AddrModNUM);
+appendHiddenInput("fSubmit", "IF_IPv6AddrAddNUM", IPv6AddrAddNUM);
+appendHiddenInput("fSubmit", "IF_ACTION_IPV6", "apply");
+}
+function ipv6DMZCheckValue()
+{
+var objIPv6Table = getObj("TestContentIPv6");
+var objIPv6TableInputs = objIPv6Table.getElementsByTagName("input");
+var IPv6TableInputsNum = objIPv6TableInputs.length;
+for ( var i=0; i<IPv6TableInputsNum; i++ )
+{
+var objInput = objIPv6TableInputs[i];
+if ( "text" == objInput.type )
+{
+var ipv6Addr = objInput.value;
+var FrmID    = objInput.id;
+var order    = FrmID.match(/\d+$/);
+var FntID    = "Fnt_InternalHost" + order;
+if ( "" != ipv6Addr )
+{
+if( false == checkIPV6Address(ipv6Addr)
+|| "::" == ipv6Addr )
+{
+msg = getmsg(200);
+ShowErrorForCom(FrmID, FntID, msg);
+return false;
+}
+else
+{
+}
+}
+else
+{
+}
+}
+else
+{
+}
+}
+return true;
+}
+function pageGetValue()
+{
+var obj = getObj("Frm_WanName");
+jslPostToViewCheckBox("Frm_MacEnable", "MacEnable");
+changeAddressType();
+macmodvalue();
+var LanValue = getValue("InternalHost");
+var enable = getValue("Enable");
+if (enable == 0)
+{
+setChecked("Frm_Enable", false);
+}
+else
+{
+setChecked("Frm_Enable", true);
+}
+setSelOtherValue(obj, "", "Frm_WanName");
+jslDoShowComboBox("Frm_WanName","WANCViewName");
+if ("0.0.0.0" == LanValue)
+{
+setValue("Frm_InternalHost", "");
+}
+else
+{
+setValue("Frm_InternalHost", LanValue);
+}
+<%
+if ( 0 != getenv("DevIPv6Effect") )
+{
+%>
+ctrlIPv4Item();
+<%
+}
+else
+{
+}
+%>
+ipv6DMZGetValue();
+}
+function pageSetValue()
+{
+HiddenParaInit(USERIF_PARA);
+var wancid = getValue("Frm_WanName");
+if ( "" != wancid )
+{
+if (getChecked("Frm_Enable") == true)
+{
+setValue("Enable",1);
+}
+else
+{
+setValue("Enable",0);
+}
+var obj = getObj("Frm_WanName");
+setValue("WANCName", obj.options[obj.selectedIndex].text);
+jslSetValue("WANCViewName", "Frm_WanName");
+jslViewToPostCheckBox("MacEnable", "Frm_MacEnable");
+if(getChecked("Frm_MacEnable") == true)
+{
+var macValue = MacSetValue();
+setValue("InternalMacHost", macValue);
+}
+else
+{
+jslSetValue("InternalHost", "Frm_InternalHost");
+}
+}
+ipv6DMZSetValue();
+}
+function  checkIPZero(value)
+{
+var ipaddr = value;
+var parts = ipaddr.split(".");
+for( var i = 0; i < 4; i++)
+{
+if( parseInt((parts[i]),10) != 0 )
+return true;
+}
+return false;
+}
+function CheckIPv4Paras()
+{
+var msg = "";
+if( getChecked("Frm_MacEnable") == true )
+{
+var macValue = MacSetValue();
+if(checkMACAddress(macValue) != true)
+{
+msg = getmsg(110);
+ShowErrorForCom("mac1","Fnt_InternalMacHost",msg);
+return false;
+}
+if ( macValue.toLowerCase() == "ff:ff:ff:ff:ff:ff" )
+{
+msg = getmsg(110);
+ShowErrorForCom("mac1","Fnt_InternalMacHost",msg);
+return false;
+}
+if ( macValue == "00:00:00:00:00:00" )
+{
+msg = getmsg(110);
+ShowErrorForCom("mac1","Fnt_InternalMacHost",msg);
+return false;
+}
+}
+else
+{
+if(checkNull(getValue("Frm_InternalHost")) == false)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_InternalHost","Fnt_InternalHost",msg);
+return false;
+}
+if(checkIpAddress(getValue("Frm_InternalHost")) == false)
+{
+msg = getmsg(108);
+ShowErrorForCom("Frm_InternalHost","Fnt_InternalHost",msg);
+return false;
+}
+if( false == checkIPZero( getValue("Frm_InternalHost") ) )
+{
+msg = getmsg(141);
+ShowErrorForCom( "Frm_InternalHost", "Fnt_InternalHost", msg);
+return  false;
+}
+if( "127.0.0.1" == getValue("Frm_InternalHost") )
+{
+msg = getmsg(155);
+ShowErrorForCom( "Frm_InternalHost", "Fnt_InternalHost", msg);
+return  false;
+}
+if( "255.255.255.255" == getValue("Frm_InternalHost") )
+{
+msg = getmsg(156);
+ShowErrorForCom( "Frm_InternalHost", "Fnt_InternalHost", msg);
+return  false;
+}
+}
+return true;
+}
+function pageCheckValue()
+{
+var msg = "";
+<%
+if ( 0 == getenv("DevIPv6Effect") )
+{
+%>
+if(checkNull(getValue("Frm_WanName")) == false)
+{
+msg = getmsg(100);
+ShowErrorForCom("Frm_WanName","Fnt_WanName",msg);
+return false;
+}
+else
+{
+}
+<%
+}
+else
+{
+}
+%>
+var wancid = getValue("Frm_WanName");
+if ( "" != wancid && false == CheckIPv4Paras() )
+{
+return false;
+}
+else
+{
+}
+if ( false == ipv6DMZCheckValue() )
+{
+return false;
+}
+else
+{
+}
+return true;
+}
+function pageSubmit()
+{
+ReSetIpRmZero("Frm_InternalHost");
+if(pageCheckValue() == true)
+{
+pageSetValue();
+var wancid = getValue("Frm_WanName");
+if ( "" != wancid )
+{
+setValue("IF_ACTION", "apply");
+}
+else
+{
+}
+DisableALL();
+getObj("fSubmit").submit();
+}
+else
+{
+}
+}
+function pageCancel()
+{
+jslDisable("Btn_Submit","Btn_Cancel");
+DisableALL();
+getObj("fSubmit").submit();
+}
+function changeAddressType()
+{
+if(getChecked("Frm_MacEnable") == true)
+{
+jslDiDisplay("TR_InternalHost");
+jslEnDisplay("TR_InternalMacHost");
+}
+else
+{
+jslDiDisplay("TR_InternalMacHost");
+jslEnDisplay("TR_InternalHost");
+}
+}
+function macmodvalue()
+{
+var value_source = getValue("InternalMacHost");
+if("00:00:00:00:00:00" == value_source)
+{
+value_source = "";
+}
+if((value_source!=":::::")&&(value_source!=""))
+{
+setValue("mac1",value_source.substring(0,2));
+setValue("mac2",value_source.substring(3,5));
+setValue("mac3",value_source.substring(6,8));
+setValue("mac4",value_source.substring(9,11));
+setValue("mac5",value_source.substring(12,14));
+setValue("mac6",value_source.substring(15,17));
+}
+else
+{
+setValue("mac1","");
+setValue("mac2","");
+setValue("mac3","");
+setValue("mac4","");
+setValue("mac5","");
+setValue("mac6","");
+}
+}
+function MacSetValue()
+{
+var value = getValue("mac1");
+value += ":" + getValue("mac2");
+value += ":" + getValue("mac3");
+value += ":" + getValue("mac4");
+value += ":" + getValue("mac5");
+value += ":" + getValue("mac6");
+if( ":::::" == value)
+{
+value = "";
+}
+return value;
+}
+function toNext()
+{
+}
+</script>

@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<META HTTP-EQUIV="pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title><%=getenv("WEBTitle");%></title>
+<LINK REL="stylesheet" HREF='<%=getenv("css_path_outtemplate");%>' TYPE="text/css" />
+<LINK REL="stylesheet" HREF="&?csslang;" TYPE="text/css" />
+<script src="js/common.js"></script>
+<script language="javascript">
+<%
+IMPORT FILE "global.gch";
+IMPORT FILE "auth/api.gch";
+IMPORT FILE "js/common_check.js";
+IMPORT FILE "js/pro_commom.js";
+%>
+</script>
+</head>
+<body onload="pageLoad();">
+<%
+IMPORT FILE "tr069_login_gch.gch";
+IMPORT FILE "tr069_login_js.gch";
+var session_token = get_csrf_session_token();
+setenv("UPLOAD_ENV",session_token);
+%>
+<div>
+<form name="fLogin" id="fLogin" method="post"  onsubmit="return false;" action="">
+<input type="hidden" name="action" id="action" value="login">
+<input type="hidden" name="Username" id="Username" value="">
+<input type="hidden" name="Password" id="Password" value="">
+<input type="hidden" name="Frm_Logintoken" id="Frm_Logintoken" value="">
+<!--content部分开始-->
+<div id="div_visite" align="center">
+<table width="660px" height="60px" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td width="70%" height="20" align="left" ></td>
+<td height="10" colspan="3" align="right" bgcolor="#FFFFFF"></td>
+</tr>
+</table>
+<table width="505px" border="0" align="center" cellpadding="1" cellspacing="1" bordercolor="#000000" bordercolorlight="#FF0000" style="background: url(/skin/priorgreen/img/bg1.gif) no-repeat; width:503px;height:349px;">
+<tr>
+<td width="100%" height="100"></td>
+</tr>
+<tr>
+<td width="95%" height="40px" align="left" style="padding-left:126px;"><font size="+2" face="Arial">TR069 Management</td>
+</tr>
+<tr>
+<td>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<td align="right" width="40%">User Name :</td>
+<td>
+<label>
+<input name="txt_Username" type="text" id="txt_Username" style="width:140px; font-family:Arial" maxlength="31"/>
+</label>
+</td>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<td align="right" width="40%">Password :</td>
+<td><input name="txt_Password" type="password" id="txt_Password" style="width:140px; font-family:Arial" maxlength="127"/></td>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<td align="right" width="40%">Validate Code :</td>
+<td><input name="Frm_Validatecode" type="text" id="Frm_Validatecode" style="width:140px; font-family:Arial" maxlength="31"/></td>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<td align="right" width="40%"></td>
+<td>
+<img id="ImgID" style="height:30px;width:100px;" onClick="validatecodeRefresh();" onload="imgLoad()" />
+<input type="button" id="RefreshId" style="font-size:12px;font-family:Tahoma,Arial;margin-left:30px;" class="submit" value="Refresh" onclick="validatecodeRefresh();" disabled="true" />
+</td>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<td align="right" width="48%"></td>
+<td><button style="font-size:12px;font-family:Tahoma,Arial;" id="buttonmanul" class="submit" name="Submit" onClick="dosubmit();" type="button">Submit</button></td>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" >
+<tr align="center"><td height="20px" id="errorInfo" style="color:red;"></td></tr>
+</table>
+</td>
+</tr>
+<tr><td></td></tr>
+</table>
+<br>
+<br>
+<br>
+<br>
+<br>
+<table width="700px" border="0" align="center" cellpadding="1" cellspacing="1" bordercolor="#6CB4CE" style="position:relative;">
+<tr>
+<td height="10" align="left" bgcolor="#FFFFFF">
+<label>
+<div style="background:url(/skin/priorgreen/img/logo3bb1.gif) no-repeat; width:131px; height:73px;"></div>
+</label>
+<td height="10" align="left" bgcolor="#FFFFFF">
+<font color="#000000">&?sbb_008;<br></font>
+<font color="#333333" size="-1">&?sbb_009;</font>
+<font color="#333333" size="-1">&?sbb_010;</font>
+<img src="img/skype.png" style="heigth:12px;width:12px;">
+<font color="#10bef2" size="-1">02 100 2100</font>
+</td>
+<td height="10" align="left" bgcolor="#FFFFFF">
+<label>
+<div style="background:url(/skin/priorgreen/img/callcenter.gif) no-repeat; width:131px; height:73px;"></div>
+</label>
+</td>
+</tr>
+</table>
+</div>
+</form>
+</div>
+</body>
+<script language="javascript">
+<%
+var session_token = get_csrf_session_token();
+session_set("_SESSION_TOKEN", session_token);
+setenv("_SESSION_TOKEN", session_token);
+%>
+function addToken2AllForms()
+{
+function doAddLogic()
+{
+var session_token = "<%=encodeJS(session_token);%>";
+var forms = document.getElementsByTagName("form");
+for ( var i=0; i<forms.length; i++ )
+{
+var tempform = forms[i];
+var sEnctype = tempform.getAttribute("enctype");
+if ( sEnctype != null &&
+"multipart/form-data" == sEnctype.toLowerCase() )
+{
+continue;
+}
+var tokenInput = document.createElement("input");
+tokenInput.setAttribute("id", "_SESSION_TOKEN");
+tokenInput.setAttribute("name", "_SESSION_TOKEN");
+tokenInput.setAttribute("type", "hidden");
+tokenInput.setAttribute("value", session_token);
+tempform.appendChild(tokenInput);
+}
+}
+if( window.onload == null )
+{
+window.onload=function(){
+doAddLogic();
+}
+}
+else
+{
+var tempfunction = window.onload;
+window.onload=function(){
+tempfunction();
+doAddLogic();
+}
+}
+}
+addToken2AllForms();
+</script>
+</html>

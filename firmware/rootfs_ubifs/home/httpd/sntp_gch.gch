@@ -1,0 +1,30 @@
+<%
+IMPORT FILE "common_gch.gch";
+var FP_OBJNAME      = "OBJ_SNTP_ID";
+var FP_MULTIDISPLAY = 0;
+var FP_PARANUM      = 20;
+var PARA[20] =
+{
+"Enable",
+"NtpServer1",
+"NtpServer2",
+"NtpServer3",
+"NtpServer4",
+"NtpServer5",
+"WeekDay",
+"CurrentLocalTime",
+"DayTimeType",
+"LocalTimeZone",
+"LocalTimeZoneName",
+"DaylightSavingsUsed",
+"DaylightSavingsStart",
+"DaylightSavingsEnd",
+"PollTimeInterval",
+"Dscp",
+"isSynchronized",
+"ZoneIndex",
+"AutoSetTzname",
+"PosixTimeZoneName"
+};
+getPageGCH(FP_OBJNAME, FP_MULTIDISPLAY, PARA, FP_PARANUM);
+%>

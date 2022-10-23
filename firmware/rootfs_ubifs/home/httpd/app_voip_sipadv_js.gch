@@ -1,0 +1,422 @@
+<script language="javascript">
+var VPDTMF_PARA = new Array(
+"DTMFMethod",
+"DTMFRedEnable"
+);
+var RTPADV_PARA= new Array(
+"JitMode",
+"FixedJitLen",
+"AdaptJitMin",
+"AdaptJitMax",
+"SupppressRTPOnSilence",
+"G726Endian"
+);
+var VOICEPROC_PARA =  new Array(
+"ReceiveGain",
+"TransmitGain",
+"EchoCancellationTail",
+"EchoCancellationEnable",
+"DCFDisable",
+"FixedTransmitGain",
+"ReceiveToneGain",
+"TransmitToneGain"
+);
+var TONE_PARA =  new Array(
+"ToneUp",
+"ToneDown"
+);
+var RTP_PARA = new Array(
+"RTPLocalPortMin",
+"RTPTelephoneEventPT",
+"RTPVLANIDMark",
+"RTPDSCPMark",
+"RTPEthernetPriorityMark",
+"RTPQueueNum"
+);
+var DTMFADV_PARA = new Array(
+"DTMFMethodG711",
+"RFC2833EncryptEnable"
+);
+var LineNumber = parseInt(getValue("IF_INSTNUM"));
+var cver = "<%=getenv("CurrentVersionInfo");%>";
+function getmsg(id)
+{
+var str  = new Array();
+str[0]   = new Array(118, "&?error_118;");
+str[1]   = new Array(119, "&?error_119;");
+str[2]   = new Array(122, "&?error_122;");
+str[3]   = new Array(101, "&?error_101;");
+str[4]   = new Array(115, "&?error_115;");
+str[5]   = new Array(116, "&?error_116;");
+str[6]   = new Array(117, "&?error_117;");
+str[7]   = new Array(159, "&?error_159;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+ProcessRet(errstr, errpara);
+pageGetValue();
+change_mode();
+if(getObj("TR_PayLoadType") != null || getObj("TR_Encry_Enable") != null)
+{
+getObj("Frm_DTMFMethod").onchange = function change_method()
+{
+var method = getValue("Frm_DTMFMethod");
+switch(method)
+{
+case "1":
+{
+if(getObj("TR_PayLoadType") != null)
+{
+jslEnDisplay("TR_PayLoadType");
+}
+if(getObj("TR_Encry_Enable") != null)
+{
+jslEnDisplay("TR_Encry_Enable");
+}
+break;
+}
+case "2":
+{
+if(getObj("TR_PayLoadType") != null)
+{
+jslDiDisplay("TR_PayLoadType");
+}
+if(getObj("TR_Encry_Enable") != null)
+{
+jslDiDisplay("TR_Encry_Enable");
+}
+break;
+}
+default:
+break;
+}
+}
+getObj("Frm_DTMFMethod").onchange();
+}
+}
+function change_mode()
+{
+var mode = getValue("Frm_JitMode");
+switch (mode)
+{
+case "0":
+{
+jslDiDisplay("TR_AdaptJitMax","TR_AdaptJitMin");
+jslEnDisplay("TR_FixedJitLen");
+jslSetValue("Frm_FixedJitLen", "FixedJitLen");
+break;
+}
+case "1":
+{
+jslEnDisplay("TR_AdaptJitMax","TR_AdaptJitMin");
+jslDiDisplay("TR_FixedJitLen");
+jslSetValue("Frm_AdaptJitMax", "AdaptJitMax");
+jslSetValue("Frm_AdaptJitMin", "AdaptJitMin");
+break;
+}
+default:
+break;
+}
+}
+function pageGetValue()
+{
+var instNum = getValue("VP_INSTNUM");
+var j = 0;
+for (var i=0; i<instNum; i++)
+{
+j = i+1;
+addSelectOption("Frm_VP", i, "VP"+j);
+}
+if(instNum < 2)
+{
+jslDiDisplay("TR_VP");
+}
+jslSetValue("Frm_VP", "IF_INDEX");
+var receive,transmit;
+for(var i=0; i < LineNumber; i++)
+{
+jslSetValue("Frm_EchoCancellationEnable"+i, "EchoCancellationEnable"+i);
+receive = (getValue("ReceiveGain"+i)-140)/10;
+transmit = (getValue("TransmitGain"+i)-140)/10;
+setValue("Frm_Receive"+i,receive);
+setValue("Frm_Transmit"+i,transmit);
+}
+jslSetValue("Frm_DTMFMethod", "DTMFMethod");
+jslSetValue("Frm_JitMode", "JitMode");
+jslSetValueSafe("Frm_BusyToneOn", "ToneUp")
+jslSetValueSafe("Frm_BusyToneOff", "ToneDown")
+jslSetValueSafe("Frm_PayLoadType", "RTPTelephoneEventPT")
+if(getObj("Frm_Encry_Enable") != null)
+{
+jslPostToViewCheckBox("Frm_Encry_Enable","RFC2833EncryptEnable");
+}
+}
+function pageSetValue()
+{
+HiddenParaInit(VPDTMF_PARA,DTMFADV_PARA);
+HiddenParaInit(RTPADV_PARA);
+HiddenParaInit(TONE_PARA);
+HiddenParaInit(RTP_PARA);
+for(var i=0; i < LineNumber; i++)
+{
+HiddenMultiInstParaInit(VOICEPROC_PARA, i);
+}
+for(var i=0; i < LineNumber; i++)
+{
+jslSetValue("EchoCancellationEnable"+i, "Frm_EchoCancellationEnable"+i);
+setValue("ReceiveGain"+i,getValue("Frm_Receive"+i)*10 +140);
+setValue("TransmitGain"+i,getValue("Frm_Transmit"+i)*10 +140);
+}
+jslSetValue("DTMFMethod", "Frm_DTMFMethod");
+if("1" == getValue("Frm_DTMFMethod"))
+{
+jslSetValueSafe("RTPTelephoneEventPT", "Frm_PayLoadType");
+}
+jslSetValueSafe("ToneUp", "Frm_BusyToneOn");
+jslSetValueSafe("ToneDown", "Frm_BusyToneOff");
+jslSetValue("JitMode", "Frm_JitMode");
+if(getObj("Frm_Encry_Enable") != null)
+{
+if(getValue("Frm_DTMFMethod") == "1")
+{
+jslViewToPostCheckBox("RFC2833EncryptEnable","Frm_Encry_Enable");
+}
+}
+var mode = getValue("Frm_JitMode");
+switch (mode)
+{
+case "0":
+{
+jslSetValue("FixedJitLen", "Frm_FixedJitLen");
+break;
+}
+case "1":
+{
+jslSetValue("AdaptJitMax", "Frm_AdaptJitMax");
+jslSetValue("AdaptJitMin", "Frm_AdaptJitMin");
+break;
+}
+default:
+break;
+}
+}
+function pageCheckValue()
+{
+var msg = "";
+if(getObj("Frm_PayLoadType") != null)
+{
+var method = getValue("Frm_DTMFMethod");
+if("1" == method)
+{
+PayloadValue = checkIntegerRange(getValue("Frm_PayLoadType"),97,127);
+if(PayloadValue == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_PayLoadType", "Fnt_PayLoadType", msg);
+return false;
+}
+else if(PayloadValue == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_PayLoadType", "Fnt_PayLoadType", msg);
+return false;
+}
+else if(PayloadValue == -3)
+{
+msg = getmsg(116,97,127);
+ShowErrorForCom("Frm_PayLoadType", "Fnt_PayLoadType", msg);
+return false;
+}
+}
+}
+var mode = getValue("Frm_JitMode");
+if ("0" == mode)
+{
+FixLen = getValue("Frm_FixedJitLen");
+var mm = checkIntegerRange(FixLen, 0, 200);
+if(-1 == mm)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_FixedJitLen","Fnt_FixedJitLen",msg);
+return false;
+}
+else if(-2 == mm)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_FixedJitLen","Fnt_FixedJitLen",msg);
+return false;
+}
+else if(-3 == mm)
+{
+msg = getmsg(116,0,200);
+ShowErrorForCom("Frm_FixedJitLen","Fnt_FixedJitLen",msg);
+return false;
+}
+}
+else
+{
+var MaxLen = getValue("Frm_AdaptJitMax");
+var MinLen = getValue("Frm_AdaptJitMin");
+var mm1 = checkIntegerRange(MaxLen, 0, 200);
+var mm2 = checkIntegerRange(MinLen, 0, 200);
+if(-1 == mm1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_AdaptJitMax","Fnt_AdaptJitMax",msg);
+return false;
+}
+else if(-2 == mm1)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_AdaptJitMax","Fnt_AdaptJitMax",msg);
+return false;
+}
+else if(-3 == mm1)
+{
+msg = getmsg(116,0,200);
+ShowErrorForCom("Frm_AdaptJitMax","Fnt_AdaptJitMax",msg);
+return false;
+}
+if(-1 == mm2)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_AdaptJitMin","Fnt_AdaptJitMin",msg);
+return false;
+}
+else if(-2 == mm2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_AdaptJitMin","Fnt_AdaptJitMin",msg);
+return false;
+}
+else if(-3 == mm2)
+{
+msg = getmsg(116,0,200);
+ShowErrorForCom("Frm_AdaptJitMin","Fnt_AdaptJitMin",msg);
+return false;
+}
+if (parseInt(MaxLen) < parseInt(MinLen))
+{
+msg = getmsg(159);
+ShowErrorForCom(null,null,msg);
+return false;
+}
+}
+for(var i=0; i < LineNumber; i++)
+{
+Tgain = checkIntegerRange(getValue("Frm_Transmit"+i),-14,6);
+if(Tgain == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_Transmit"+i, "Fnt_Transmit"+i, msg);
+return false;
+}
+else if(Tgain == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_Transmit"+i, "Fnt_Transmit"+i, msg);
+return false;
+}
+else if(Tgain == -3)
+{
+msg = getmsg(116,-14,6);
+ShowErrorForCom("Frm_Transmit"+i, "Fnt_Transmit"+i, msg);
+return false;
+}
+Rgain = checkIntegerRange(getValue("Frm_Receive"+i),-14,6);
+if(Rgain == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_Receive"+i, "Fnt_Receive"+i, msg);
+return false;
+}
+else if(Rgain == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_Receive"+i, "Fnt_Receive"+i, msg);
+return false;
+}
+else if(Rgain == -3)
+{
+msg = getmsg(116,-14,6);
+ShowErrorForCom("Frm_Receive"+i, "Fnt_Receive"+i, msg);
+return false;
+}
+}
+if(getObj("Frm_BusyToneOn") != null)
+{
+var toneon = getValue("Frm_BusyToneOn");
+var toneoff = getValue("Frm_BusyToneOff");
+var onvalue = checkIntegerRange(toneon, 250, 500);
+var offvalue = checkIntegerRange(toneoff, 250, 500);
+if(-1 == onvalue)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_BusyToneOn","Fnt_BusyToneOn",msg);
+return false;
+}
+else if(-2 == onvalue)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_BusyToneOn","Fnt_BusyToneOn",msg);
+return false;
+}
+else if(-3 == onvalue)
+{
+msg = getmsg(116,250,500);
+ShowErrorForCom("Frm_BusyToneOn","Fnt_BusyToneOn",msg);
+return false;
+}
+if(-1 == offvalue)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_BusyToneOff","Fnt_BusyToneOff",msg);
+return false;
+}
+else if(-2 == offvalue)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_BusyToneOff","Fnt_BusyToneOff",msg);
+return false;
+}
+else if(-3 == offvalue)
+{
+msg = getmsg(116,250,500);
+ShowErrorForCom("Frm_BusyToneOff","Fnt_BusyToneOff",msg);
+return false;
+}
+}
+return true;
+}
+function pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+ReSetValueRmZero("Frm_AdaptJitMax","Frm_AdaptJitMin","Frm_FixedJitLen","Frm_PayLoadType",
+"Frm_BusyToneOn","Frm_BusyToneOff");
+if(pageCheckValue() == true)
+{
+jslSetValue("IF_INDEX", "Frm_VP");
+pageSetValue();
+setValue("IF_ACTION", "apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+else
+{
+}
+}
+function ChangeVP()
+{
+jslSetValue("IF_INDEX", "Frm_VP");
+DisableALL();
+getObj("fSubmit").submit();
+}
+</script>

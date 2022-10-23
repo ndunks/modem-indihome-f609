@@ -1,0 +1,16 @@
+<%
+IMPORT FILE "common_gch.gch";
+function sip_slccfg_func(FP_ACTION, FP_INDEX, FP_ERRORSTR)
+{
+var FP_OBJNAME      = "OBJ_PONVOIPSLCCFG_ID";
+var FP_MULTIDISPLAY = 0;
+var FP_PARANUM      = 3;
+var PARA[3] =
+{
+"PortVoltage",
+"PortCurrent",
+"RingVoltage"
+};
+return getOldFunctionGCH(FP_OBJNAME, FP_MULTIDISPLAY, PARA, FP_PARANUM, FP_ACTION, FP_INDEX, FP_ERRORSTR);
+}
+%>

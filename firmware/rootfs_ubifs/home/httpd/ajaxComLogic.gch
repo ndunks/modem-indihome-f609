@@ -1,0 +1,22 @@
+<%
+IMPORT FILE "common_gch.gch";
+function devRestart()
+{
+var FP_HANDLE = create_paralist();
+set_para(FP_HANDLE, "CmdId", "cmd_devrestart");
+dev_action(FP_HANDLE);
+outputXML("");
+}
+var FP_ACTION = request("IF_ACTION");
+if ( "devRestart" == FP_ACTION )
+{
+devRestart();
+}
+else if(FP_ACTION == "devrestore")
+{
+var FP_HANDLE = create_paralist();
+set_para(FP_HANDLE, "CmdId", "cmd_devrestore");
+dev_action(FP_HANDLE);
+outputXML("");
+}
+%>

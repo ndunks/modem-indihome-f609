@@ -1,0 +1,89 @@
+<%
+IMPORT FILE "global.gch";
+IMPORT FILE "auth/api.gch";
+var sess_id = auth_sessid();
+session_start(sess_id, 0);
+var is_login = 0;
+if( getenv("elogin") != 1 && auth_check(sess_id) == 0 )
+{
+var login_status = auth_get_status("login");
+if (login_status == "logined")
+{
+is_login = 1;
+}
+}
+var curRight = getenv("Right");
+if (0 == is_login || curRight == "N/A")
+{
+="FAIL";
+return;
+}
+var OPTIONNUM = 13;
+var OPTIONNAME[13] = {
+"VersionUpload",
+"CertUpload",
+"config",
+"ConfigUpload",
+"defcfg",
+"DefCfgUpload",
+"downloadlog",
+"curdate",
+"downloadseculog",
+"BootUpload",
+"CommFileUpload",
+"CertUploadClient",
+"CertUploadUpgrade"
+};
+var OPTIONLEVEL[13] = {
+3,
+3,
+3,
+3,
+3,
+3,
+3,
+0,
+0,
+0,
+0,
+3,
+1
+};
+var FP_OPTIONNAME = request("IF_OPTIONNAME");
+var FP_OPTIONLEVEL = 3;
+if( FP_OPTIONNAME != "")
+{
+for(var i=0; i<OPTIONNUM; i++)
+{
+if( OPTIONNAME[i] == FP_OPTIONNAME)
+{
+FP_OPTIONLEVEL = OPTIONLEVEL[i];
+break;
+}
+}
+}
+if( FP_OPTIONLEVEL != 0)
+{
+var tmpright = 1 << (curRight - 1);
+if ( (tmpright & FP_OPTIONLEVEL) != tmpright )
+{
+="FAIL";
+return ;
+}
+}
+var requsetVersion = request("UPLOAD_ENV");
+var envVersion = getenv("UPLOAD_ENV");
+if(requsetVersion IS NULL ||envVersion IS NULL )
+{
+="FAIL";
+return ;
+}
+if(requsetVersion == envVersion )
+{
+="SUCC";
+}
+else
+{
+="FAIL";
+}
+%>

@@ -1,0 +1,16 @@
+<%
+IMPORT FILE "common_gch.gch";
+var FP_IDENTITY, FP_OBJNAME,FP_MULTIDISPLAY,FP_PARANUM;
+FP_OBJNAME = "OBJ_PON_LOID_ID";
+FP_PARANUM = 4;
+FP_IDENTITY = "";
+FP_MULTIDISPLAY = 0;
+var PARA[4] =
+{
+"PonLoid",
+"LoidPasswd",
+"LoidState",
+"LoidCount"
+};
+getPageGCH(FP_OBJNAME, FP_MULTIDISPLAY, PARA, FP_PARANUM);
+%>

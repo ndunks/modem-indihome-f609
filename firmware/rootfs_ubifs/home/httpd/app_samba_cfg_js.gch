@@ -1,0 +1,278 @@
+
+<script language="javascript">
+var SAMBA_PARA = new Array(
+"PassWord",
+"NetbiosName",
+"EnableSmb",
+"AutoRun",
+"UserName",
+"AuthType"
+);
+function getmsg(id)
+{
+var str      = new Array();
+str[0]   = new Array(101, "&?error_101;");
+str[1]   = new Array(102, "&?error_102;");
+str[2]   = new Array(103, "&?error_103;");
+str[3]   = new Array(106, "&?error_106;");
+str[4]   = new Array(118, "&?error_118;");
+str[5]   = new Array(122, "&?error_122;");
+str[6]   = new Array(239, "&?error_239;");
+str[7]   = new Array(114, "&?error_114;");
+str[8]   = new Array(242, "&?error_242;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+ProcessRet(errstr, errpara);
+moveErrLayer(595,93);
+pageGetValue();
+}
+function pageGetValue()
+{
+if( 1 == getValue("AutoRun"))
+{
+setChecked("Frm_AutoRun",true);
+}
+else
+{
+setChecked("Frm_AutoRun",false);
+}
+if( 1 == getValue("EnableSmb"))
+{
+setChecked("Frm_EnableSmb",true);
+}
+else
+{
+setChecked("Frm_EnableSmb",false);
+}
+if( 0 == getValue("AuthType"))
+{
+setChecked("Frm_AuthType",true);
+}
+else
+{
+setChecked("Frm_AuthType",false);
+}
+PageAuthType();
+jslSetValue("Frm_UserName", "UserName");
+jslSetValue("Frm_PassWord", "PassWord", "GET");
+jslSetValue("Frm_NetbiosName","NetbiosName");
+}
+function PageAutoRun()
+{
+var AutoRun = getChecked("Frm_AutoRun");
+if(1 == AutoRun)
+{
+setChecked("Frm_EnableSmb",false);
+}
+}
+function PageEnableSmb()
+{
+var EnableSmb = getChecked("Frm_EnableSmb");
+if(1 == EnableSmb)
+{
+setChecked("Frm_AutoRun",false);
+}
+}
+function PageAuthType()
+{
+var AuthType = getChecked("Frm_AuthType");
+if(1 == AuthType)
+{
+jslDiDisplay("TR_SambaNAME", "TR_SambaPWD");
+}
+else
+{
+jslEnDisplay("TR_SambaNAME", "TR_SambaPWD");
+}
+}
+function checkSambaHostName(HostName)
+{
+var len       = HostName.length;
+var firstChar = HostName.substr(0,1);
+var lastChar  = HostName.substr(len-1,1);
+var leftChar  = "";
+var rightChar = "";
+var iDotCount = 0;
+var i         = 0;
+var preDotPos = 0;
+if (HostName.match("[^0-9a-zA-Z.-]") != null)
+{
+return false;
+}
+if(firstChar.match("[^0-9a-zA-Z]") != null)
+{
+return false;
+}
+if(lastChar.match("[^0-9a-zA-Z]") != null)
+{
+return false;
+}
+var pos = HostName.lastIndexOf(".");
+if(pos == -1)        
+{
+var str = HostName;
+var len = HostName.length;
+for(var i=0;i<len;i++)
+{
+var value = str.substring(i,i+1);
+if(isNaN(parseInt(value)))
+{
+return true;
+}
+}
+return -1;
+}
+else
+{
+var str = HostName.substr(pos+1);
+var len = HostName.length - (pos + 1);
+for(var i=0;i<len;i++)
+{
+var value = str.substring(i,i+1);
+if(isNaN(parseInt(value)))
+{
+return true;
+}
+}
+return false;
+}
+return true;
+}
+function checkSambaStrLengthRange(value, min, max)
+{
+var len = value.length;
+if((len < min) || (len > max))
+{
+return -3;
+}
+return true;
+}
+function pageCheckValue()
+{
+var NetbiosName = getValue("Frm_NetbiosName");
+var statu = checkStrLengthRange(NetbiosName, 2, 15);
+if(-1 == statu)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_NetbiosName","Fnt_NetbiosName",msg);
+return false;
+}
+else if(-3 == statu)
+{
+msg = getmsg(102,2,15);
+ShowErrorForCom("Frm_NetbiosName","Fnt_NetbiosName",msg);
+return false;
+}
+else
+{
+}
+if(checkSambaHostName(NetbiosName)!=true)
+{
+if(checkSambaHostName(NetbiosName)==-1)
+{
+msg = getmsg(239);
+ShowErrorForCom("Frm_NetbiosName","Fnt_NetbiosName",msg);
+return false;
+}
+else
+{
+msg = getmsg(106);
+ShowErrorForCom("Frm_NetbiosName","Fnt_NetbiosName",msg);
+return false;
+}
+}
+if(getChecked("Frm_AuthType") == "0")
+{
+var str = getValue("Frm_UserName");
+if(checkGenStringForASC(str) == false)
+{
+msg = getmsg(114);
+ShowErrorForCom("Frm_UserName","Fnt_UserName",msg);
+return false;
+}
+if(checkStrLengthRange(str,1,32) != true)
+{
+msg = getmsg(102,1,32);
+ShowErrorForCom("Frm_UserName","Fnt_UserName",msg);
+return false;
+}
+if (str.match("[^0-9a-zA-Z]") != null)
+{
+msg = getmsg(242);
+ShowErrorForCom("Frm_UserName","Fnt_UserName",msg);
+return false;
+}
+if (str.match("[= ]") != null)
+{
+msg = getmsg(242);
+ShowErrorForCom("Frm_UserName","Fnt_UserName",msg);
+return false;
+}
+str = getValue("Frm_PassWord");
+if(checkGenStringForASC(str) == false)
+{
+msg = getmsg(114);
+ShowErrorForCom("Frm_PassWord","Fnt_PassWord",msg);
+return false;
+}
+if(checkSambaStrLengthRange(str,0,32) != true)
+{
+msg = getmsg(102,0,32);
+ShowErrorForCom("Frm_PassWord","Fnt_PassWord",msg);
+return false;
+}
+}
+return true;
+}
+function pageSetValue()
+{
+HiddenParaInit(SAMBA_PARA);
+if( true == getChecked("Frm_EnableSmb"))
+{
+setValue("EnableSmb","1");
+}
+else
+{
+setValue("EnableSmb","0");
+}
+if( true == getChecked("Frm_AutoRun"))
+{
+setValue("AutoRun","1");
+}
+else
+{
+setValue("AutoRun","0");
+}
+jslSetValue("NetbiosName","Frm_NetbiosName");
+if( true == getChecked("Frm_AuthType"))
+{
+setValue("AuthType","0");
+}
+else
+{
+setValue("AuthType","1");
+jslSetValue("UserName", "Frm_UserName");
+jslSetValue("PassWord", "Frm_PassWord", "SET");
+}
+}
+function pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+if(pageCheckValue()==true)
+{
+pageSetValue();
+setValue("IF_ACTION", "apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+}
+</script>

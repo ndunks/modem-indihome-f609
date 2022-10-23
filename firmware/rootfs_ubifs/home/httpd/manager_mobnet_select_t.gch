@@ -1,0 +1,30 @@
+<%
+IMPORT FILE "manager_mobnet_select_js.gch";
+IMPORT FILE "mobnet_select_gch.gch";
+%>
+<div id="div4"></div>
+<form name="fwork" id="fwork">
+<table class="table" width="450px" border="0">
+<tr>
+<td class="td1"><input type="radio" name="Frm_mobile_net" id="Frm_mobile_net0" value="default"></td>
+<td class="td2">&?cmn40;</td>
+</tr>
+<tr>
+<td class="td1"><input type="radio" name="Frm_mobile_net" id="Frm_mobile_net1" value="WCDMA_pre"></td>
+<td class="td2">&?cmn41;</td>
+</tr>
+<tr>
+<td class="td1"><input type="radio" name="Frm_mobile_net" id="Frm_mobile_net2" value="GSM_pre"></td>
+<td class="td2">&?cmn42;</td>
+</tr>
+<tr>
+<td class="td1"><input type="radio" name="Frm_mobile_net" id="Frm_mobile_net3" value="WCDMA_only"></td>
+<td class="td2">&?cmn43;</td>
+</tr>
+<tr>
+<td class="td1"><input type="radio" name="Frm_mobile_net" id="Frm_mobile_net4" value="GSM_only"></td>
+<td class="td2">&?cmn44;</td>
+</tr>
+</table>
+</form>
+<div id="div4"></div>

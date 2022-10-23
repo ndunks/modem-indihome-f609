@@ -1,0 +1,49 @@
+<%
+IMPORT FILE "voip_h248main_gch.gch";
+IMPORT FILE "app_voip_h248basic_js.gch";
+%>
+<table id = "h248basic" class="table" width="550px" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td class="td1"><font id="Fnt_LocalPort">&?cvh001;</font></td>
+<td class="td2"><input type="text" class="inputId" size="15" id="Frm_LocalPort" name="Frm_LocalPort" value="" />&?cvm013;</td>
+</tr>
+<tr height="15">
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_MGCAddr1">&?cvh002;</font></td>
+<td class="td2"><input type="text" class="inputId" size="15" id="Frm_MGCAddr1" name="Frm_MGCAddr1" value="" />&?cvm020;</td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_MGCPort1">&?cvh003;</font></td>
+<td class="td2"><input type="text" class="inputId" size="15" id="Frm_MGCPort1" name="Frm_MGCPort1" value="" />&?cvm013;</td>
+</tr>
+<tr height="15">
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_MGCAddr2">&?cvh004;</font></td>
+<td class="td2"><input type="text" class="inputId" size="15" id="Frm_MGCAddr2" name="Frm_MGCAddr2" value="" />&?cvm020;</td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_MGCPort2">&?cvh005;</font></td>
+<td class="td2"><input type="text" class="inputId" size="15" id="Frm_MGCPort2" name="Frm_MGCPort2" value="" />&?cvm013;</td>
+</tr>
+</tr>
+<tr height="15">
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_MGMIDType">&?cvh006;</td>
+<td class="td2">
+<select id="Frm_MGMIDType" name="Frm_MGMIDType" size="1" class="list_6" onchange="ChooseMIDType()">
+<option value="0">&?cvh007;</option>
+<option value="2">&?cvh008;</option>
+<option value="4">&?cvh009;</option>
+</select>
+</td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_MGMID">&?cvh010;</font></td>
+<td class="td2"><input type="text" class="inputId" size="15" id="Frm_MGMID" name="Frm_MGMID" value="" />&?cvm0202;</td>
+</tr>
+<tr height="25">
+</tr>
+</table>

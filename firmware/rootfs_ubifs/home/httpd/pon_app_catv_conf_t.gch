@@ -1,0 +1,17 @@
+<SCRIPT LANGUAGE="javascript" src ="./js/pro_commom.js"></SCRIPT>
+<SCRIPT LANGUAGE="javascript" src ="./js/common.js"></SCRIPT>
+<SCRIPT LANGUAGE="javascript" src ="./js/common_check.js"></SCRIPT>
+<%
+IMPORT FILE "pon_catv_conf_gch.gch";
+IMPORT FILE "pon_app_catv_conf_js.gch";
+%>
+<table id="BpduConf"  class="table" width="450px" border="0">
+<tr id="TR_CatvEnable">
+<td class="td1" id="Fnt_CatvEnable">&?poncatv001;</td>
+<td class="td2"><input name="Frm_CatvEnable" id="Frm_CatvEnable" type="checkbox" value=""/></td>
+</tr>
+<tr id="TR_AgcOffset">
+<td class="td1" id="Fnt_AgcOffset">&?poncatv003;</td>
+<td class="td2"><input name="Frm_AgcOffset" id="Frm_AgcOffset" class="inputId9" size="15" type="text" value=""/> (-12.8~12.7dB &?poncatv004;:0.1dB)</td>
+</tr>
+</table>

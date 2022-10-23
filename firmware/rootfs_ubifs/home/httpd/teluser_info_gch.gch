@@ -1,0 +1,45 @@
+<%
+IMPORT FILE "common_gch.gch";
+var FP_ERRORSTR     = "SUCC";
+var FP_OBJNAME      = "OBJ_TELNETUSER_ID";
+var FP_CHK_OBJNAME  = "OBJ_TELNETUSERCHK_ID";
+var FP_IDENTITY     = "";
+var FP_HANDLE;
+var FP_APPLYFLAG    = 0;
+var FP_ACTION = request("IF_ACTION");
+create_form_start("fSubmit", "");
+createBasicHidden();
+if (FP_ACTION == "apply")
+{
+FP_HANDLE = create_paralist();
+set_para(FP_HANDLE, "Password", request("OldPassword"));
+FP_IDENTITY = set_inst(FP_HANDLE, FP_CHK_OBJNAME, FP_IDENTITY);
+FP_ERRORSTR = getDisplayInstError(FP_ERRORSTR);
+if(FP_ERRORSTR == "SUCC")
+{
+FP_HANDLE = create_paralist();
+set_para(FP_HANDLE, "Password", request("Password"));
+FP_IDENTITY = set_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+FP_ERRORSTR = getDisplayInstError(FP_ERRORSTR);
+if (FP_ERRORSTR == "SUCC")
+{
+FP_APPLYFLAG = 1;
+}
+else
+{
+FP_APPLYFLAG = 2;
+}
+}
+else
+{
+FP_APPLYFLAG = 0;
+}
+}
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, FP_OBJNAME, "");
+create_hidden_sep("Username", get_para(FP_HANDLE, "Username"));
+create_hidden_sep("Password", "");
+destroy_paralist(FP_HANDLE);
+create_hidden_sep("IF_APPLYFLAG", FP_APPLYFLAG);
+create_form_end();
+%>

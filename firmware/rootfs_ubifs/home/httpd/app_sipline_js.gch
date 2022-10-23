@@ -1,0 +1,214 @@
+<script language="javascript">
+var SIP_PARA = new Array(
+"Enable",
+"AuthUserName",
+"AuthPassword",
+"DigestUserName",
+"DisplayName",
+"RegStatus",
+"DNSStatus"
+);
+var SIPLINE_PARA = new Array(
+"AuthUserName",
+"DigestUserName"
+);
+var index  = "";
+var sepStr = "******";
+function getmsg(id)
+{
+var str  = new Array();
+str[0]   = new Array(102, "&?error_102;");
+str[1]   = new Array(103, "&?error_103;");
+str[2]   = new Array(118, "&?error_118;");
+str[3]   = new Array(119, "&?error_119;");
+str[4]   = new Array(122, "&?error_122;");
+str[5]   = new Array(114, "&?error_114;");
+str[6]   = new Array(167, "&?error_167;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+moveErrLayer(580,95);
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+ProcessRet(errstr, errpara);
+showTable();
+pageGetValue();
+}
+function getInput(id,len)
+{
+return ("<input class=\"uiNoBorder\"  type=\"text\"  size=\""+len+"\" id=\""+id+"\" readonly>");
+}
+function addline(index)
+{
+var newline = getObj("Sipline_Table").insertRow(-1);
+newline.setAttribute("class", "white");
+newline.setAttribute("className", "white");
+for(var i = 0; i < SIPLINE_PARA.length ; i++)
+{
+if(SIPLINE_PARA[i] == "DigestUserName")
+{
+newline.insertCell(-1).innerHTML = getInput("Frm_"+SIPLINE_PARA[i]+index,24);
+}
+else
+{
+newline.insertCell(-1).innerHTML = getInput("Frm_"+SIPLINE_PARA[i]+index,8);
+}
+}
+newline.insertCell(-1).innerHTML=getImagefrmClass("multiImg_modify", "Modify("+index+")", "BtnMod"+index);
+}
+function showTable()
+{
+var num = getValue("IF_INSTNUM");
+for(var i = 0; i < num; i++)
+{
+addline(i);
+}
+}
+function pageGetValue()
+{
+var index = getValue("IF_INSTNUM");
+for(var i = 0; i < index; i++)
+{
+for(var j = 0; j < SIPLINE_PARA.length ; j++)
+{
+setValue("Frm_"+SIPLINE_PARA[j]+i,getValue(SIPLINE_PARA[j]+i));
+}
+}
+<%
+var userright = getenv("Right");
+var cver = getenv("CurrentVersionInfo");
+if(cver == 74)
+{
+%>
+jslEnDisplay("TR_AccountEnable");
+<%
+}
+%>
+}
+function pageSetValue()
+{
+HiddenParaInit(SIP_PARA);
+jslSetValue("AuthUserName", "Frm_AuthUserName");
+jslSetValue("AuthPassword", "Frm_AuthPassword", "SET");
+jslSetValue("DigestUserName", "Frm_DigestUserName");
+if(getChecked("Frm_AccountEnable") == true)
+{
+setValue("Enable", 1);
+}
+else
+{
+setValue("Enable", 0);
+}
+}
+function pageCheckValue()
+{
+var msg = "";
+if(checkGenStringForASC(getValue("Frm_AuthUserName")) == false)
+{
+msg = getmsg(114);
+ShowErrorForCom("Frm_AuthUserName","Fnt_AuthUserName",msg);
+return false;
+}
+if(checkStrLengthRange(getValue("Frm_AuthUserName"),0,127) == -3)
+{
+msg = getmsg(102,0,127);
+ShowErrorForCom("Frm_AuthUserName","Fnt_AuthUserName",msg);
+return false;
+}
+if(getValue("Frm_AuthPassword") != sepStr)
+{
+if(checkGenStringForASC(getValue("Frm_AuthPassword")) == false)
+{
+msg = getmsg(114);
+ShowErrorForCom("Frm_AuthPassword","Fnt_AuthPassword",msg);
+return false;
+}
+if(checkStrLengthRange(getValue("Frm_AuthPassword"),0,31) == -3)
+{
+msg = getmsg(102,0,31);
+ShowErrorForCom("Frm_AuthPassword","Fnt_AuthPassword",msg);
+return false;
+}
+}
+if(checkGenStringForASC(getValue("Frm_DigestUserName")) == false)
+{
+msg = getmsg(114);
+ShowErrorForCom("Frm_DigestUserName","Fnt_DigestUserName",msg);
+return false;
+}
+if(checkStrLengthRange(getValue("Frm_DigestUserName"),0,127) == -3)
+{
+msg = getmsg(102,0,127);
+ShowErrorForCom("Frm_DigestUserName","Fnt_DigestUserName",msg);
+return false;
+}
+return true;
+}
+function pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+if(pageCheckValue() == true)
+{
+pageSetValue();
+setValue("IF_ACTION", "apply");
+setValue("IF_INDEX",index);
+DisableALL();
+getObj("fSubmit").submit();
+}
+else
+{
+}
+}
+function GetHomeLineInstNum()
+{
+return getValue("HomeLine_INSTNUM");
+}
+function ModifyGetValue(i)
+{
+jslSetValue("Frm_AuthUserName", "AuthUserName"+i);
+jslSetValue("Frm_AuthPassword", "AuthPassword"+i, "GET");
+jslSetValue("Frm_DigestUserName", "DigestUserName"+i);
+if("1" == getValue("Enable"+i))
+{
+setChecked("Frm_AccountEnable", true);
+}
+else
+{
+setChecked("Frm_AccountEnable", false);
+}
+}
+function Modify(i)
+{
+getObj("modify").style.display="";
+document.getElementById("back").style.display="";
+jslEnable("Frm_AuthUserName","Frm_AuthPassword","Frm_DigestUserName","Frm_AccountEnable");
+ModifyGetValue(i);
+index=i;
+}
+function ModifySubmit()
+{
+if(pageCheckValue() == true)
+{
+pageSetValue();
+setValue("IF_ACTION", "apply");
+setValue("IF_INDEX",index);
+DisableALL();
+getObj("fSubmit").submit();
+}
+else
+{
+}
+}
+function back4add()
+{
+var number = getValue("IF_INSTNUM");
+DisableALL();
+getObj("fSubmit").submit();
+}
+</script>

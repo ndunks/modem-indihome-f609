@@ -1,0 +1,99 @@
+
+<%
+IMPORT FILE "fw_dmz_gch.gch";
+IMPORT FILE "app_dmz_conf_js.gch";
+%>
+<table id="TestContent"  class="table" width="450px" border="0">
+<tr>
+<td class="td1">&?comm001;</td>
+<td class="td2"><input id="Frm_Enable" name="Frm_Enable" type="checkbox" value="" /></td>
+</tr>
+<%
+if ( 0 != getenv("DevIPv6Effect") )
+{
+%>
+</table>
+<!-- IPv4专有参数：广域网连接、启用MAC映射、局域网IP地址、局域网MAC地址 -->
+<fieldset style="margin:0;padding:0;">
+<legend style="color:#000000">IPv4</legend>
+<table id="TestContentIPv4" class="table" border="0" width="450px">
+<%
+}
+else
+{
+}
+%>
+<tr>
+<td class="td1"><font id="Fnt_WanName">&?comm002;</font></td>
+<td class="td2">
+<%
+if ( 0 == getenv("DevIPv6Effect") )
+{
+%>
+<select id="Frm_WanName" name="Frm_WanName" size="1" class="list_2">
+<%
+}
+else
+{
+%>
+<select id="Frm_WanName" name="Frm_WanName" size="1" class="list_2" onchange="ctrlIPv4Item()">
+<%
+}
+%>
+<% IMPORT FILE "wan_func.gch";
+if((getenv("CurrentVersionInfo") == "3") && (getenv("Right") == "2"))
+{
+wanV4QueryByAppForRds("firewall");
+}
+else
+{
+wanV4QueryByApp("firewall");
+}
+%>
+</select>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_MacEnable">&?virt009;</font></td>
+<td class="td2"><input name="Frm_MacEnable" id="Frm_MacEnable" type="checkbox" value="" onclick="changeAddressType()"/></td>
+</tr>
+<tr  id="TR_InternalHost" style="display:">
+<td class="td1"><font id="Fnt_InternalHost">&?dmco004;</font></td>
+<td class="td2"><input id="Frm_InternalHost" name="Frm_InternalHost" type="text" class="inputId"  value="" size="15" /></td>
+</tr>
+<tr id="TR_InternalMacHost" style="display:none">
+<td class="td1"><font id="Fnt_InternalMacHost">&?dmco005;</font></td>
+<td class="td2">
+<input name="mac1" type="text" class="inputId3"   size="15" maxlength="2" id="mac1" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac2" type="text" class="inputId3"   size="15" maxlength="2" id="mac2" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac3" type="text" class="inputId3"   size="15" maxlength="2" id="mac3" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac4" type="text" class="inputId3"   size="15" maxlength="2" id="mac4" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac5" type="text" class="inputId3"   size="15" maxlength="2" id="mac5" onkeyup="CheckLen(this,this.value)"  /> :
+<input name="mac6" type="text" class="inputId3"   size="15" maxlength="2" id="mac6" onkeyup="CheckLen(this,this.value)"  />
+</td>
+</tr>
+</table>
+<%
+if ( 0 != getenv("DevIPv6Effect") )
+{
+%>
+</fieldset>
+<div id="div4"></div>
+<fieldset id="ipv6dmz" style="margin:0;padding:0;"><legend style="color:#000000">IPv6</legend>
+<%
+}
+else
+{
+%>
+<fieldset id="ipv6dmz" style="display:none"><legend style="color:#000000">IPv6</legend>
+<%
+}
+%>
+<!-- IPv6地址添加控制 -->
+<div id="div4" style="text-align:center">
+<span id="divMaxIPv6Addr"></span>
+<input id="BtnAddIPv6Addr" onclick="addIPv6Addr()" class="button" type="button" value="&?WDS007;">
+</div>
+<!-- IPv6专有参数：最大8个 局域网IPv6地址 -->
+<table id="TestContentIPv6" class="table" border="0" width="450px">
+</table>
+</fieldset>

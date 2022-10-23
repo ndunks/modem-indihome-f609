@@ -1,0 +1,340 @@
+<%
+IMPORT FILE "common_gch.gch";
+IMPORT FILE "wlanm_wds_func_gch.gch";
+function displayMultiInst_WLANCard(FP_OBJNAME, PARA, FP_PARANUM)
+{
+var FP_INSTNUM = query_list(FP_OBJNAME, getenv("g_wlanSettingID"));
+var FP_IDENTITY = "";
+for (var i=0; i<FP_INSTNUM; i++)
+{
+var FP_HANDLE = create_paralist();
+FP_IDENTITY   = query_identity(i);
+get_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+create_hidden_sep("WLAN_SSID"+i, FP_IDENTITY);
+create_hidden_multiinstpara(FP_HANDLE, PARA, i, FP_PARANUM);
+destroy_paralist(FP_HANDLE);
+}
+return FP_INSTNUM;
+}
+create_form_start("fSubmit", "");
+createBasicHidden();
+var CONFIG_OBJNAME = "OBJ_WLANCONFIG_ID";
+var CONFIG_PARANUM = 10;
+var CONFIG_PARA[10] =
+{
+"RadioStatus",
+"ESSID",
+"WEPAuthMode",
+"BeaconType",
+"WPAEncryptType",
+"WPAAuthMode",
+"11iAuthMode",
+"11iEncryptType",
+"Enable",
+"WdsMode"
+};
+var DRIVER_OBJNAME = "OBJ_WLANCONFIGDRV_ID";
+var DRIVER_PARANUM = 11;
+var DRIVER_PARA[11] =
+{
+"TotalPacketsReceived",
+"TotalBytesReceived",
+"TotalPacketsSent",
+"TotalBytesSent",
+"ErrorsReceived",
+"ErrorsSent",
+"DiscardPacketsSent",
+"ChannelInUsed",
+"DiscardPacketsReceived",
+"Bssid",
+"RealRF"
+};
+var FP_INSTNUM = displayMultiInst_WLANCard(CONFIG_OBJNAME, CONFIG_PARA, CONFIG_PARANUM);
+create_hidden_sep("IF_INSTNUM", FP_INSTNUM);
+displayMultiInst_WLANCard(DRIVER_OBJNAME, DRIVER_PARA, DRIVER_PARANUM);
+var FP_ERRORSTR = getDisplayInstError("SUCC");
+FP_ERRORSTR = wds_func("", "N", FP_ERRORSTR);
+create_form_end();
+%>
+<%
+%>
+<table id="tbl_basic_info" class="infor" style="display:none" cellpadding="0" cellspacing="1">
+<tr>
+<td class="tdleft">&?cmwc2;</td>
+<td class="tdright" id="td_RealRF"></td>
+</tr>
+<tr id="tr_ChannelInUsed" style="display:none">
+<td class="tdleft">&?wlan008;</td>
+<td class="tdright" id="td_ChannelInUsed"></td>
+</tr>
+</table>
+<!--WDS Informantion-->
+<table id="tbl_wds_info" class="infor" style="display:none" cellpadding="0" cellspacing="1" >
+<tr>
+<td class="tdleft">&?WDS001;</td>
+<td class="tdright" id="td_wdsmode"></td>
+</tr>
+<tr id="tr_wdsBssid">
+<td class="tdleft">&?WDS002;</td>
+<td class="tdright" id="td_wdsBssid"></td>
+</tr>
+<tr id="tr_wdsmac">
+<td class="tdleft" id="td_wdsmac_name"></td>
+<td class="tdright" id="td_wdsmac"></td>
+</tr>
+<tr id="tr_cnnctStatus">
+<td class="tdleft">&?wan044;</td>
+<td class="tdright" id="td_cnnctStatus"></td>
+</tr>
+</table>
+<%
+for (var i=0; i<FP_INSTNUM; i++)
+{
+%>
+<table id="tbl_ssid_info<%=i;%>"  class="infor" style="display:none" cellpadding="0" cellspacing="1" >
+<!-- Enable -->
+<tr id="tr_Enable<%=i;%>">
+<td class="tdleft" id="td_EnableFont<%=i;%>"></td>
+<td class="tdright" id="td_Enable<%=i;%>">
+</td>
+</tr>
+<!-- ESSID -->
+<tr id="tr_ESSID<%=i;%>">
+<td class="tdleft" id="td_ESSIDFont<%=i;%>"></td>
+<td class="tdright" id="td_ESSID<%=i;%>">
+</td>
+</tr>
+<!-- 认证方式( -> BeaconType / WEPAuthMode / 11iAuthMode /  ) -->
+<tr id="tr_AuthMode<%=i;%>">
+<td class="tdleft">&?wlan010;</td>
+<td class="tdright" id="td_AuthMode<%=i;%>">
+</td>
+</tr>
+<!-- 加密方式 ( -> BeaconType / WPAEncryptType / 11iEncryptType /  ) -->
+<tr id="tr_CryptMode<%=i;%>">
+<td class="tdleft">&?wlan011;</td>
+<td class="tdright" id="td_CryptMode<%=i;%>">
+</td>
+</tr>
+<!-- MAC地址 ( Bssid ) -->
+<tr id="tr_Bssid<%=i;%>">
+<td class="tdleft">&?dhcp_d006;</td>
+<td class="tdright" id="td_Bssid<%=i;%>"></td>
+</tr>
+<!-- 收包数/字节数 ( TotalPacketsReceived / TotalBytesReceived ) -->
+<tr id="tr_TotalReceived<%=i;%>">
+<td class="tdleft">&?lan001;</td>
+<td class="tdright" id="td_TotalReceived<%=i;%>">
+</td>
+</tr>
+<!-- 发包数/字节数 ( TotalPacketsSent / TotalBytesSent ) -->
+<tr id="tr_TotalSent<%=i;%>">
+<td class="tdleft">&?lan002;</td>
+<td class="tdright" id="td_TotalSent<%=i;%>">
+</td>
+</tr>
+<!-- ErrorsReceived -->
+<tr id="tr_ErrorsReceived<%=i;%>">
+<td class="tdleft">&?wlan004;</td>
+<td class="tdright" id="td_ErrorsReceived<%=i;%>"></td>
+</tr>
+<!-- ErrorsSent -->
+<tr id="tr_ErrorsSent<%=i;%>">
+<td class="tdleft">&?wlan005;</td>
+<td class="tdright" id="td_ErrorsSent<%=i;%>"></td>
+</tr>
+<!-- DiscardPacketsReceived -->
+<tr id="tr_DiscardPacketsReceived<%=i;%>">
+<td class="tdleft">&?wlan006;</td>
+<td class="tdright" id="td_DiscardPacketsReceived<%=i;%>"></td>
+</tr>
+<!-- DiscardPacketsSent -->
+<tr id="tr_DiscardPacketsSent<%=i;%>">
+<td class="tdleft">&?wlan007;</td>
+<td class="tdright" id="td_DiscardPacketsSent<%=i;%>"></td>
+</tr>
+</table>
+<%
+}
+%>
+<script language="javascript">
+function showWDSInfo()
+{
+var wdsMode = getValue("WdsMode0");
+if (wdsMode == "WDS_Disable")
+{
+setHTML("td_wdsmode", "&?wlan048;");
+jslDiDisplay("tr_wdsBssid", "tr_wdsmac", "tr_cnnctStatus");
+}
+else if (wdsMode == "WDS_Root")
+{
+setHTML("td_wdsmode", "WDS+Root");
+setHTML("td_wdsBssid", getValue("Bssid0"));
+setHTML("td_wdsmac_name", "&?WDS003;");
+var wdsmac = getValue("WDSMac1");
+if ( "00:00:00:00:00:00" == wdsmac )
+{
+wdsmac = "";
+}
+setHTML("td_wdsmac", wdsmac);
+setHTML("td_cnnctStatus", getValue("WDSConnectStatus1"));
+}
+else if (wdsMode == "WDS_Repeater")
+{
+setHTML("td_wdsmode", "WDS+Repeater");
+setHTML("td_wdsBssid", getValue("Bssid0"));
+setHTML("td_wdsmac_name", "&?WDS005;");
+var wdsmac = getValue("WDSMac1");
+if ( "00:00:00:00:00:00" == wdsmac )
+{
+wdsmac = "";
+}
+setHTML("td_wdsmac", wdsmac);
+setHTML("td_cnnctStatus", getValue("WDSConnectStatus1"));
+}
+colorizeInfoTbl("tbl_wds_info");
+}
+function showSSIDInfo()
+{
+var IF_INSTNUM = getValue("IF_INSTNUM");
+for (var i=0; i<IF_INSTNUM; i++)
+{
+var ident = getValue("WLAN_SSID"+i);
+setHTML("td_EnableFont"+i, "SSID"+ident.match(/\d+$/)+"&nbsp;&?vs02;");
+if ( 0 == getValue("Enable"+i) )
+{
+setHTML("td_Enable"+i, "&?wlan048;");
+jslDiDisplay("tr_ESSID"+i, "tr_AuthMode"+i, "tr_CryptMode"+i,
+"tr_Bssid"+i, "tr_TotalReceived"+i, "tr_TotalSent"+i,
+"tr_ErrorsReceived"+i, "tr_ErrorsSent"+i,
+"tr_DiscardPacketsReceived"+i, "tr_DiscardPacketsSent"+i);
+}
+else
+{
+setHTML("td_Enable"+i, "&?wan049;");
+setHTML("td_ESSIDFont"+i, "SSID"+ident.match(/\d+$/)+"&?wlan009;");
+setHTML("td_ESSID"+i, HTMLAddBr(getValue("ESSID"+i), 25));
+if ( "None"==getValue("BeaconType"+i)
+|| ("Basic"==getValue("BeaconType"+i) && "None"==getValue("WEPAuthMode"+i)) )
+{
+setHTML("td_AuthMode"+i, "Open System");
+}
+else if ( "Basic"==getValue("BeaconType"+i) && "SharedAuthentication"==getValue("WEPAuthMode"+i) )
+{
+setHTML("td_AuthMode"+i, "Shared Key");
+}
+else if ( "WPA"==getValue("BeaconType"+i) && "PSKAuthentication"==getValue("WPAAuthMode"+i) )
+{
+setHTML("td_AuthMode"+i, "WPA-PSK");
+}
+else if ( "11i"==getValue("BeaconType"+i) && "PSKAuthentication"==getValue("11iAuthMode"+i) )
+{
+setHTML("td_AuthMode"+i, "WPA2-PSK");
+}
+else if ( "WPAand11i" == getValue("BeaconType"+i)
+&& "PSKAuthentication" == getValue("WPAAuthMode"+i)
+&& "PSKAuthentication" == getValue("11iAuthMode"+i) )
+{
+setHTML("td_AuthMode"+i, "WPA/WPA2-PSK");
+}
+else if ( "WPA"==getValue("BeaconType"+i) && "EAPAuthentication"==getValue("WPAAuthMode"+i) )
+{
+setHTML("td_AuthMode"+i, "WPA-EAP");
+}
+else if ( "11i"==getValue("BeaconType"+i) && "EAPAuthentication"==getValue("11iAuthMode"+i) )
+{
+setHTML("td_AuthMode"+i, "WPA2-EAP");
+}
+else if ( "WPAand11i" == getValue("BeaconType"+i)
+&& "EAPAuthentication" == getValue("WPAAuthMode"+i)
+&& "EAPAuthentication" == getValue("11iAuthMode"+i) )
+{
+setHTML("td_AuthMode"+i, "WPA/WPA2-EAP");
+}
+if ( "None" == getValue("BeaconType"+i) )
+{
+setHTML("td_CryptMode"+i, "&?wlan043;")
+}
+else if ( "Basic" == getValue("BeaconType"+i) )
+{
+setHTML("td_CryptMode"+i, "WEP");
+}
+else if ( ( "WPA"==getValue("BeaconType"+i) && "TKIPEncryption"==getValue("WPAEncryptType"+i) )
+|| ( "11i"==getValue("BeaconType"+i) && "TKIPEncryption"==getValue("11iEncryptType"+i) )
+|| ( "WPAand11i"==getValue("BeaconType"+i) && "TKIPEncryption"==getValue("WPAEncryptType"+i) ) )
+{
+setHTML("td_CryptMode"+i, "TKIP");
+}
+else if ( ( "WPA"==getValue("BeaconType"+i) && "AESEncryption"==getValue("WPAEncryptType"+i) )
+|| ( "11i"==getValue("BeaconType"+i) && "AESEncryption"==getValue("11iEncryptType"+i) )
+|| ( "WPAand11i"==getValue("BeaconType"+i) && "AESEncryption"==getValue("WPAEncryptType"+i) ) )
+{
+setHTML("td_CryptMode"+i, "AES");
+}
+else if ( ( "WPA"==getValue("BeaconType"+i) && "TKIPandAESEncryption"==getValue("WPAEncryptType"+i) )
+|| ( "11i"==getValue("BeaconType"+i) && "TKIPandAESEncryption"==getValue("11iEncryptType"+i) )
+|| ( "WPAand11i"==getValue("BeaconType"+i) && "TKIPandAESEncryption"==getValue("WPAEncryptType"+i) ) )
+{
+setHTML("td_CryptMode"+i, "TKIP+AES");
+}
+setHTML("td_Bssid"+i, getValue("Bssid"+i));
+setHTML("td_TotalReceived"+i, getValue("TotalPacketsReceived"+i) + "/" + getValue("TotalBytesReceived"+i));
+setHTML("td_TotalSent"+i, getValue("TotalPacketsSent"+i) + "/" + getValue("TotalBytesSent"+i));
+setHTML("td_ErrorsReceived"+i, getValue("ErrorsReceived"+i));
+setHTML("td_ErrorsSent"+i, getValue("ErrorsSent"+i));
+setHTML("td_DiscardPacketsReceived"+i, getValue("DiscardPacketsReceived"+i));
+setHTML("td_DiscardPacketsSent"+i, getValue("DiscardPacketsSent"+i));
+}
+colorizeInfoTbl("tbl_ssid_info"+i);
+}
+}
+function pageGetValue()
+{
+if ( 0 == getValue("RealRF" + 0 ) )
+{
+setHTML("td_RealRF", "&?wan050;");
+}
+else
+{
+setHTML("td_RealRF", "&?wan049;");
+if ( 0 == getValue( "ChannelInUsed" + 0 ) )
+{
+setHTML("td_ChannelInUsed", "N/A")
+}
+else
+{
+setHTML("td_ChannelInUsed", getValue( "ChannelInUsed"+ 0 ))
+}
+jslEnDisplay("tr_ChannelInUsed");
+showWDSInfo();
+jslEnDisplay("tbl_wds_info");
+showSSIDInfo();
+var IF_INSTNUM = getValue("IF_INSTNUM");
+for (var i=0; i<IF_INSTNUM; i++)
+{
+<%
+if(getenv("CurrentVersionInfo") == 18  || getenv("CurrentVersionInfo") == 96)
+{
+%>
+if(i==2 || i==3 || i== 6 || i==7)
+continue;
+<%
+}
+%>
+jslEnDisplay("tbl_ssid_info"+i);
+}
+}
+colorizeInfoTbl("tbl_basic_info");
+jslEnDisplay("tbl_basic_info");
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+pageGetValue();
+}
+function pageReFresh()
+{
+jslDisable("Btn_ReFresh");
+getObj("fSubmit").submit();
+}
+</script>

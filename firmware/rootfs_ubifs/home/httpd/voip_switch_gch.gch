@@ -1,0 +1,31 @@
+
+<%
+IMPORT FILE "common_gch.gch";
+var FP_OBJNAME  = "OBJ_VOIPEXT_ID";
+var FP_PARANUM  = 2;
+var FP_ACTION   = request("IF_ACTION");
+var FP_MULTIDISPLAY = 1;
+var FP_INDEX    = getInstIndex("old");
+var FP_IDENTITY = getInstIdentity(FP_OBJNAME, FP_INDEX);
+var FP_ERRORSTR = "SUCC";
+var PARA[2] =
+{
+"ProtocolSet",
+"FaxVbdEnable"
+};
+create_form_start("fSubmit", "");
+createSubmitHidden(FP_MULTIDISPLAY, PARA, FP_PARANUM, FP_INDEX);
+FP_ERRORSTR = applyOrNewOrDelInst(FP_OBJNAME, FP_ACTION, FP_IDENTITY, PARA, FP_PARANUM, FP_ERRORSTR);
+var isApplyAndSucc = 0;
+if ( "apply" == FP_ACTION && "SUCC" == FP_ERRORSTR )
+{
+isApplyAndSucc = 1;
+}
+else
+{
+}
+create_hidden_sep("isApplyAndSucc", isApplyAndSucc);
+create_hidden_sep("VoIPProtocal", getenv("VoIPProtocal"));
+FP_ERRORSTR = displayOldSingleInst(FP_OBJNAME, FP_IDENTITY, PARA, FP_PARANUM, FP_ERRORSTR);
+create_form_end();
+%>

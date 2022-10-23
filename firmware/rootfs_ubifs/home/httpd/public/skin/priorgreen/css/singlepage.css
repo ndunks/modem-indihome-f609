@@ -1,0 +1,202 @@
+* {
+    margin: 0 0 0 0;
+    padding: 0;
+}
+
+/*∂‡”Ô—‘—˘ Ω«–ªª*/
+html, body {
+    height: 100%; /* Required */
+    font-size: 12px;
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    background-color:#fff; /* style unifys in case window color changes */
+}
+.content {
+    font-size: 12px;
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+}
+
+#container {
+    margin: 0 auto;
+    width: 778px;
+    text-align: left;
+    position: relative;
+    min-height: 100%; /* For Modern Browsers */
+    height: auto !important; /* For Modern Browsers */
+    height: 100%; /* For IE */ 
+}
+#head {
+    width:778px; 
+    text-align: right;
+    font-size: 20px
+}
+#banner {
+    width:778px; 
+    height:67px; 
+    background:url(../img/banner.gif) no-repeat;
+}
+#banner_Linkstar {
+    width:778px; 
+    height:60px; 
+    background:url(../img/banner_Linkstar.gif) no-repeat;
+}
+#banner_st {
+    width:778px; 
+    height:60px; 
+    background-image:url(../img/banner_st.gif); 
+    background-repeat:no-repeat;
+ }
+ 
+#banner_tele {
+    width:778px; 
+    height:60px; 
+    background-image:url(../img/banner_tele.gif); 
+    background-repeat:no-repeat;
+ }
+#content {
+    width:778px;
+    padding-bottom:20px;
+    min-height: 270px; /* For Modern Browsers */
+    height: auto !important; /* For Modern Browsers */
+    height: 50%; /* For IE */ 	
+    border-left:1px solid #f7f7f7;
+    border-right:1px solid #f7f7f7;
+}
+#content:after {
+    clear: both;
+    display: block;
+    font: 1px/0px serif;
+    content: ".";
+    height: 0;
+    visibility: hidden;
+}
+#content li {
+    list-style:none;
+    display:block;
+}
+#bottom {
+    width: 778px;
+    height: 28px;
+
+    border-left:1px solid #f7f7f7;
+    border-right:1px solid #f7f7f7;
+}
+#bottom li {
+    list-style:none;
+    float:left;
+    height: 28px;
+}
+#bottom a {
+    display:block;
+    height:28px;
+}
+#bottom a.b1 {
+    position:absolute;
+    left:1px;
+    width:156px;
+}
+#bottom a.b2 {
+    width:54px;
+    margin-right:2px;
+    position:absolute;
+    left:157px;	
+}
+#bottom a.b2 ul {
+    text-align:right;
+    padding-top:5px;
+}
+#bottom a.b3 {
+    width:564px;
+    height:28px;
+    position:absolute;
+    left:211px;
+    background-color:#f7f7f7;
+    margin-right:2px;
+    text-align:right;
+}
+.copyright {
+    height:16px;
+    width:806px; 
+    padding-top:10px; 
+    border-left:1px solid #B1B1B1; 
+    border-right:1px solid #f7f7f7; 
+    text-align:center;
+}
+.bottom_line {
+    background-color:#f7f7f7;
+    height:8px; 
+    width:778px;
+}
+.submit {
+    padding-top:2px;
+}
+#bottomx {
+    width: 100%;
+    position: absolute;
+    bottom: 0 !important;
+    bottom: -1px; /* For Certain IE widths */
+    height: 1px;
+}
+.bottom_line {
+    background-color:rgb(178,178,178);
+    height:5px; 
+    width:778px; 
+    over-flow:hidden;
+}
+
+.login_bg { 
+    width:778px;
+    height:389px;
+    background-color:#f7f7f7; 
+}
+.type { 
+    position:absolute;
+    top:32px;
+    left:623px;
+    font:20px Arial,sans-serif;
+    color:#000000;
+    z-index:999; 
+}
+.comtype{ position:absolute;top:20px;left:250px;font:16px Arial,sans-serif;color:#fff;z-index:999; }
+
+.wlanlogin01 { 
+    text-align:left; 
+    font:17px Arial,sans-serif; 
+    height:40px; 
+    color:#000000
+}
+.wlanlogin02 { 
+    width:400px;
+    height:100px; 
+}
+.wlanlogin03 { text-align:center;}
+.login_frame_1 { 
+    width:450px;
+    height:108px;
+    position:absolute;
+    top:155px;left:200px; 
+}
+.white {
+    background-color:#FFFFFF; 
+    text-align:center;   
+    height:25px;
+}
+.infor1 {
+    font-size: 12px;
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+}
+.system_busy_div{ 
+    width:778px;
+    height:108px;
+    text-align:center;
+    padding-top:100px; 
+}
+.system_busy_td1{ 
+    padding:5px 0; 
+    font-size:14px; 
+}
+.system_busy_td2{ 
+    padding:5px 0; 
+    font-size:12px;
+    color:#CC0000; 
+}
+.system_busy_td3{ padding:5px 0; }

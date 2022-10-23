@@ -1,0 +1,101 @@
+
+<script language="javascript">
+var PREFIX_BAN_PORT_PARA = new Array(
+"PortID",
+"PortName",
+"BanDelegation"
+);
+function getmsg(id)
+{
+var str      = new Array();
+str[0]   = new Array(118, "&?error_118;");
+str[1]   = new Array(122, "&?error_122;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+moveErrLayer(580,40);
+pageGetValue();
+}
+function pageGetValue()
+{
+var number = getValue("IF_INSTNUM");
+for(var i = 0; i < number; i++)
+{
+var BanDelegation = document.getElementById("BanDelegation" + i).value;
+if(BanDelegation == "0")
+{
+setChecked("Frm_RA" + i, false);
+setChecked("Frm_DHCPV6" + i, false);
+}
+else if (BanDelegation == "1")
+{
+setChecked("Frm_RA" + i, true);
+setChecked("Frm_DHCPV6" + i, false);
+}
+else if (BanDelegation == "2")
+{
+setChecked("Frm_RA" + i, false);
+setChecked("Frm_DHCPV6" + i, true);
+}
+else
+{
+setChecked("Frm_RA" + i, true);
+setChecked("Frm_DHCPV6" + i, true);
+}
+<%
+if((getenv("CurrentVersionInfo") == 3) && (getenv("Right") == 2))
+{
+%>
+if( getObj("fnt_portname"+i).innerHTML == "SSID2" || getObj("fnt_portname"+i).innerHTML == "SSID3" || getObj("fnt_portname"+i).innerHTML == "SSID4")
+{
+jslDiDisplay("TR_portname"+i);
+}
+<%
+}
+%>
+}
+}
+function pageSetValue()
+{
+HiddenParaInit(PREFIX_BAN_PORT_PARA);
+var number = getValue("IF_INSTNUM");
+for(var i = 0; i < number; i++)
+{
+var RAChoose = document.getElementById("Frm_RA" + i).checked;
+var DHCPv6Choose = document.getElementById("Frm_DHCPV6" + i).checked;
+if(RAChoose == true && DHCPv6Choose == true)
+{
+setValue("BanDelegation" + i, "3");
+}
+else if (RAChoose == true && DHCPv6Choose == false)
+{
+setValue("BanDelegation" + i, "1");
+}
+else if (RAChoose == false && DHCPv6Choose == true)
+{
+setValue("BanDelegation" + i, "2");
+}
+else
+{
+setValue("BanDelegation" + i, "0");
+}
+}
+}
+function pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+pageSetValue();
+setValue("IF_ACTION", "apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+</script>

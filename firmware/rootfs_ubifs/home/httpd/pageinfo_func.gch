@@ -1,0 +1,294 @@
+<%
+function getDevModeName()
+{
+var FP_HANDLE;
+var ModelName;
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, "OBJ_DEVINFO_ID", "");
+ModelName = get_para(FP_HANDLE,"ModelName");
+destroy_paralist(FP_HANDLE);
+return ModelName;
+}
+function getBoardFuncInfoToCutMenu()
+{
+var FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, "OBJ_PON_BOARD_FUNC_INFO_ID", "IGD");
+var OnuModeValue  = "1";    
+OnuModeValue  = get_para(FP_HANDLE, "OnuMode");
+var OnuPotsPort = get_para(FP_HANDLE, "PotsPort");
+var OnuWifi = get_para(FP_HANDLE, "Wifi");
+var OnuUsbPort = get_para(FP_HANDLE, "UsbPort");
+var OnuCatv = get_para(FP_HANDLE,"Catv");
+destroy_paralist(FP_HANDLE);
+setenv("IsOnuModeValue",  OnuModeValue);
+setenv("IsOnuPotsPort",  OnuPotsPort);
+setenv("IsOnuWifi",  OnuWifi);
+setenv("IsOnuUsbPort", OnuUsbPort);
+setenv("IsOnuCatv",OnuCatv);
+}
+function getVersionInfo()
+{
+var FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, "OBJ_PON_VERSION_SWITCH_ID", "");
+var CurrentVersionInfo = get_para(FP_HANDLE, "CountryCode");
+destroy_paralist(FP_HANDLE);
+setenv("CurrentVersionInfo", CurrentVersionInfo);
+return;
+}
+function getDevVerDate()
+{
+var FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, "OBJ_DEVINFO_ID", "");
+var VerDate = get_para(FP_HANDLE, "VerDate");
+destroy_paralist(FP_HANDLE);
+VerDate = substr(VerDate,0,4);
+setenv("VerDate", VerDate);
+return;
+}
+function initEnvWanType(defaultTypeValue, defaultObjWancId)
+{
+var INSTNUM = query_list("OBJ_WANTYPE_ID", "IGD");
+if(INSTNUM>0 && INSTNUM!=888)
+{
+for( var i=0; i<INSTNUM; i++ )
+{
+var HANDLE   = create_paralist();
+var identity = query_identity(i);
+get_inst(HANDLE, "OBJ_WANTYPE_ID", identity);
+var WandType     = get_para(HANDLE, "WandType");
+var IsOn         = get_para(HANDLE, "IsOn");
+destroy_paralist(HANDLE);
+if(IsOn == "1")
+{
+if(WandType == "DSL")
+{
+setenv("TypeValue", 1);
+setenv("ObjWancId", "OBJ_DSLWANC_ID");
+}
+else if(WandType == "Ethernet")
+{
+setenv("TypeValue", 2);
+setenv("ObjWancId", "OBJ_ETHWANC_ID");
+}
+else if (WandType == "3GDongle")
+{
+setenv("TypeValue", 4);
+setenv("ObjWancId", "OBJ_TTYWANCPPP_ID");
+setenv("DevIPv6Effect", 0);
+}
+else if( WandType == "GPON" || WandType == "EPON" )
+{
+setenv("TypeValue", 2);
+setenv("ObjWancId", "OBJ_ETHWANC_ID");
+}
+else if( "DSL&ETH(Master)&3GDongle(Backup)" == WandType )
+{
+setenv("TypeValue", defaultTypeValue);
+setenv("ObjWancId", defaultObjWancId);
+}
+}
+}
+}
+}
+function getDevLang()
+{
+var language  = "";
+var FP_HANDLE = "";
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, "OBJ_USERIF_ID", "");
+language = get_para(FP_HANDLE,"Language");
+destroy_paralist(FP_HANDLE);
+return language;
+}
+function setDevLang()
+{
+var language = getDevLang();
+if (language == "English")
+{
+set_language("langen.conf");
+}
+else
+{
+var langcfg = "lang" + getenv("LanguageCtr") + ".conf";     
+set_language(langcfg);
+}
+}
+function setWebSkinInfo()
+{
+var SkinColor = "";
+var css_path_login = "";
+var css_path_template ="";
+var css_path_singlepage ="";
+var css_path_outtemplate = "";
+var FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, "OBJ_WEB_SKININFO_ID", "IGD");
+SkinColor = get_para(FP_HANDLE, "SkinColor");
+destroy_paralist(FP_HANDLE);
+if ( (SkinColor == "") || (SkinColor == "N/A") )
+{
+SkinColor = "priorgreen";
+}
+css_path_login      =  "skin/" + SkinColor + "/css/login.css";
+css_path_template   =  "skin/" + SkinColor + "/css/template.css";
+css_path_singlepage =  "skin/" + SkinColor + "/css/singlepage.css";
+css_path_outtemplate=  "skin/" + SkinColor + "/css/outtemplate.css";
+setenv("css_path_login",css_path_login);
+setenv("css_path_template",css_path_template);
+setenv("css_path_singlepage",css_path_singlepage);
+setenv("css_path_outtemplate",css_path_outtemplate);
+}
+function initOnceEnv()
+{
+if (getenv("system/initialized") == 1)
+{
+return;
+}
+setenv("system/initialized", 1);
+if(getenv("CurrentVersionInfo") == 85)
+{
+setenv("thaild3bb", 0);
+}
+if ("N/A" == getenv("IsLogin"))
+{
+setenv("IsLogin", 0);
+}
+if ("N/A" == getenv("errLoginNum"))
+{
+setenv("errLoginNum", 0);
+}
+if ("N/A" == getenv("errLoginNumMax"))
+{
+setenv("errLoginNumMax", 3);
+}
+if ("N/A" == getenv("errLoginTime"))
+{
+setenv("errLoginTime", 0);
+}
+if ("N/A" == getenv("WEBTitle"))
+{
+setenv("WEBTitle", getDevModeName());
+}
+if ( "N/A" == getenv("TypeValue") || "N/A" == getenv("ObjWancId") )
+{
+var defaultTypeValue = 1;
+var defaultObjWancId = "OBJ_DSLWANC_ID";
+var pdtDefaultTypeValue = getenv("DefaultTypeValue");
+var pdtDefaultObjWancId = getenv("DefaultObjWancId");
+if (pdtDefaultTypeValue != "N/A")
+{
+defaultTypeValue = pdtDefaultTypeValue;
+}
+if (pdtDefaultObjWancId != "N/A")
+{
+defaultObjWancId = pdtDefaultObjWancId;
+}
+initEnvWanType(defaultTypeValue, defaultObjWancId);
+}
+if ( "N/A" == getenv("DevIPv6Effect") )
+{
+var FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, "OBJ_IPV6SWITCH_ID", "");
+var Effect = get_para(FP_HANDLE,"Effect");
+destroy_paralist(FP_HANDLE);
+setenv("DevIPv6Effect", Effect);
+if ( 0 == getenv("DevIPv6Effect") )
+{
+set_menu_info("smFirewall", "helpTag", "ch280");
+}
+}
+if ( "N/A" == getenv("VoIPProtocal") )
+{
+var FP_OBJNAME = "OBJ_VOIPEXT_ID";
+var FP_INSTNUM = query_list(FP_OBJNAME, "IGD");
+var FP_IDENTITY = "";
+if ( FP_INSTNUM > 0 )
+{
+FP_IDENTITY = query_identity(0);
+}
+var FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+var ProtocolSet = get_para(FP_HANDLE,"ProtocolSet");
+destroy_paralist(FP_HANDLE);
+if ( "1" == ProtocolSet )
+{
+ProtocolSet = "H248";
+}
+else if ( "2" == ProtocolSet )
+{
+ProtocolSet = "MGCP";
+}
+else if ( "4" == ProtocolSet )
+{
+ProtocolSet = "SIP";
+}
+else
+{
+ProtocolSet = "N/A";
+}
+setenv("VoIPProtocal", ProtocolSet);
+}
+if ( "N/A" == getenv("TR069CertChainList") )
+{
+var FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, "OBJ_MANAGESERVER_ID", "");
+var CertList = get_para(FP_HANDLE, "CertList");
+destroy_paralist(FP_HANDLE);
+if ( "" != CertList )
+{
+set_menu_info("ssmTR069Basic", "helpTag", "chipv6_0061");
+}
+setenv("TR069CertChainList", CertList);
+}
+var FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, "OBJ_IGMP_BRUP_ID", "");
+var BrupEnable= get_para(FP_HANDLE, "Brup");
+if (BrupEnable == 1)
+{
+setenv("BrupEnable", 1);
+}
+else
+{
+setenv("BrupEnable", 0);
+}
+destroy_paralist(FP_HANDLE);
+setWebSkinInfo();
+var FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, "OBJ_USERIF_ID", "IGD");
+var LanguageCtr = get_para(FP_HANDLE,"LanguageCtr");  
+destroy_paralist(FP_HANDLE);
+if (LanguageCtr == "")
+{
+LanguageCtr = "cn";	      
+}
+setenv("LanguageCtr", LanguageCtr);
+unsetenv("gw_saveurl");
+unsetenv("gw_refreshtime");
+}
+function initEnv()
+{
+initOnceEnv();
+getDevVerDate();
+if ("N/A" == getenv("gw_lang"))
+{
+setenv("gw_lang", getDevLang());
+setDevLang();
+}
+}
+function execTemplateComScript()
+{
+return 0;
+}
+function refreshhelpTag()
+{
+var cver = getenv("CurrentVersionInfo");
+if((cver != 3) && (cver != 61) && (cver != 23))
+{
+set_menu_info("ssmDHCPSer", "helpTag", "ch210");
+}
+if(cver == 54)
+{
+set_menu_info("smCATV", "helpTag", "poncatv020");
+}
+return 0;
+}
+%>

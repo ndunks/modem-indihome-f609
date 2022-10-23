@@ -1,0 +1,137 @@
+<script language="javascript">
+var CATV_PARA = new Array(
+"CatvEnable",
+"AgcOffset"
+);
+function getmsg(id)
+{
+var str  = new Array();
+str[0]   = new Array(101, "&?error_101;");
+str[1]   = new Array(118, "&?error_118;");
+str[2]   = new Array(119, "&?error_119;");
+str[3]   = new Array(122, "&?error_122;");
+str[4]   = new Array(805, "&?error_805;");
+str[5]   = new Array(810, "&?error_810;");
+str[6]   = new Array(811, "&?error_811;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errparam = getValue("IF_ERRORPARAM");
+ProcessRet(errstr, errparam);
+pageGetValue();
+<%
+if(getenv("CurrentVersionInfo") == 54)
+{
+%>
+jslDiDisplay("TR_CatvEnable");
+if(getValue("CatvEnable") == 0)
+{
+jslDiDisplay("TR_AgcOffset");
+DisableALL();
+}
+<%
+}
+%>
+}
+function pageGetValue()
+{
+var CatvEnableValue = getValue("CatvEnable");
+var AgcOffset = getValue("AgcOffset");
+if(CatvEnableValue == 1)
+{
+setChecked("Frm_CatvEnable", true);
+}
+else
+{
+setChecked("Frm_CatvEnable", false);
+}
+if (checkRange(AgcOffset,0,127))
+setValue("Frm_AgcOffset",(AgcOffset/10.0).toFixed(1));
+else if (checkRange(AgcOffset,128,255))
+setValue("Frm_AgcOffset",((AgcOffset-256)/10.0).toFixed(1));
+else
+setValue("Frm_AgcOffset",AgcOffset);
+}
+function pageSetValue()
+{
+HiddenParaInit(CATV_PARA);
+var AgcOffset = getValue("Frm_AgcOffset");
+if (getObj("Frm_CatvEnable").checked == true)
+{
+setValue("CatvEnable", 1);
+
+}
+else
+{
+setValue("CatvEnable", 0);
+
+}
+if (checkRange(AgcOffset,-0.05,12.7))
+setValue("AgcOffset",Math.round(AgcOffset*10));
+else
+setValue("AgcOffset",Math.round(256 + AgcOffset*10));
+}
+
+function pageCheckValue()
+{
+var msg = "";
+var AgcOffset = getValue("Frm_AgcOffset");
+if(AgcOffset == "NULL")
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_AgcOffset","Fnt_AgcOffset",msg);
+return false;
+}
+if(checkValue(AgcOffset)!= true)
+{
+msg = getmsg(805);
+ShowErrorForCom("Frm_AgcOffset","Fnt_AgcOffset",msg);
+return false;
+}
+if(checkRange(AgcOffset,-12.8,12.7) != true)
+{
+msg = getmsg(810,-12.8,12.7);
+ShowErrorForCom("Frm_AgcOffset","Fnt_AgcOffset",msg);
+return false;
+}
+return true;
+}
+function checkValue(value)
+{
+var check = value.match(/[\+\-]?\d+\.?\d*?/g);
+if(check == null)
+{
+return false;
+}
+return true;
+}
+function checkRange(value,min,max)
+{
+if(value > max || value < min)
+{
+return false;
+}
+return true;
+}
+function pageSubmit()
+{
+if(pageCheckValue() == true)
+{
+jslDisable("Btn_Submit", "Btn_Cancel");
+pageSetValue();
+setValue("IF_ACTION", "apply");
+getObj("fSubmit").submit();
+}
+else
+{
+}
+}
+function pageCancel()
+{
+jslDisable("Btn_Submit", "Btn_Cancel");
+getObj("fSubmit").submit();
+}
+</script>

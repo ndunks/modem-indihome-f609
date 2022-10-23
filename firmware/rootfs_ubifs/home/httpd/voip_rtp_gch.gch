@@ -1,0 +1,59 @@
+<%
+IMPORT FILE "common_gch.gch";
+function rtp_func(FP_ACTION, FP_INDEX, FP_ERRORSTR)
+{
+var FP_OBJNAME      = "OBJ_VOIPRTP_ID";
+var FP_MULTIDISPLAY = 0;
+var FP_PARANUM      = 6;
+var inputName = "RTP";
+var FP_HANDLE;
+var PARA[6] =
+{
+"LocalPortMin",
+"TelephoneEventPT",
+"VLANIDMark",
+"DSCPMark",
+"EthernetPriorityMark",
+"QueueNum"
+};
+var FP_IDENTITY = getInstIdentity(FP_OBJNAME, FP_INDEX);
+for(var i = 0; i < FP_PARANUM ; i++)
+{
+="<INPUT type='hidden' name="+ inputName+PARA[i] +"   ID="+ inputName+PARA[i] +" value=''>\n";
+="<script language=javascript>Transfer_meaning('";
+=inputName+PARA[i];
+="','";
+="');";
+="</script>\n";
+}
+if("apply" == FP_ACTION || "new" == FP_ACTION)
+{
+FP_HANDLE = create_paralist();
+for(i = 0; i < FP_PARANUM; i++)
+{
+set_para(FP_HANDLE, PARA[i], request(inputName+PARA[i]));
+}
+FP_IDENTITY = set_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+FP_ERRORSTR = getNewInstError(FP_ERRORSTR);
+}
+else if("delete" == FP_ACTION && "" != FP_IDENTITY)
+{
+del_inst(FP_OBJNAME, FP_IDENTITY);
+FP_ERRORSTR = getNewInstError(FP_ERRORSTR);
+}
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+for(i = 0; i < FP_PARANUM ; i ++)
+{
+="<script language=javascript>Transfer_meaning('";
+=inputName+PARA[i];
+="','";
+=get_para(FP_HANDLE, PARA[i]);
+="');";
+="</script>\n";
+}
+destroy_paralist(FP_HANDLE);
+FP_ERRORSTR = getDisplayInstError(FP_ERRORSTR);
+return FP_ERRORSTR;
+}
+%>

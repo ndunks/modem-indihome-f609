@@ -1,0 +1,150 @@
+<script language="javascript">
+var PORTLOCATE_PARA = new Array(
+"DhcpEnable",
+"PppoeEnable",
+"PortLocateFormat"
+);
+function getmsg(id)
+{
+var str      = new Array();
+str[0]   = new Array(118, "&?error_118;");
+str[1]   = new Array(119, "&?error_119;");
+str[2]   = new Array(122, "&?error_122;");
+str[3]   = new Array(101, "&?error_101;");
+str[4]   = new Array(123, "&?error_123;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+pageGetValue();
+}
+function cntrlFormatDisp()
+{
+var format = getValue("Frm_PortLocateFormatSelect");
+if ( "" == format )
+{
+jslEnDisplay("TR_PortLocateFormat");
+}
+else
+{
+jslDiDisplay("TR_PortLocateFormat");
+}
+<%
+if( getenv("CurrentVersionInfo") == "48")
+{
+%>
+jslDisable("Frm_PortLocateFormat", "Frm_PortLocateFormatSelect");
+<%
+}
+%>
+}
+function formatFocus()
+{
+jslEnDisplay("TR_PortLocateFormat_TIP");
+}
+function formatBlur()
+{
+jslDiDisplay("TR_PortLocateFormat_TIP");
+}
+function cntrlFormat()
+{
+jslSetValue("Frm_PortLocateFormat", "Frm_PortLocateFormatSelect");
+cntrlFormatDisp();
+}
+function pageGetValue()
+{
+var DhcpEnable = getValue("DhcpEnable");
+if(1 == DhcpEnable)
+{
+setChecked("Frm_DhcpEnable",true);
+}
+else if(0 == DhcpEnable)
+{
+setChecked("Frm_DhcpEnable",false);
+}
+else
+{
+}
+var PppoeEnable = getValue("PppoeEnable");
+if(1 == PppoeEnable)
+{
+setChecked("Frm_PppoeEnable",true);
+}
+else if(0 == PppoeEnable)
+{
+setChecked("Frm_PppoeEnable",false);
+}
+else
+{
+}
+var format = getValue("PortLocateFormat");
+if ( 0 == isValInSelect(format, "Frm_PortLocateFormatSelect") )
+{
+format = "";
+}
+else
+{
+}
+setValue("Frm_PortLocateFormatSelect", format);
+jslSetValue("Frm_PortLocateFormat", "PortLocateFormat");
+cntrlFormatDisp();
+}
+function pageSetValue()
+{
+HiddenParaInit(PORTLOCATE_PARA);
+if (getChecked("Frm_DhcpEnable") == true)
+{
+setValue("DhcpEnable","1");
+}
+else
+{
+setValue("DhcpEnable","0");
+}
+if (getChecked("Frm_PppoeEnable") == true)
+{
+setValue("PppoeEnable","1");
+}
+else
+{
+setValue("PppoeEnable","0");
+}
+jslSetValue("PortLocateFormat","Frm_PortLocateFormat");
+}
+function pageCheckValue()
+{
+var msg = "";
+var format = getValue("Frm_PortLocateFormat");
+if ( false == checkNull(format) )
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_PortLocateFormat", "Fnt_PortLocateFormat", msg);
+return false;
+}
+if ( null != format.match(/[^01\/.: ]/) )
+{
+msg = getmsg(123);
+ShowErrorForCom("Frm_PortLocateFormat", "Fnt_PortLocateFormat", msg);
+return false;
+}
+return true;
+}
+function pageSubmit()
+{
+if ( true == pageCheckValue() )
+{
+pageSetValue();
+setValue("IF_ACTION", "apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+}
+function pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+</script>

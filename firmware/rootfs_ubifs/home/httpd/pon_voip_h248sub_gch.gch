@@ -1,0 +1,41 @@
+<%
+IMPORT FILE "common_gch.gch";
+function h248sub_func(FP_ACTION, FP_INDEX, FP_ERRORSTR)
+{
+var FP_OBJNAME      = "OBJ_PON_VOIPH248SUB_ID";
+var FP_PARANUM      = 28;
+var FP_MULTIDISPLAY = 0;  
+var PARA[28] =
+{
+"TransPrtl",
+"Version",
+"CodecType",
+"ProfileVersion",
+"Profile",
+"MessageAuthenticationMethod",
+"MessageAuthenticationAHParameter",
+"MessageAuthenticationLen",
+"RootDefaultEventDes",
+"PhyDefaultEventDes",
+"DigitMapStarChar",
+"DigitMapPoundChar",
+"DigitMapLongTimer",
+"DigitMapShortTimer",
+"DigitMapStartTimer",
+"DigitMapZTimer",
+"DefaultDigitmapDes",
+"VoiceParameterFrom",
+"ServiceChangeReasonType",
+"ServiceChangeTimestampType",
+"DSType",
+"RtpProtectType",
+"SDPO",
+"SDPS",
+"SDPT",
+"DigitMapShortMatch",
+"InterCtrl",
+"ActiveMGC"
+};
+return getOldFunctionGCH(FP_OBJNAME, FP_MULTIDISPLAY, PARA, FP_PARANUM, FP_ACTION, FP_INDEX, FP_ERRORSTR);
+}
+%>

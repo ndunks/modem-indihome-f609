@@ -1,0 +1,16 @@
+<%
+IMPORT FILE "common_gch.gch";
+function sip_ext_func(FP_ACTION, FP_INDEX, FP_ERRORSTR)
+{
+var FP_OBJNAME = "OBJ_VOIPEXT_ID";
+var FP_PARANUM = 3;
+var FP_MULTIDISPLAY = 0;
+var PARA[3] =
+{
+"FaxVbdEnable",
+"ProtocolSet",
+"Opt120FlagControl",
+};
+return getOldFunctionGCH(FP_OBJNAME, FP_MULTIDISPLAY, PARA, FP_PARANUM, FP_ACTION, FP_INDEX, FP_ERRORSTR);
+}
+%>

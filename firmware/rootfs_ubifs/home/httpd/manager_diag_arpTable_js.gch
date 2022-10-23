@@ -1,0 +1,116 @@
+<script language="javascript">
+var ARP_PARA = new Array(
+"DestIP",
+"MACAddr",
+"Status",
+"Interface"
+);
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+ProcessRet(errstr, errpara);
+moveErrLayer(590,75);
+var arpnum = getValue("IF_ARP_NUM");
+var thresholdnum = getValue("IF_THRESHOLD_NUM");
+arpnum = parseInt(arpnum, 10);
+thresholdnum = parseInt(thresholdnum, 10);
+var if_action = getValue("IF_ACTION");
+if ( arpnum > thresholdnum )
+{
+if ( "DISPALL"==if_action || "DISPPART"==if_action )
+{
+showTable();
+}
+else
+{
+var dispall =
+confirm("<%var note='&?arptbl_007;'; =encodeJS(note); %>");
+if ( true == dispall )
+{
+setValue("IF_ACTION", "DISPALL");
+}
+else
+{
+setValue("IF_ACTION", "DISPPART");
+}
+DisableALL();
+getObj("fSubmit").submit();
+}
+}
+else
+{
+showTable();
+}
+}
+function getNameValue(size, value)
+{
+return ("<input type=\"text\" class=\"uiNoBorder\" size=\""
++ size +"\" value=\""
++ HTMLEnCode(value) + "\"readonly>");
+}
+function addline(index)
+{
+var newline = getObj("Tbl_ARP_Table").insertRow(-1);
+var cellSize = 16;
+var paraVal = "";
+newline.setAttribute("class", "white");
+newline.setAttribute("className", "white");
+for(var i=0; i<ARP_PARA.length; i++)
+{
+paraVal = getValue(ARP_PARA[i]+index);
+if ( "DestIP" == ARP_PARA[i] )
+{
+cellSize = 16;
+}
+else if ( "MACAddr" == ARP_PARA[i] )
+{
+cellSize = 18;
+}
+else if ( "Status" == ARP_PARA[i] )
+{
+if (parseInt(paraVal) == 0)
+{
+paraVal = "&?arptbl_009;";
+}
+else if (parseInt(paraVal) == 1)
+{
+paraVal = "&?arptbl_008;";
+}
+else
+{
+paraVal = "&?arptbl_008;";
+}
+}
+else
+{
+}
+newline.insertCell(-1).innerHTML = getNameValue(cellSize, paraVal);
+}
+}
+function showTable()
+{
+var num = getValue("IF_DispNum");
+if(num == 0)
+{
+var newline = getObj("Tbl_ARP_Table").insertRow(-1);
+newline.setAttribute("align", "center");
+newline.setAttribute("class", "white");
+newline.setAttribute("className", "white");
+var objcell =  newline.insertCell(-1);
+objcell.colSpan = 4;
+objcell.innerHTML= "&?note_007;";
+}
+for(var i=0; i<num; i++)
+{
+addline(i);
+}
+}
+function pageReFresh()
+{
+DisableALL();
+setValue("IF_ACTION", "");
+getObj("fSubmit").submit();
+}
+</script>

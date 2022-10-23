@@ -1,0 +1,203 @@
+<script language="javascript">
+var LINEVMEDIA_PARA = new Array(
+"MediaVEnable",
+"MediaVType",
+"MediaVCodec",
+"MediaVPV",
+"MediaVPT",
+"MediaVCR",
+"MediaVPri",
+"MediaSSuprs",
+"MediaRSSuprs"
+);
+var allindex = 0;
+var allInstNum = getValue("ALL_INSTNUM");
+function getmsg(id)
+{
+var str  = new Array();
+str[0]   = new Array(101, "&?error_101;");
+str[1]   = new Array(132, "&?error_132;");
+str[2]   = new Array(131, "&?error_131;");
+str[3]   = new Array(116, "&?error_116;");
+str[4]   = new Array(117, "&?error_117;");
+str[5]   = new Array(118, "&?error_118;");
+str[6]   = new Array(119, "&?error_119;");
+str[7]   = new Array(122, "&?error_122;");
+str[8]   = new Array(517, "&?error_517;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+moveErrLayer(580,40);
+showTable();
+jslSetValue("Frm_NegoLocPri", "NegoLocPri");
+}
+function getInput(id, value)
+{
+return ("<input type=\"text\" id=\""+id
++"\"  size=\"4\" value=\""+HTMLEnCode(value)
++"\">");
+}
+function getFont(id, value)
+{
+return ("<font id=\""+ id + "\">" + value + "</font>");
+}
+function getCheckbox(id, value, showValue)
+{
+if(value == 1)
+{
+return ("<input type=\"checkbox\" id=\""+id+"\"   checked > " + showValue);
+}
+else
+{
+return ("<input type=\"checkbox\" id=\""+id+"\"> " + showValue);
+}
+}
+function getShowValue(allindex)
+{
+var showValue = "";
+switch(getValue("MediaVCodec"+allindex))
+{
+case "1":
+{
+showValue = "G711U";
+break;
+}
+case "2":
+{
+showValue = "G723";
+break;
+}
+case "4":
+{
+showValue = "G711A";
+break;
+}
+case "8":
+{
+showValue = "G729";
+break;
+}
+case "16":
+{
+showValue = "G722";
+break;
+}
+case "32":
+{
+showValue = "G726";
+break;
+}
+default:
+showValue = "Other";
+break;
+}
+return showValue;
+}
+function addCodeLine(phoneID, allindex)
+{
+var showValue = getShowValue(allindex);
+var newline = getObj("Siptype_Table").insertRow(-1);
+var tdl=newline.insertCell(-1);
+tdl.innerHTML = getCheckbox("Frm_VADENABLE"+allindex,
+getValue("MediaSSuprs"+allindex),
+showValue+" VAD");
+}
+function addPriorityLine(phoneID, allindex)
+{
+var newline = getObj("Siptype_Table").insertRow(-1);
+var tdl=newline.insertCell(-1);
+tdl.setAttribute("className", "td1_4");
+tdl.setAttribute("class", "td1_4");
+tdl.setAttribute("text-align", "left");
+tdl.setAttribute("id", "Fnt_CODECTYPE" + allindex);
+var showValue = getShowValue(allindex);
+tdl.innerHTML = getFont("Fnt_PRIORITY" + allindex, showValue);
+tdl.innerHTML += "&nbsp;&nbsp;&nbsp;"
++ getInput(("Frm_PRIORITY" + allindex),getValue("MediaVPri"+allindex));
+var tdr = newline.insertCell(-1);
+tdr.setAttribute("className", "td2");
+tdr.setAttribute("class", "td2");
+tdl.setAttribute("text-align", "left");
+}
+function showSpaceLine(Num)
+{
+for(var i=0; i < Num; i++)
+{
+var newline = getObj("Siptype_Table").insertRow(-1);
+newline.insertCell(-1).innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
+newline.insertCell(-1);
+}
+}
+function showPhoneLine(phoneID)
+{
+if(parseInt(getValue("LINE_INSTNUM")) > 1)
+{
+var inttmp =  parseInt(phoneID) + parseInt(1);
+var newline = getObj("Siptype_Table").insertRow(-1);
+var tdl=newline.insertCell(-1);
+tdl.innerHTML = "<B>&?media_11;"+inttmp+"</B>";
+newline.insertCell(-1);
+showSpaceLine(1);
+}
+var mediaNum = getValue("IF_INSTNUM" + phoneID);
+for(var index = 0; index < mediaNum; index++, allindex++)
+{
+addCodeLine(phoneID, allindex);
+}
+showSpaceLine(1);
+showSpaceLine(2);
+}
+function showTable()
+{
+var phoneNum = getValue("LINE_INSTNUM");
+for(var phoneID = 0; phoneID < phoneNum; phoneID++)
+{
+showPhoneLine(phoneID);
+}
+}
+function pageSetValue()
+{
+jslSetValue("NegoLocPri", "Frm_NegoLocPri");
+for(var i = 0; i < allInstNum; i++)
+{
+HiddenMultiInstParaInit(LINEVMEDIA_PARA, i);
+if(getChecked("Frm_VADENABLE" + i) == true)
+{
+setValue("MediaSSuprs" + i, 1);
+}
+else
+{
+setValue("MediaSSuprs" + i, 0);
+}
+}
+}
+function pageCheckValue()
+{
+var msg = "";
+var cResult;
+return true;
+}
+function pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+if(true == pageCheckValue())
+{
+pageSetValue();
+setValue("IF_ACTION", "apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+else
+{
+}
+}
+</script>

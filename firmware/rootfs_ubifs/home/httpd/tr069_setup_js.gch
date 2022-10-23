@@ -1,0 +1,295 @@
+<script language="javascript">
+var TR069_PARA = new Array(
+"URL",
+"UserName",
+"UserPassword",
+"PeriodicInformEnable",
+"PeriodicInformInterval",
+"ConnectionRequestUsername",
+"ConnectionRequestPassword",
+"SupportCertAuth",
+"ConnectionRequestPort",
+"Tr069Enable",
+"ConnectionRequestPath"
+);
+function pageLoad()
+{
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+jslSparkItem("Frm_URL","Frm_UserName","Frm_UserPassword","Frm_ConnectionRequestUsername",
+"Frm_ConnectionRequestPassword", "Frm_PeriodicInformInterval");
+if( errstr == "&?cmret_260;")
+{
+errstr = "&?cmret_2600;";
+alert(errstr);
+return;
+}
+if(errstr == "&?cmret_231;")
+{
+alert("&?cmret_231;");
+}
+else if( errstr != "SUCC")
+{
+alert("&?quicksetup013;");
+}
+}
+function pageGetValue()
+{
+jslPostToViewCheckBox("Frm_modify_enable", "Tr069Enable");
+jslSetValue("Frm_URL", "URL");
+jslSetValue("Frm_UserName", "UserName");
+jslSetValue("Frm_UserPassword", "UserPassword", "GET");
+jslSetValue("Frm_ConnectionRequestUsername", "ConnectionRequestUsername");
+jslSetValue("Frm_ConnectionRequestPassword", "ConnectionRequestPassword", "GET");
+jslSetValue("Frm_ConnectionRequestPort", "ConnectionRequestPort");
+var val = getValue("PeriodicInformEnable");
+var levelObjs = document.getElementsByName("Frm_PeriodicInformEnable");
+var len = levelObjs.length;
+for (var i=0; i<len; i++)
+{
+if (levelObjs[i].value ==  val)
+{
+levelObjs[i].checked = true;
+break;
+}
+}
+if(true == getChecked("Frm_PeriodicInformOn"))
+{
+jslEnable("Frm_PeriodicInformInterval");
+}
+else
+{
+jslDisable("Frm_PeriodicInformInterval");
+}
+jslSetValue("Frm_PeriodicInformInterval", "PeriodicInformInterval");
+jslSetValue("Frm_path", "ConnectionRequestPath");
+}
+function pageSetValue()
+{
+jslViewToPostCheckBox("Tr069Enable", "Frm_modify_enable");
+jslSetValue("URL", "Frm_URL");
+jslSetValue("UserName", "Frm_UserName");
+jslSetValue("UserPassword", "Frm_UserPassword", "SET");
+jslSetValue("ConnectionRequestUsername", "Frm_ConnectionRequestUsername");
+jslSetValue("ConnectionRequestPassword", "Frm_ConnectionRequestPassword", "SET");
+jslSetValue("ConnectionRequestPort", "Frm_ConnectionRequestPort");
+var levelObjs = document.getElementsByName("Frm_PeriodicInformEnable");
+var len = levelObjs.length;
+for (var i=0; i<len; i++)
+{
+if (levelObjs[i].checked)
+{
+setValue("PeriodicInformEnable", levelObjs[i].value);
+break;
+}
+}
+jslSetValue("PeriodicInformInterval", "Frm_PeriodicInformInterval");
+jslSetValue("ConnectionRequestPath", "Frm_path");
+}
+function pageCheckValue()
+{
+if( false == ReSetValueRmZero("Frm_PeriodicInformInterval"))
+{
+alert("&?trbs008;"+"&?error_114;");
+return false;
+}
+if(false == checkTR069URL("Frm_URL", "Fnt_URL", 1, 1, 256))
+{
+return  false;
+}
+if(false == checkName("Frm_UserName", "Fnt_UserName", 1, 1, 256))
+{
+return  false;
+}
+if(false == checkName("Frm_UserPassword", "Fnt_UserPassword", 1, 1, 256))
+{
+return  false;
+}
+if(false == checkNum("Frm_PeriodicInformInterval", "Fnt_PeriodicInformInterval", 1, 1, 42949672))
+{
+return  false;
+}
+if(false == checkName("Frm_ConnectionRequestUsername", "Fnt_ConnectionRequestUsername", 1, 0, 256))
+{
+return  false;
+}
+if(false == checkName("Frm_ConnectionRequestPassword", "Fnt_ConnectionRequestPassword", 1, 1, 256))
+{
+return  false;
+}
+if(false == checkNum("Frm_ConnectionRequestPort", "Fnt_ConnectionRequestPort", 0, 1025, 65534))
+{
+return  false;
+}
+if(false == checkPath("Frm_path", "Fnt_path", 0, 0, 60))
+{
+return false;
+}
+return  true;
+}
+function checkTR069URL(frm_id, fnt_id, isNull, minLength, maxLength)
+{
+var fntmsg = document.getElementById(fnt_id).innerHTML;
+if(0 == isNull && false == checkNull(getValue(frm_id)))
+{
+return  true;
+}
+var url = getValue(frm_id);
+var urlCheck = checkURL(url);
+if("-1" == urlCheck)
+{
+alert(fntmsg+"&?error_101;");
+document.getElementById(frm_id).focus();
+return false;
+}
+else if("-3" == urlCheck)
+{
+alert(fntmsg+"&?error_102;"+minLength+"~"+maxLength+".");
+document.getElementById(frm_id).focus();
+return false;
+}
+else if(false == urlCheck)
+{
+alert(fntmsg+"&?error_105;");
+document.getElementById(frm_id).focus();
+return false;
+}
+else if(url.match("^(http:\/\/)|(https:\/\/)") == null)
+{
+alert(fntmsg+"&?error_143;");
+document.getElementById(frm_id).focus();
+return false;
+}
+else
+{
+}
+return  true;
+}
+function checkName(frm_id, fnt_id, isNull, minLength, maxLength)
+{
+var fntmsg = document.getElementById(fnt_id).innerHTML;
+if( 0 == isNull && false == checkNull(getValue(frm_id)) )
+{
+return  true;
+}
+var  nameCheck = checkStrLengthRange(getValue(frm_id), minLength, maxLength);
+if("-1" == nameCheck)
+{
+alert(fntmsg+"&?error_101;");
+document.getElementById(frm_id).focus();
+return false;
+}
+else if(false == checkGenStringForASC(getValue(frm_id)))
+{
+alert(fntmsg+"&?error_114;");
+document.getElementById(frm_id).focus();
+return false;
+}
+else if("-3" == nameCheck)
+{
+alert(fntmsg+"&?error_102;"+minLength+"~"+maxLength+".");
+document.getElementById(frm_id).focus();
+return false;
+}
+else
+{
+}
+return true;
+}
+function checkNum(frm_id, fnt_id, isNull, minValue, maxValue)
+{
+var fntmsg = document.getElementById(fnt_id).innerHTML;
+if( 0 == isNull && false == checkNull(getValue(frm_id)) )
+{
+return  true;
+}
+var numCheck = checkIntegerRange(getValue(frm_id), minValue, maxValue);
+if("-1" == numCheck)
+{
+alert(fntmsg+"&?error_101;");
+document.getElementById(frm_id).focus();
+return false;
+}
+if("-2" == numCheck)
+{
+alert(fntmsg+"&?error_115;");
+document.getElementById(frm_id).focus();
+return false;
+}
+else if("-3" == numCheck)
+{
+alert(fntmsg+"&?error_116;"+minValue+"~"+maxValue+".");
+document.getElementById(frm_id).focus();
+return false;
+}
+else
+{
+}
+return  true;
+}
+function checkPath(frm_id, fnt_id, isNull, minLength, maxLength)
+{
+var fntmsg = document.getElementById(fnt_id).innerHTML;
+if( 0 == isNull && false == checkNull(getValue(frm_id)) )
+{
+return  true;
+}
+var pathvalue = getValue(frm_id);
+if(null == pathvalue.match(/^\//))
+{
+alert(fntmsg+"&?error_245;");
+document.getElementById(frm_id).focus();
+return false;
+}
+var temppath = pathvalue.slice(1);
+if(temppath.length != 0)
+{
+if (temppath.match("[^0-9a-zA-Z-]") != null)
+{
+alert(fntmsg+"&?error_114;");
+document.getElementById(frm_id).focus();
+return false;
+}
+var  nameCheck = checkStrLengthRange(temppath, minLength, maxLength);
+if("-3" == nameCheck)
+{
+alert(fntmsg+"&?error_102;"+minLength+"~"+maxLength+".");
+document.getElementById(frm_id).focus();
+return false;
+}
+else
+{
+}
+}
+return true;
+}
+function tr069pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+function tr069pageSubmit()
+{
+if(true == pageCheckValue())
+{
+HiddenParaInit(TR069_PARA);
+pageSetValue();
+setValue("IF_ACTION", "apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+else
+{}
+}
+function Enable_Reported()
+{
+if(true == getChecked("Frm_PeriodicInformOn"))
+{
+jslEnable("Frm_PeriodicInformInterval");
+}
+else
+{
+jslDisable("Frm_PeriodicInformInterval");
+}
+}
+</script>

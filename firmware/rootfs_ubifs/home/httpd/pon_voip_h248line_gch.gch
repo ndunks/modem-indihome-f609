@@ -1,0 +1,50 @@
+<%
+IMPORT FILE "common_gch.gch";
+function h248line_func(FP_ACTION, FP_INDEX, FP_ERRORSTR)
+{
+var FP_OBJNAME      = "OBJ_PON_VOIPH248LINE_ID";
+var FP_PARANUM      = 3;
+var FP_IDENTITY     = "";
+var FP_MULTIDISPLAY = 1;
+var FP_INSTNUM, FP_HANDLE;
+var FP_PARA[3] =
+{
+"PhysicalTermID",
+"RegStatus",
+"DNSStatus"
+};
+create_hidden_newpara(FP_PARA, FP_PARANUM);
+create_hidden_sep("IF_INSTNUM", "");
+if(FP_ACTION == "apply")
+{
+if(FP_INDEX == -1)
+{
+FP_INSTNUM = query_list(FP_OBJNAME, "IGD");
+for(var index = 0 ; index < FP_INSTNUM ; index++)
+{
+FP_IDENTITY = query_identity(index);
+FP_HANDLE = create_paralist();
+for(var i=0; i< FP_PARANUM; i++)
+{
+set_multiinst_para(FP_HANDLE, FP_PARA[i], index);
+}
+FP_IDENTITY = set_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+}
+}
+else if(FP_INDEX >= 0)
+{
+FP_INSTNUM = query_list(FP_OBJNAME, "IGD");
+FP_IDENTITY = query_identity(FP_INDEX);
+for(var i=0; i< FP_PARANUM; i++)
+{
+setpara(FP_HANDLE, FP_PARA[i]);
+}
+FP_IDENTITY = set_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+}
+}
+set_hidden("IF_INSTNUM", query_list(FP_OBJNAME, "IGD"));
+FP_ERRORSTR = getNewInstError(FP_ERRORSTR);
+
+return displayFunctionInst(FP_OBJNAME, FP_MULTIDISPLAY, FP_PARA, FP_PARANUM, FP_ERRORSTR);
+}
+%>

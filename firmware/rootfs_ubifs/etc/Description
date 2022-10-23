@@ -1,0 +1,182 @@
+#
+# 产品大类: Dhome、XPON、STB、RFID ...
+#
+INT_PRODUCTS_SERIES=1
+
+#
+# 固件类型: 版本文件、boot文件、配置文件、证书文件
+#
+INT_FIREWARE_TYPEID=0
+
+#
+# 产品单板名称
+#
+STR_BOARDCARD_NAMES=F6xx
+
+#
+# 版本号扩展部分，用于生成批次号
+#
+VERSION_NUM_EXT=P4T58
+
+#
+# 版本文件的软件版本号
+#
+STR_VERSION_NUMBERS=V5.2.10P3T32
+
+#
+# bootloader软件版本号
+#
+STR_BOOTLDR_NUMBERS=V5.2.10
+
+#
+# CSP平台软件版本号
+#
+STR_CSPKENL_NUMBERS=V3.0.05
+
+#
+# 语音协议：H248、SIP、MGCP、UNI、NULL
+#
+CODEC_PROTOCOL_NAMES=UNI
+
+#
+# 版本文件的描述字符串
+#
+STR_VERSION_DESCRIP=F660 UNI V5.2.10P3T32 NAND128K
+
+#
+# 32MB CSP2102/1027版本Flash分区兼容性
+#
+INT_V2102_COMPATIBLE=1
+
+#
+# OMCI、WEB升级版本后缀名
+#
+UPGRADE_SUFFIX_NAMES=UPGRADE.bin
+
+#
+# 生产线烧结版本后缀名
+#
+BURNROM_SUFFIX_NAMES=BURNROM.bin
+
+#
+# bootloader升级版本后缀名
+#
+BOOTLDR_SUFFIX_NAMES=BOOTLDR.bin
+
+#
+# 版本文件 + bootloader 升级版本后缀名
+#
+COMBINE_SUFFIX_NAMES=UPGRADE_BOOTLDR.bin
+
+#
+# flash总容量大小
+#
+HEX_FLASH_TOTAL_SIZE=0x08000000
+
+
+#
+# flash类型
+#
+STR_FLASH_TYPE=nand128k
+
+#
+# flash分区使用告警百分比
+#
+FLOAT_LIMIT_PERCENTS=0.99
+
+#
+# 签名区大小
+#
+INT_SIGNATURE_LENGTH=0
+
+#
+# 使用的缺省配置选择项
+# 0 - 缺省配置使用新升级版本中的配置
+# 1 - 缺省配置使用原来的的配置
+#
+INT_DEFAULT_CFG_USED=0
+
+#
+# 版本形式: 单，双，大小，分别取值0，1，2
+#
+INT_VERSION_FORM_NUM=1
+
+#
+# 版本类型：版本、内核、文件系统、小版本、大版本
+#
+INT_VERSION_TYPE_NUM=0
+
+#
+# 版本0在Flash中的偏移、大小
+#
+HEX_VMLINUZ_0_OFFSET=0
+HEX_VMLINUZ_0_LENGTH=0
+
+#
+# 文件系统0在Flash中的偏移、大小
+#
+HEX_FILESYS_0_OFFSET=0x20000
+HEX_FILESYS_0_LENGTH=0
+
+#
+# 版本1在Flash中的偏移、大小
+#
+HEX_VMLINUZ_1_OFFSET=0
+HEX_VMLINUZ_1_LENGTH=0
+
+#
+# 文件系统1在Flash中的偏移、大小
+#
+HEX_FILESYS_1_OFFSET=0x1920000
+HEX_FILESYS_1_LENGTH=0
+
+# USERCFG在Flash中的偏移、大小
+#
+HEX_USERCFG_OFFSET=0x03220000
+HEX_USERCFG_LENGTH=0x00800000
+
+#
+# BOOT在Flash中的偏移、大小
+#
+HEX_BOOTLOADER_OFFSET=0
+HEX_BOOTLOADER_LENGTH=0x20000
+
+#
+# bootloader源文件路径
+#
+STR_PATH_BOOTLDR_FILE=../target/images/cferom.tmp
+
+#
+# 内核映像源文件路径
+#
+STR_PATH_VMLINUZ_FILE=no
+
+#
+# 文件系统映像源文件路径
+#
+STR_PATH_FILESYS_FILE=../target/images/rootfs128kb.img
+
+#
+# target 路径
+#
+STR_DIRECTORY_TARGET=../target
+
+#
+# target/images 路径
+#
+STR_DIRECTORY_IMAGES=../target/images
+
+#
+# target/release 路径
+#
+STR_DIRECTORY_RELEASE=../target/release
+
+#
+# longlaser_cfg 路径
+#
+STR_LONGLASER_FILE=../target/images/longlaser_cfg
+
+# 
+# 版本生成时间
+# 
+STR_BUILD_DATE=2017-03-29 04:15:20

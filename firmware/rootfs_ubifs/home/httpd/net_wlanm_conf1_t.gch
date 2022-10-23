@@ -1,0 +1,6 @@
+<%
+query_list("OBJ_WLANSETTING_ID", "IGD");
+setenv("g_wlanSettingID", query_identity(0));
+setenv("wlanIDname", "2.4G");
+IMPORT FILE "net_wlanm_conf_t.gch";
+%>

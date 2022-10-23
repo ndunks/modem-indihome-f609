@@ -1,0 +1,39 @@
+
+<%
+IMPORT FILE "common_gch.gch";
+IMPORT FILE "wan_func.gch";
+var ALL_OBJNAME = "OBJ_ALLWANC_ID";
+var ALL_INSTNUM = query_list(ALL_OBJNAME, "IGD");
+var identity = "";
+var name = "";
+var IpMode = "";
+var type = "";
+if(ALL_INSTNUM >= 1 && ALL_INSTNUM != 888)
+{
+for(var i = 0; i < ALL_INSTNUM; i++ )
+{
+identity = query_identity(i);
+type = query_wanctype(i);
+name     = query_name(i);
+if((getenv("CurrentVersionInfo") == "41" || (getenv("CurrentVersionInfo") == "84")) && (getenv("Right") == "2"))
+{
+if(name != "omci_ipv4_dhcp_1")
+{
+continue;
+}
+}
+if((getenv("CurrentVersionInfo") == "3") && (getenv("Right") == "2"))
+{
+if(! checkInternetWAN(type,identity))
+continue;
+}
+IpMode   = get_IPMode(identity);
+if ("bridge"!=type)
+{
+%>
+<option value="<%=identity;%>" ><%=encodeHTML(name);%></option>
+<%
+}
+}
+}
+%>

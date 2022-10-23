@@ -1,0 +1,31 @@
+<%
+IMPORT FILE "common_gch.gch";
+var FP_ERRORSTR = "SUCC";
+var FP_OBJNAME = "OBJ_MOBNET_SELECT_ID";
+var FP_MULTIDISPLAY = 0;
+var FP_IDENTITY = "";
+var FP_PARANUM = 2;
+var FP_ACTION = "";
+var FP_HANDLE;
+var PARA[2] =
+{
+"DevIndex",
+"NetModeSelect"
+};
+FP_ACTION = request("IF_ACTION");
+FP_ERRORSTR = applyOrNewOrDelInst(FP_OBJNAME, FP_ACTION, FP_IDENTITY, PARA, FP_PARANUM, FP_ERRORSTR);
+create_form_start("fSubmit", "");
+createBasicHidden();
+create_hidden_newpara(PARA, FP_PARANUM);
+if (FP_MULTIDISPLAY == 0)
+{
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+cover_hidden(FP_HANDLE, PARA, FP_PARANUM);
+destroy_paralist(FP_HANDLE);
+}
+
+getDisplayInstError("SUCC");
+create_hidden_sep("IF_ACTION", "");
+create_form_end();
+%>

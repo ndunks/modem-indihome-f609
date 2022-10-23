@@ -1,0 +1,65 @@
+<%
+IMPORT FILE "pon_net_sn_gch.gch";
+IMPORT FILE "pon_net_sn_js.gch";
+var FP_OBJNAME = "OBJ_MANAGESERVER_ID";
+var FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, FP_OBJNAME, "");
+var Tr069LoidState=get_para(FP_HANDLE,"ActiveState");
+destroy_paralist(FP_HANDLE);
+var CurrentVersionInfo = getenv("CurrentVersionInfo");
+%>
+<%
+if( CurrentVersionInfo != "63")
+{
+%>
+<div class="space_0">
+<div style="text-align:left;width:500px;margin-left:0px">
+<div style="position:absolute; left:245px; height:30px;margin-top:3px;">
+<img src="img/info.gif"/>
+</div>
+<ul>
+<li style="margin-top:5px;text-align:left; margin-left:60px;">
+&?poninfo002;</li>
+</ul>
+</div>
+</div>
+<%
+}
+%>
+<div class="space_0">
+<table id="OnuPwdConf"  class="table" width="450px" border="0">
+<tr height="20px" ><td colspan="2"></td></tr>
+<tr>
+<%
+if(CurrentVersionInfo==21 || CurrentVersionInfo==23)
+{
+%>
+<td class="td1"><font id="Fnt_Sn">&?ponloid012;</font></td>
+<%
+}
+else
+{
+%>
+<td class="td1"><font id="Fnt_Sn">&?ponloid011;</font></td>
+<%
+}
+%>
+<td class="td2"><input name="Frm_Sn" id="Frm_Sn" type="text" value="" class="inputId" /></td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_Pwd">&?poninfo001;</font></td>
+<td class="td2"><input name="Frm_Pwd" id="Frm_Pwd" type="text" value="" class="inputId" autocomplete="off"/></td>
+</tr>
+<%
+if( CurrentVersionInfo == "63")
+{
+%>
+<tr>
+<td class="td1"><font id="Fnt_Tr069LoidState">&?Tr069LoidState;</font></td>
+<td class="td2"><input type="text" name="Frm_State" id="Frm_Tr069State"  value="<%=Tr069LoidState;%>" class="inputId" disabled="disabled"/></td>
+</tr>
+<%
+}
+%>
+</table>
+</div>

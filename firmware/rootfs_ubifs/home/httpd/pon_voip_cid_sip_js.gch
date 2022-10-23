@@ -1,0 +1,120 @@
+<script language="javascript">
+var Voip_CID_PARA = new Array(
+"ViewName",
+"CIDMode",
+"TimeEnable",
+"CallerNameAsCIDNumber",
+"ETSICallIDStandard",
+"FskFrameType",
+"PAssertedID"
+);
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+ProcessRet(errstr, errpara);
+pageGetValue();
+}
+function change_mode()
+{
+<%
+var VoIPProtocal = getenv("VoIPProtocal");
+if ( "SIP" == VoIPProtocal )
+{
+%>
+var mode = getValue("Frm_CIDMode");
+if(mode==2)
+{
+jslDisable("Frm_TimeEnable");
+}
+else
+{
+jslEnable("Frm_TimeEnable");
+}
+<%
+}
+%>
+}
+function pageGetValue()
+{
+jslSetValue("Frm_CIDMode", "CIDMode");
+var ETSIEnable = getValue("ETSICallIDStandard");
+if (ETSIEnable == 0)
+{
+setChecked("Frm_ESTICidStd", true);
+}
+else
+{
+setChecked("Frm_ESTICidStd", false);
+}
+<%
+var VoIPProtocal = getenv("VoIPProtocal");
+if ( "SIP" == VoIPProtocal )
+{
+%>
+jslSetValue("Frm_TimeEnable", "TimeEnable");
+
+jslSetValue("Frm_PAssertedID", "PAssertedID");
+
+if("1" == getValue("CallerNameAsCIDNumber"))
+{
+setChecked("Frm_CallerNameAsCIDNumber", true);
+}
+else
+{
+setChecked("Frm_CallerNameAsCIDNumber", false);
+}
+change_mode();
+<%
+}
+%>
+}
+function pageSetValue()
+{
+HiddenParaInit(Voip_CID_PARA);
+jslSetValue("CIDMode","Frm_CIDMode");
+if (getChecked("Frm_ESTICidStd") == true)
+{
+setValue("ETSICallIDStandard", 0);
+setValue("FskFrameType", 1);
+}
+else
+{
+setValue("ETSICallIDStandard", 1);
+setValue("FskFrameType", 0);
+}
+<%
+var VoIPProtocal = getenv("VoIPProtocal");
+if ( "SIP" == VoIPProtocal )
+{
+%>
+jslSetValue("TimeEnable","Frm_TimeEnable");
+
+jslSetValue("PAssertedID", "Frm_PAssertedID");
+
+if(getChecked("Frm_CallerNameAsCIDNumber") == true)
+{
+setValue("CallerNameAsCIDNumber", 1);
+}
+else
+{
+setValue("CallerNameAsCIDNumber", 0);
+}
+<%
+}
+%>
+}
+function pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+DisableALL();
+pageSetValue();
+setValue("IF_ACTION", "apply");
+getObj("fSubmit").submit();
+}
+</script>

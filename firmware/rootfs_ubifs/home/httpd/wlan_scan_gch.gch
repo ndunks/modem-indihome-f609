@@ -1,0 +1,90 @@
+<%
+IMPORT FILE "common_gch.gch";
+IMPORT FILE "wlan_channel_gch.gch";
+function create_hidden_wlaninstpara(handle, PARA[], instindex,  num)
+{
+var v = "";
+for(var i = 0; i < num ; i ++)
+{
+v +="<INPUT type='hidden' name="+ PARA[i] + instindex +"   ID="+ PARA[i] + instindex +" value=''>\n";
+v +="<script language=javascript>Transfer_meaning('";
+v +=PARA[i] + instindex;
+v +="','";
+v +=encodeJS(get_para(handle, PARA[i]+instindex));
+v +="');";
+v +="</script>\n";
+}
+=v;
+recordServerOutput(v);
+}
+var FP_OBJNAME      = "OBJ_WLANGETAP_ID";
+var FP_MULTIDISPLAY = 1;
+var FP_PARANUM      = 7;
+var FP_ERRORSTR     = "SUCC";
+var MGetFlag;
+var FP_INSTNUM = 0;
+var FP_IFNAME;
+var FP_HANDLE;
+var FP_TIME = 10;
+var PARA[7] =
+{
+"Essid",
+"MacAddr",
+"Channel",
+"Signal",
+"Noise",
+"BeaconIntervel",
+"AuthMode"
+};
+create_form_start("fSubmit", "");
+createSubmitHidden(FP_MULTIDISPLAY, PARA, FP_PARANUM, "");
+var timer=request("SCAN_TIME");
+if(timer!=""&&timer!=NULL)
+{
+FP_TIME  = request("SCAN_TIME");
+}
+var FP_ACTION       = request("IF_ACTION");
+var GetFlag   = request("IF_MGetFlag");
+if(GetFlag == "0")
+{
+MGetFlag = 0;
+}
+else if(GetFlag == "1")
+{
+MGetFlag = 1;
+}
+else
+{
+}
+if (FP_ACTION == "apply")
+{
+FP_HANDLE = create_paralist();
+set_para(FP_HANDLE, "ScanChannel", "65535");
+set_inst(FP_HANDLE, "OBJ_WLAN_SCAN", "IGD.LD1.WLANBase1");
+FP_ERRORSTR = getNewInstError(FP_ERRORSTR);
+}
+if (FP_MULTIDISPLAY == 1)
+{
+if (1 == MGetFlag)
+{
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, FP_OBJNAME, "IGD.LD1.WLANBase1");
+FP_INSTNUM = get_para(FP_HANDLE, "MGET_INST_NUM");
+FP_INSTNUM = integer(FP_INSTNUM);
+for (var i=0; i<FP_INSTNUM; i++)
+{
+create_hidden_wlaninstpara(FP_HANDLE, PARA, i,  FP_PARANUM);
+}
+destroy_paralist(FP_HANDLE);
+}
+}
+undoDBSave();
+getDisplayInstError(FP_ERRORSTR);
+set_hidden("IF_INSTNUM", FP_INSTNUM);
+create_hidden_sep("IF_MGetFlag", MGetFlag);
+create_hidden_sep("SCAN_TIME", FP_TIME);
+query_list("OBJ_WLANCONFIG_ID", getenv("g_wlanSettingID"));
+var FP_VIEWID = query_identity(0);
+FP_ERRORSTR = config_func(FP_ACTION, "N", FP_VIEWID, FP_ERRORSTR);
+create_form_end();
+%>

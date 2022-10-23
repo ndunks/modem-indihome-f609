@@ -1,0 +1,162 @@
+<%
+IMPORT FILE "wlanm_security.gch";
+IMPORT FILE "net_wlanm_secrity_js.gch";
+%>
+<div id="t_warn" class="space_0" style="display:none;">
+<table width="450px" border="0" class="table">
+<tr>
+<td valign="top" style="width:30px;"><img src="img/info.gif"></td>
+<td height="18" align="left" style="padding-left:10px;" id="tipLi"></td>
+</tr>
+</table>
+</div>
+<div class="space_0">
+<table id="TestContent"  class="table" width="530px" border="0">
+<tr>
+<td class="td1"></td>
+<td class="td2"></td>
+</tr>
+<tr>
+<td class="td1">&?wlan040;</td>
+<td class="td2">
+<select name="" size="1" tabIndex="1"  class="list_1" id="Frm_SSID_SET" onchange="ESSID_Choose()"/>
+</select></td>
+</tr>
+<tr id="TR_Authentication">
+<td class="td1">&?wlan010;</td>
+<td class="td2">
+<select size="1" class="list_2" id="Frm_Authentication"  onchange="Authentication()">
+<option value="Open System">Open System</option>
+<option value="Shared Key">Shared Key</option>
+<option value="WPA-PSK">WPA-PSK</option>
+<option value="WPA2-PSK">WPA2-PSK</option>
+<option value="WPA/WPA2-PSK">WPA/WPA2-PSK</option>
+<option value="WPA-EAP">WPA-EAP</option>
+<option value="WPA2-EAP">WPA2-EAP</option>
+<option value="WPA/WPA2-EAP">WPA/WPA2-EAP</option>
+</select>
+</td>
+</tr>
+<tr id="t_wep">
+<td class="td1">WEP&?wlan022;</td>
+<td class="td2">
+<select size="1" class="list_1" id="Frm_BeaconType" onchange="WEP_Key()">
+</select>
+</td>
+</tr>
+</table>
+</div>
+<div class="space_0">
+<table class="table" width="530px" border="0" id="shared" style="display:none">
+<tr>
+<td class="td1">&?wlan024;</td>
+<td class="td2">
+<select size="1" class="list_5" id="Frm_WEPKeyIndex">
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+</select>
+</td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_WEPKey0">&?wlan025;1</font></td>
+<td class="td2"><input type="text" class="inputId" id="Frm_WEPKey0"/></td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_WEPKey1">&?wlan025;2</font></td>
+<td class="td2"><input type="text" class="inputId" id="Frm_WEPKey1"/></td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_WEPKey2">&?wlan025;3</font></td>
+<td class="td2"><input type="text" class="inputId" id="Frm_WEPKey2"/></td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_WEPKey3">&?wlan025;4</font></td>
+<td class="td2"><input type="text" class="inputId" id="Frm_WEPKey3"/></td>
+</tr>
+<tr>
+<td  class="td15" colspan="2">&?wlan026;</td>
+</tr>
+</table>
+</div>
+<div class="space_0">
+<table class="table" width="530px" border="0" id="eap" style="display:none">
+<tr>
+<td class="td1"><font id="Fnt_MasterAuthServerIP">&?pdt_wlansec001;</font></td>
+<td class="td2"><input type="text" class="inputId" id="Frm_MasterAuthServerIP"/></td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_MasterAuthServerPort">&?pdt_wlansec002;</font></td>
+<td class="td2"><input type="text" class="inputId" id="Frm_MasterAuthServerPort"/></td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_MasterAuthServerSecret">&?pdt_wlansec003;</font></td>
+<td class="td2"><input type="text" class="inputId" id="Frm_MasterAuthServerSecret"/></td>
+</tr>
+<%
+if(getenv("CurrentVersionInfo")==56)
+{
+%>
+<tr id="tr_WanCon">
+<td class="td1">&?comm002;</td>
+<td class="td2">
+<select size="1" class="list_2" name="Frm_Interface" id="Frm_Interface">
+<%
+IMPORT FILE "wan_func.gch";
+if ( 0 != getenv("DevIPv6Effect") )
+{
+wanQueryByApp("binding");
+Tunnel46QueryByApp("binding");
+Tunnel64Query();
+}
+else
+{
+wanV4QueryByApp("binding");
+}
+%>
+</select></td>
+</tr>
+<%
+}
+%>
+</table>
+</div>
+<div class="space_0">
+<table class="table" width="530px" border="0" id="wpa" style="display:none">
+<tr id="TR_KeyPassphrase">
+<td class="td1"><font id="Fnt_KeyPassphrase">WPA&?wlan029;</font></td>
+<td class="td2">
+<%
+if(getenv("CurrentVersionInfo") == 85)
+{
+%>
+<input type="password" class="inputId2" id="Frm_KeyPassphrase" autocomplete="off" /> &?wlan032;
+<%
+}
+else
+{
+%>
+<input type="text" class="inputId2" id="Frm_KeyPassphrase"/> &?wlan032;
+<%
+}
+%>
+</td>
+</tr>
+<tr style="display:none">
+<td class="td1"><font id="Fnt_WPAGroupRekey">WPA&?wlan030;</font></td>
+<td class="td2"><input type="text" class="inputId2" id="Frm_WPAGroupRekey"/> &?wan029;</td>
+</tr>
+<tr id="TR_WPAEncryptType">
+<td class="td1">WPA&?wlan031;</td>
+<td class="td2">
+<select name="" size="1" class="list_1" id="Frm_WPAEncryptType">
+<option value="TKIPEncryption">TKIP</option>
+<option value="AESEncryption">AES</option>
+<option selected="selected" value="TKIPandAESEncryption">TKIP+AES</option>
+</select>
+</td>
+</tr>
+</table>
+</div>
+<div id="div4"></div>

@@ -1,0 +1,29 @@
+<%
+IMPORT FILE "pon_voip_sipdigitmap_gch.gch";
+IMPORT FILE "pon_voip_sipdigitmap_js.gch";
+%>
+<table id="TestContent"  class="table" width="450px" border="0">
+<tr id="TR_VP">
+<td id="Fnt_VP" class="td1">&?pro_vp001;</td>
+<td class="td2">
+<select name="Frm_VP" id="Frm_VP" size="1" class="list_1" onchange="ChangeVP()">
+</select>
+</td>
+</tr>
+<tr id="TR_LongTimer" style="display:none">
+<td class="td1"><font id="Fnt_LongTimer">&?digitmap_003;</font></td>
+<td class="td2"><input name="Frm_LongTimer" id="Frm_LongTimer" type="text" value="" class="inputId" />&?ponservice015;</td>
+</tr>
+<tr id="TR_ShortTimer" style="display:none">
+<td class="td1"><font id="Fnt_ShortTimer">&?digitmap_004;</font></td>
+<td class="td2"><input name="Frm_ShortTimer" id="Frm_ShortTimer" type="text" value="" class="inputId" />&?ponservice015;</td>
+</tr>
+<tr>
+<td align="center"  colspan="2" height="25">&?digitmap_001; <font id="Fnt_DigitMap" style="display:none">&?pon_item_160;</font></td>
+</tr>
+<tr>
+<td align="center" colspan="2">
+<textarea id="Frm_DigitMap" cols="85" rows="15" class="textarea_1"></textarea>
+</td>
+</tr>
+</table>

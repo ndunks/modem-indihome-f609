@@ -1,0 +1,19 @@
+<%
+IMPORT FILE "common_gch.gch";
+create_form_start("fSubmit", "");
+createBasicHidden();
+var FP_ACTION = request("IF_ACTION");
+var FP_INDEX = 0;
+var FP_ERRORSTR = "SUCC";
+var FP_OBJNAME      = "OBJ_PON_LOADPAGE_ID";
+var FP_MULTIDISPLAY = 0;
+var FP_PARANUM      = 3;
+var PARA[3] =
+{
+"Enable",
+"PcUrl",
+"StbUrl"
+};
+getOldFunctionGCH(FP_OBJNAME, FP_MULTIDISPLAY, PARA, FP_PARANUM, FP_ACTION, FP_INDEX, FP_ERRORSTR);
+create_form_end();
+%>

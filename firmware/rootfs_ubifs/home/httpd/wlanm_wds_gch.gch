@@ -1,0 +1,21 @@
+<%
+IMPORT FILE "common_gch.gch";
+IMPORT FILE "wlan_config_gch.gch";
+IMPORT FILE "wlan_driver_gch.gch";
+IMPORT FILE "wlanm_wds_func_gch.gch";
+create_form_start("fSubmit", "");
+createBasicHidden();
+create_hidden_sep("IF_CONFIGTAG", "");
+create_hidden_sep("IF_WDSTAG", "");
+var FP_ERRORSTR = "SUCC";
+var FP_CONFIGTAG = request("IF_CONFIGTAG");
+var FP_WDSTAG = request("IF_WDSTAG");
+var FP_ACTION = request("IF_ACTION");
+var WLAN_OBJNAME = "OBJ_WLANCONFIG_ID";
+var WLAN_INSTNUM = query_list(WLAN_OBJNAME, getenv("g_wlanSettingID"));
+var FP_VIEWID = query_identity(0);
+FP_ERRORSTR = config_func(FP_ACTION, FP_CONFIGTAG, FP_VIEWID, FP_ERRORSTR);
+FP_ERRORSTR = wds_func(FP_ACTION, FP_WDSTAG, FP_ERRORSTR);
+FP_ERRORSTR = driver_func(FP_VIEWID, FP_ERRORSTR);
+create_form_end();
+%>

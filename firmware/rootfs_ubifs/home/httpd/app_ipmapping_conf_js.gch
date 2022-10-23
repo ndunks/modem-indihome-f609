@@ -1,0 +1,517 @@
+<script language="javascript">
+var PARA = new Array(
+"WANCViewName",
+"RuleType",
+"LocalStartIP",
+"LocalEndIP",
+"PublicStartIP",
+"PublicEndIP"
+);
+var OTHER_PARA = new Array(
+"ViewName",
+"WANCName"
+);
+var index ="";
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+moveErrLayer(580,40);
+showTable();
+}
+function getImage(src, strmethod, id)
+{
+return ("<input type=\"button\" id=\""+id+"\"  onclick=\""+ strmethod +"\" style=\"width:20px;height:20px;border:0px;padding:2px;cursor:pointer;background:url("+src+");\">");
+}
+function getNameValue(id, size, value)
+{
+return ("<input type=\"text\" class=\"uiNoBorder\" size=\"" + size +"\" value=\""
++ value + "\"  id=\"" + id + "\"  readonly>");
+}
+function addline(index)
+{
+var newline  = getObj("fwpm_Table").insertRow(-1);
+var newline2 = getObj("fwpm_Table").insertRow(-1);
+var cellId = "";
+var cellSize = 0;
+var cellValue = "";
+var nowRuleType = getValue("RuleType"+index);
+newline.setAttribute("class", "white");
+newline.setAttribute("className", "white");
+var newCell = newline.insertCell(-1);
+cellId = "Line_" + index + "_" + "WANCName" + "_" + 0;
+newCell.innerHTML = getNameValue(cellId, 6, getValue("WANCName"+index));
+newCell.id = "WANCName_" + (2*index).toString();
+newCell = newline.insertCell(-1);
+cellId = "Line_" + index + "_" + PARA[1] + "_" + 0;
+newCell.innerHTML = getNameValue(cellId, 12, getValue(PARA[1]+index));
+newCell.id = "RuleType_" + (2*index).toString();
+for(var i = 2; i < PARA.length; i+=2)
+{
+cellSize = 12;
+cellId = "Line_" + index + "_" + PARA[i] + "_" + i;
+cellValue = getValue(PARA[i]+index);
+if(nowRuleType == "Server")
+{
+if(i == "2" && cellValue == "0.0.0.0")
+{
+cellValue = "";
+}
+}
+newline.insertCell(-1).innerHTML = getNameValue(cellId, cellSize, "");
+setValue(cellId, cellValue);
+}
+newCell = newline.insertCell(-1);
+newCell.innerHTML = getImagefrmClass("multiImg_modify", "Modify("+index+")", "modify" + index);
+newCell.id = "modify_" + (2*index).toString();
+newCell = newline.insertCell(-1);
+newCell.innerHTML = getImagefrmClass("multiImg_delete", "pageDel("+index+")", "delete" + index);
+newCell.id = "delete_" + (2*index).toString();
+newline2.setAttribute("class", "white");
+newline2.setAttribute("className", "white");
+newCell = newline2.insertCell(-1);
+newCell.id = "WANCName_" + (2*index+1).toString();
+newCell = newline2.insertCell(-1);
+newCell.id = "RuleType_" + (2*index+1).toString();
+for(var i = 3; i < PARA.length; i+=2)
+{
+cellSize = 12;
+cellId = "Line_" + index + "_" + PARA[i] + "_" + i;
+cellValue = getValue(PARA[i]+index);
+if(nowRuleType == "One-to-One" || nowRuleType == "Server")
+{
+if(cellValue == "0.0.0.0")
+{
+cellValue = "";
+}
+}
+else if(nowRuleType == "Many-to-One")
+{
+if(i == "5" && cellValue == "0.0.0.0")
+{
+cellValue = "";
+}
+}
+else
+{
+}
+newline2.insertCell(-1).innerHTML = getNameValue(cellId, cellSize, "" );
+setValue(cellId, cellValue);
+}
+newCell = newline2.insertCell(-1);
+newCell.id = "modify_" + (2*index+1).toString();
+newCell = newline2.insertCell(-1);
+newCell.id = "delete_" + (2*index+1).toString();
+var obj0 = document.getElementById("WANCName_" + (2*index).toString());
+var obj1 = document.getElementById("WANCName_" + (2*index+1).toString());
+obj0.rowSpan++;
+obj1.parentNode.removeChild(obj1);
+var obj0 = document.getElementById("RuleType_" + (2*index).toString());
+var obj1 = document.getElementById("RuleType_" + (2*index+1).toString());
+obj0.rowSpan++;
+obj1.parentNode.removeChild(obj1);
+var obj0 = document.getElementById("modify_" + (2*index).toString());
+var obj1 = document.getElementById("modify_" + (2*index+1).toString());
+obj0.rowSpan++;
+obj1.parentNode.removeChild(obj1);
+var obj0 = document.getElementById("delete_" + (2*index).toString());
+var obj1 = document.getElementById("delete_" + (2*index+1).toString());
+obj0.rowSpan++;
+obj1.parentNode.removeChild(obj1);
+}
+function showTable()
+{
+var num = getValue("IF_INSTNUM");
+if( num > 0)
+{
+for(var i = 0; i < num; i++)
+{
+addline(i);
+}
+}
+else
+{
+var newline = getObj("fwpm_Table").insertRow(-1);
+newline.setAttribute("align", "center");
+newline.setAttribute("class", "white");
+newline.setAttribute("className", "white");
+var objcell =  newline.insertCell(-1);
+objcell.colSpan = 6;
+objcell.innerHTML= "&?note_007;";
+}
+}
+function getmsg(id)
+{
+var str      = new Array();
+str[0]   = new Array(101, "&?error_101;");
+str[1]   = new Array(102, "&?error_102;");
+str[2]   = new Array(103, "&?error_103;");
+str[3]   = new Array(108, "&?error_108;");
+str[4]   = new Array(115, "&?error_115;");
+str[5]   = new Array(116, "&?error_116;");
+str[6]   = new Array(117, "&?error_117;");
+str[7]   = new Array(118, "&?error_118;");
+str[8]   = new Array(119, "&?error_119;");
+str[9]   = new Array(122, "&?error_122;");
+str[10]  = new Array(127, "&?error_127;");
+str[11]  = new Array(138, "&?error_138;");
+str[12]  = new Array(139, "&?error_139;");
+str[13]  = new Array(140, "&?error_140;");
+str[14]  = new Array(141, "&?error_141;");
+str[15]  = new Array(144, "&?error_144;");
+str[16]  = new Array(114, "&?error_114;");
+str[17]  = new Array(148, "&?error_148;");
+str[18]  = new Array(155, "&?error_155;");
+str[19]  = new Array(156, "&?error_156;");
+str[20]  = new Array(510, "&?error_510;");
+str[21]  = new Array(509, "&?error_509;");
+str[22]  = new Array(511, "&?error_511;");
+str[23]  = new Array(512, "&?error_512;");
+str[24]  = new Array(513, "&?error_513;");
+str[25]  = new Array(514, "&?error_514;");
+str[26]  = new Array(110, "&?error_110;");
+str[27]  = new Array(537, "&?error_537;");
+str[28]  = new Array(538, "&?error_538;");
+str[29]  = new Array(539, "&?error_539;");
+str[30]  = new Array(540, "&?error_540;");
+return getMsgFormArray(str, arguments);
+}
+function changeRuleType()
+{
+var rule = getValue("Frm_RuleType");
+if(rule == "One-to-One")
+{
+setValue("Frm_EndLocalIP","");
+setValue("Frm_EndPublicIP","");
+jslDisable("Frm_EndLocalIP","Frm_EndPublicIP");
+jslEnable("Frm_LocalIP","Frm_PublicIP");
+jslDisable("Fnt_EndLocalIP","Fnt_EndPublicIP");
+jslEnable("Fnt_LocalIP", "Fnt_PublicIP");
+}
+else if(rule == "Many-to-One")
+{
+setValue("Frm_EndPublicIP","");
+jslDisable("Frm_EndPublicIP");
+jslEnable("Frm_LocalIP","Frm_EndLocalIP","Frm_PublicIP");
+jslDisable("Fnt_EndPublicIP");
+jslEnable("Fnt_LocalIP", "Fnt_EndLocalIP", "Fnt_PublicIP");
+}
+else if(rule == "Server")
+{
+setValue("Frm_LocalIP","");
+setValue("Frm_EndLocalIP","");
+setValue("Frm_EndPublicIP","");
+jslDisable("Frm_LocalIP","Frm_EndLocalIP","Frm_EndPublicIP");
+jslEnable("Frm_PublicIP");
+jslDisable("Fnt_LocalIP", "Fnt_EndLocalIP", "Fnt_EndPublicIP");
+jslEnable("Fnt_PublicIP");
+}
+}
+function pageSetValue()
+{
+HiddenParaInit(PARA);
+HiddenParaInit(OTHER_PARA);
+jslSetValue("WANCViewName", "Frm_WANCViewName");
+jslSetValue("RuleType", "Frm_RuleType");
+jslSetValue("LocalStartIP", "Frm_LocalIP");
+jslSetValue("PublicStartIP", "Frm_PublicIP");
+jslSetValue("LocalEndIP", "Frm_EndLocalIP");
+jslSetValue("PublicEndIP", "Frm_EndPublicIP");
+}
+function pageCheckValue()
+{
+var msg = "";
+var rule = getValue("Frm_RuleType");
+if(rule == "One-to-One")
+{
+ReSetIpRmZero("Frm_LocalIP","Frm_PublicIP");
+if(false == checkIP("Frm_LocalIP", "Fnt_LocalIP"))
+{
+return  false;
+}
+if( "0.0.0.0" == getValue("Frm_LocalIP") )
+{
+msg = getmsg(108);
+ShowErrorForCom("Frm_LocalIP", "Fnt_LocalIP", msg);
+return  false;
+}
+if( "255.255.255.255" == getValue("Frm_LocalIP") )
+{
+msg = getmsg(156);
+ShowErrorForCom("Frm_LocalIP", "Fnt_LocalIP", msg);
+return  false;
+}
+if(false == checkIP("Frm_PublicIP", "Fnt_PublicIP"))
+{
+return  false;
+}
+if( "255.255.255.255" == getValue("Frm_PublicIP") )
+{
+msg = getmsg(156);
+ShowErrorForCom("Frm_PublicIP", "Fnt_PublicIP", msg);
+return  false;
+}
+}
+else if(rule == "Many-to-One")
+{
+ReSetIpRmZero("Frm_LocalIP","Frm_EndLocalIP","Frm_PublicIP");
+if(false == checkIP("Frm_LocalIP", "Fnt_LocalIP"))
+{
+return  false;
+}
+if( "255.255.255.255" == getValue("Frm_LocalIP") )
+{
+msg = getmsg(156);
+ShowErrorForCom("Frm_LocalIP", "Fnt_LocalIP", msg);
+return  false;
+}
+if(false == checkIP("Frm_EndLocalIP", "Fnt_EndLocalIP"))
+{
+return  false;
+}
+if( "0.0.0.0" == getValue("Frm_EndLocalIP") )
+{
+msg = getmsg(108);
+ShowErrorForCom("Frm_EndLocalIP","Fnt_EndLocalIP", msg);
+return  false;
+}
+if(false == checkIP("Frm_PublicIP", "Fnt_PublicIP"))
+{
+return  false;
+}
+if( "255.255.255.255" == getValue("Frm_PublicIP") )
+{
+msg = getmsg(156);
+ShowErrorForCom("Frm_PublicIP", "Fnt_PublicIP", msg);
+return  false;
+}
+if( compareIP(getValue("Frm_LocalIP"), getValue("Frm_EndLocalIP")) > 0)
+{
+msg = getmsg(510);
+ShowErrorForCom(null, null, msg);
+return false;
+}
+}
+else if(rule == "Server")
+{
+ReSetIpRmZero("Frm_PublicIP");
+if(false == checkIP("Frm_PublicIP", "Fnt_PublicIP"))
+{
+return  false;
+}
+if( "255.255.255.255" == getValue("Frm_PublicIP") )
+{
+msg = getmsg(156);
+ShowErrorForCom("Frm_PublicIP", "Fnt_PublicIP", msg);
+return  false;
+}
+}
+else
+{
+}
+return true;
+}
+function  checkIP(frm_id, fnt_id, num)
+{
+var msg = "";
+if(false == checkNull(getValue(frm_id)) )
+{
+msg = getmsg(101);
+ShowErrorForCom(frm_id, fnt_id, msg);
+return  false;
+}
+if(false == checkIpAddress(getValue(frm_id), num))
+{
+msg = getmsg(108);
+ShowErrorForCom( frm_id, fnt_id, msg);
+return  false;
+}
+if( "127.0.0.1" == getValue(frm_id) )
+{
+msg = getmsg(155);
+ShowErrorForCom( frm_id, fnt_id, msg);
+return  false;
+}
+return true;
+}
+function Modify(i)
+{
+jslDiDisplay("Btn_Add");
+jslEnDisplay("Btn_Edit");
+document.getElementById("back").style.display="";
+modifyGetValue(i);
+index = i;
+}
+function setSelOtherValue(obj, value, id)
+{
+var flag = 0;
+var mm = "";
+if(id == null)
+{
+mm = "";
+}
+else
+{
+mm = getValue(id);
+}
+if (("" == mm) || ("N/A" == mm) || (null == mm))
+{
+var num = obj.length;
+for (var i = num ;i > 0 ;i-- )
+{
+var name = obj.options[i-1].value;
+var text = obj.options[i-1].text;
+obj.options[i] = new Option(text, text);
+obj.options[i].value = name;
+}
+obj.options[0] = new Option(value,value);
+obj.options[0].value = value;
+obj.options[0].text = value;
+flag = 1;
+}
+return flag;
+}
+function modifyGetValue(i)
+{
+var obj = getObj("Frm_WANCViewName");
+jslDoShowComboBox("Frm_WANCViewName", "WANCViewName"+i);
+if(-1 == obj.selectedIndex)
+{
+setSelOtherValue(obj, "", null);
+obj.selectedIndex = 0;
+}
+obj = getObj("Frm_RuleType");
+jslDoShowComboBox("Frm_RuleType", "RuleType"+i);
+if(-1 == obj.selectedIndex)
+{
+setSelOtherValue(obj, "", null);
+obj.selectedIndex = 0;
+}
+var rule = getValue("RuleType"+i);
+if(rule == "One-to-One")
+{
+jslSetValue("Frm_LocalIP", "LocalStartIP"+i);
+jslIPSetValue("Frm_EndLocalIP", "LocalEndIP"+i);
+jslSetValue("Frm_PublicIP", "PublicStartIP"+i);
+jslIPSetValue("Frm_EndPublicIP", "PublicEndIP"+i);
+jslDisable("Frm_EndLocalIP","Frm_EndPublicIP");
+jslEnable("Frm_LocalIP","Frm_PublicIP");
+jslDisable("Fnt_EndLocalIP","Fnt_EndPublicIP");
+jslEnable("Fnt_LocalIP", "Fnt_PublicIP");
+}
+else if(rule == "Many-to-One")
+{
+jslSetValue("Frm_LocalIP", "LocalStartIP"+i);
+jslSetValue("Frm_EndLocalIP", "LocalEndIP"+i);
+jslSetValue("Frm_PublicIP", "PublicStartIP"+i);
+jslIPSetValue("Frm_EndPublicIP", "PublicEndIP"+i);
+jslDisable("Frm_EndPublicIP");
+jslEnable("Frm_LocalIP","Frm_EndLocalIP","Frm_PublicIP");
+jslDisable("Fnt_EndPublicIP");
+jslEnable("Fnt_LocalIP", "Fnt_EndLocalIP", "Fnt_PublicIP");
+}
+else if(rule == "Server")
+{
+jslIPSetValue("Frm_LocalIP", "LocalStartIP"+i);
+jslIPSetValue("Frm_EndLocalIP", "LocalEndIP"+i);
+jslSetValue("Frm_PublicIP", "PublicStartIP"+i);
+jslIPSetValue("Frm_EndPublicIP", "PublicEndIP"+i);
+jslDisable("Frm_LocalIP","Frm_EndLocalIP","Frm_EndPublicIP");
+jslEnable("Frm_PublicIP");
+jslDisable("Fnt_LocalIP", "Fnt_EndLocalIP", "Fnt_EndPublicIP");
+jslEnable("Fnt_PublicIP");
+}
+else
+{
+}
+}
+function pageEdit()
+{
+if(true == pageCheckValue(index))
+{
+disableAllButton();
+pageSetValue();
+setValue("IF_ACTION", "apply");
+setValue("IF_INDEX", index);
+DisableALL();
+getObj("fSubmit").submit();
+}
+else
+{
+}
+}
+function pageAdd()
+{
+jslEnDisplay("Btn_Add");
+jslDiDisplay("Btn_Edit");
+if(true == pageCheckValue(-1))
+{
+disableAllButton();
+pageSetValue();
+setValue("IF_ACTION", "new");
+setValue("IF_INDEX", "-1");
+DisableALL();
+getObj("fSubmit").submit();
+}
+else
+{
+}
+}
+function pageDel(i)
+{
+disableAllButton();
+setValue("IF_ACTION", "delete");
+setValue("IF_INDEX",i);
+DisableALL();
+getObj("fSubmit").submit();
+}
+function disableAllButton()
+{
+jslDisable("Btn_Add","Btn_Edit", "back");
+var num = getValue("IF_INSTNUM");
+for( var btn_i = 0; btn_i < num; btn_i++)
+{
+jslDisable("delete" + btn_i);
+jslDisable("modify" + btn_i);
+}
+}
+function compareIP(minIP, maxIP)
+{
+var minParts = minIP.split(".");
+var maxParts = maxIP.split(".");
+for( var i = 0; i < 4; i++)
+{
+if( parseInt((minParts[i]),10) != parseInt((maxParts[i]),10) )
+{
+return (parseInt((minParts[i]),10) - parseInt((maxParts[i]),10));
+}
+}
+}
+function back4add()
+{
+var number = getValue("IF_INSTNUM");
+jslDisable("Btn_Add","Btn_Edit", "back");
+for(var i = 0; i < number; i++)
+{
+jslDisable("modify" + i);
+jslDisable("delete" + i);
+}
+DisableALL();
+getObj("fSubmit").submit();
+}
+function jslIPSetValue(dst, src)
+{
+var src_o = getObj(src);
+var dst_o = getObj(dst);
+if(src_o.value == "0.0.0.0")
+{
+dst_o.value = "";
+}
+else
+{
+dst_o.value= String(src_o.value);
+}
+}
+</script>

@@ -1,0 +1,186 @@
+<script language="javascript">
+var VLAN_PARA = new Array(
+"FilterTblType",
+"Dir",
+"MatchOutPri",
+"MatchOutVid",
+"MatchInnerPri",
+"MatchInnerVid",
+"Target",
+"TargetOutPri",
+"TargetOutVid",
+"TargetInnerPri",
+"TargetInnerVid"
+);
+function getmsg(id)
+{
+var str  = new Array();
+str[0]   = new Array(118, "&?error_118;");
+str[1]   = new Array(119, "&?error_119;");
+str[2]   = new Array(122, "&?error_122;");
+return getMsgFormArray(str, arguments);
+}
+function Change_Port()
+{
+setValue("IF_IDENTITY", getValue("Frm_Interface"));
+DisableALL();
+getObj("fSubmit").submit();
+}
+function pageLoad(url)
+{
+moveErrLayer(580,95);
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+ProcessRet(errstr, errpara);
+pageGetValue();
+}
+function pageGetValue()
+{
+jslSetValue("Frm_Interface","IF_IDENTITY");
+showTable();
+}
+function addline(index)
+{
+var newline = getObj("Tbl_VLAN_Table").insertRow(-1);
+newline.setAttribute("class", "white");
+newline.setAttribute("className", "white");
+var Ruletype = getValue("FilterTblType"+index);
+if(Ruletype == "0")
+{
+newline.insertCell(-1).innerHTML = "&?vlantbl_010;"
+}
+else
+{
+newline.insertCell(-1).innerHTML = "&?vlantbl_011;"
+}
+var Direction = getValue("Dir"+index);
+if(Direction == "0")
+{
+newline.insertCell(-1).innerHTML = "&?vlantbl_005;"
+}
+else
+{
+newline.insertCell(-1).innerHTML = "&?vlantbl_006;"
+}
+newline.insertCell(-1).innerHTML = "(" + getValue("MatchOutPri"+index) + ","
++ getValue("MatchOutVid"+index) + ")" + "&nbsp" + "("
++ getValue("MatchInnerPri"+index) + ","
++ getValue("MatchInnerVid"+index) +")";
+var Operate = getValue("Target"+index);
+var op_parame = "," + "(" + getValue("TargetOutPri"+index) + ","
++ getValue("TargetOutVid"+index) + ")" + "&nbsp" + "("
++ getValue("TargetInnerPri"+index) + ","
++ getValue("TargetInnerVid"+index) +")";
+switch (Operate)
+{
+case "0":
+{
+newline.insertCell(-1).innerHTML = "TRANSPARENT";
+break;
+}
+case "1":
+{
+newline.insertCell(-1).innerHTML = "DISCARD";
+break;
+}
+case "2":
+{
+newline.insertCell(-1).innerHTML = "ADD_OUTER_VLAN"+op_parame;
+break;
+}
+case "3":
+{
+newline.insertCell(-1).innerHTML = "ADD_DOUBLE_VLAN"+op_parame;
+break;
+}
+case "4":
+{
+newline.insertCell(-1).innerHTML = "MOD_OUTER_VID"+op_parame;
+break;
+}
+case "5":
+{
+newline.insertCell(-1).innerHTML = "MOD_OUTER_PRI"+op_parame;
+break;
+}
+case "6":
+{
+newline.insertCell(-1).innerHTML = "MOD_INNER_VID"+op_parame;
+break;
+}
+case "7":
+{
+newline.insertCell(-1).innerHTML = "MOD_INNER_PRI"+op_parame;
+break;
+}
+case "8":
+{
+newline.insertCell(-1).innerHTML = "MOD_OUTER_VLAN"+op_parame;
+break;
+}
+case "9":
+{
+newline.insertCell(-1).innerHTML = "MOD_INNER_VLAN"+op_parame;
+break;
+}
+case "10":
+{
+newline.insertCell(-1).innerHTML = "MOD_DOUBLE_VLAN"+op_parame;
+break;
+}
+case "11":
+{
+newline.insertCell(-1).innerHTML = "MOD_VID_AGGR"+op_parame;
+break;
+}
+case "12":
+{
+newline.insertCell(-1).innerHTML = "MOD_VID_UNAGGR"+op_parame;
+break;
+}
+case "13":
+{
+newline.insertCell(-1).innerHTML = "DEL_OUTER_VLAN"+op_parame;
+break;
+}
+case "14":
+{
+newline.insertCell(-1).innerHTML = "DEL_DOUBLE_VLAN"+op_parame;
+break;
+}
+default:
+{
+newline.insertCell(-1).innerHTML = "UNKNOWN_TARGET";
+break;
+}
+}
+}
+function showTable()
+{
+var num = getValue("IF_INSTNUM");
+if(num != 0 )
+{
+for(var i = 0; i < num; i++)
+{
+addline(i);
+}
+}
+else
+{
+var newline = getObj("Tbl_VLAN_Table").insertRow(-1);
+newline.setAttribute("align", "center");
+newline.setAttribute("class", "white");
+newline.setAttribute("className", "white");
+var objcell =  newline.insertCell(-1);
+objcell.colSpan = 4;
+objcell.innerHTML= "&?note_008;"
+}
+}
+function pageReFresh()
+{
+jslSetValue("IF_IDENTITY","Frm_Interface");
+DisableALL();
+getObj("fSubmit").submit();
+}
+</script>

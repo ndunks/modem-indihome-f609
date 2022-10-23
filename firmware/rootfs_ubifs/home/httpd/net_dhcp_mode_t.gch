@@ -1,0 +1,51 @@
+<%
+IMPORT FILE "dhcp_mode_gch.gch";
+IMPORT FILE "net_dhcp_mode_js.gch";
+%>
+<div class="space_0">
+<table width="450px" border="0" class="table">
+<tbody><tr>
+<td valign="top" style="width:30px;"><img src="img/info.gif"></td>
+<td height="18" align="left" style="padding-left:10px;">&?cdhcpmode1;</td>
+</tr></tbody>
+</table>
+</div>
+<table id="TestContent"  class="table" width="450px" border="0">
+<tr>
+<td class="td2">
+<font id="Fnt_DhcpPortSelect" >&?cdhcpmode2;</font>
+</td>
+<td class="td2">
+<font id="Fnt_DhcpModeSelect" >&?cdhcpmode3;</font>
+</td>
+</tr>
+<%
+var FP_LAN_INSTNUM = query_list("OBJ_PONDHCPBINDONPORT_ID", "IGD");
+var LAN_HANDLE     = null;
+var LAN_identity   = "";
+var LAN_Name;
+if(FP_LAN_INSTNUM >= 1 && FP_LAN_INSTNUM != 888)
+{
+for(var i = 0; i < FP_LAN_INSTNUM; i++ )
+{
+LAN_HANDLE   = create_paralist();
+LAN_identity = query_identity(i);
+get_inst(LAN_HANDLE, "OBJ_PONDHCPBINDONPORT_ID", LAN_identity);
+LAN_Name     = get_para(LAN_HANDLE, "VendorClassID");
+%>
+<tr>
+<td class="td2_1"><font id="Fnt_DhcpModeSelect<%=i;%>"><%=LAN_name;%></font></td>
+<td class="td2_2">
+<select class="list_1" size="1" id="Frm_DhcpModeSelect<%=i;%>" >
+<option value="Default">&?cdhcpmode4;</option>
+<option value="Lan">&?cdhcpmode5;</option>
+<option value="Wan">&?cdhcpmode6;</option>
+</select>
+</td>
+</tr>
+<%
+destroy_paralist(LAN_HANDLE);
+}
+}
+%>
+</table>

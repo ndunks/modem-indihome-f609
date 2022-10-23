@@ -1,0 +1,426 @@
+<script language="javascript">
+var CLIENT_PARA = new Array(
+"Enable",
+"Hidden",
+"Status",
+"LastError",
+"Interface",
+"DomainName",
+"Service",
+"Username",
+"Password",
+"Offline",
+"HostNumber"
+);
+var SERVICE_PARA = new Array(
+"Name",
+"Server",
+"ServerPort",
+"Request",
+"UpdateInterval",
+"RetryInterval",
+"MaxRetries"
+);
+function getmsg(id)
+{
+var str      = new Array();
+str[0]   = new Array(101, "&?error_101;");
+str[1]   = new Array(102, "&?error_102;");
+str[2]   = new Array(103, "&?error_103;");
+str[3]   = new Array(104, "&?error_104;");
+str[4]   = new Array(114, "&?error_114;");
+str[5]   = new Array(118, "&?error_118;");
+str[6]   = new Array(119, "&?error_119;");
+str[7]   = new Array(122, "&?error_122;");
+str[8]   = new Array(106, "&?error_106;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+moveErrLayer(595,93);
+pageGetValue();
+}
+function pageGetValue()
+{
+var pwdStr = "";
+jslPostToViewCheckBox("Frm_Enable", "Enable");
+jslSetValue("Frm_Username", "Username");
+jslSetValue("Frm_Password", "Password", "GET");
+<%
+if(getenv("CurrentVersionInfo") == 36 || getenv("CurrentVersionInfo") == 80)
+{
+%>
+var ConStat = getValue("Status");
+if(ConStat == "Connected")
+{
+setValue("Frm_ConnectStat", "Connected");
+}
+else
+{
+setValue("Frm_ConnectStat", "Disconnect");
+}
+jslDisable("Frm_ConnectStat");
+<%
+}
+%>
+jslDoShowComboBox("Frm_Interface", "Interface");
+var service=getValue("Service");
+var name=getValue("IF_NAME");
+if(service==""&&name=="NULL")
+{
+<%
+if(getenv("CurrentVersionInfo") == 85)
+{
+%>
+setValue("Frm_Name","GnuDIP");
+<%
+}
+else
+{
+%>
+setValue("Frm_Name","dipc");
+<%
+}
+%>
+}
+else if(service==""&&name!="NULL")
+{
+setValue("Frm_Name",name);
+}
+else
+{
+jslSetValue("Frm_Name", "Service");
+}
+<%
+var  DDNS_INSTNUM = query_list("OBJ_DDNSSERVICE_ID", "IGD");
+for(var i=0;i<DDNS_INSTNUM;i++)
+{
+var DDNS_HANDLE = create_paralist();
+var DDNS_IDENTITY = query_identity(i);
+get_inst(DDNS_HANDLE, "OBJ_DDNSSERVICE_ID", DDNS_IDENTITY);
+var Name = get_para(DDNS_HANDLE, "Name");
+%>
+if("<%=Name;%>"==getValue("Frm_Name"))
+{
+<%
+var Server = get_para(DDNS_HANDLE, "Server");
+%>
+setValue("Frm_Server", "<%=Server;%>");
+}
+<%
+destroy_paralist(DDNS_HANDLE);
+}
+%>
+jslSetValue("Frm_DomainName", "DomainName");
+if(getValue("Frm_Name")=="dyndns")
+{
+jslEnDisplay("Frm_DomainName","Fnt_DomainName","tr_Server");
+document.getElementById("Fnt_DomainName").innerHTML="&?ddns006;";
+}
+else if((getValue("Frm_Name")=="dipc")||(getValue("Frm_Name")=="GnuDIP"))
+{
+jslEnDisplay("Frm_DomainName","Fnt_DomainName","tr_Server");
+document.getElementById("Fnt_DomainName").innerHTML="&?ddns004;";
+}
+else if(getValue("Frm_Name")=="DtDNS")
+{
+jslEnDisplay("tr_Server");
+jslDiDisplay("Frm_DomainName","Fnt_DomainName");
+}
+else if(getValue("Frm_Name")=="No-IP")
+{
+jslEnDisplay("Frm_DomainName","Fnt_DomainName","tr_Server");
+document.getElementById("Fnt_DomainName").innerHTML="&?ddns006;";
+}
+else if(getValue("Frm_Name")=="VDDNS")
+{
+if(getValue("Frm_DomainName") == "")
+{
+setValue("Frm_DomainName", "vddns.vn");
+}
+jslDiDisplay("Frm_DomainName","Fnt_DomainName","tr_Server");
+}
+else
+{
+}
+}
+function pageSetValue()
+{
+HiddenParaInit(CLIENT_PARA);
+HiddenParaInit(SERVICE_PARA);
+jslViewToPostCheckBox("Enable", "Frm_Enable");
+jslSetValue("Server", "Frm_Server");
+jslSetValue("Username", "Frm_Username");
+jslSetValue("Password", "Frm_Password", "SET");
+jslSetValue("Interface", "Frm_Interface");
+jslSetValue("Name", "Frm_Name");
+jslSetValue("Service", "Frm_Name");
+jslSetValue("DomainName", "Frm_DomainName");
+if(getValue("Frm_Name")=="dyndns")
+{
+setValue("IFservice_INDEX","1");
+}
+else if((getValue("Frm_Name")=="dipc")||(getValue("Frm_Name")=="GnuDIP"))
+{
+setValue("IFservice_INDEX","0");
+}
+else if(getValue("Frm_Name")=="DtDNS")
+{
+setValue("IFservice_INDEX","2");
+}
+else if(getValue("Frm_Name")=="No-IP")
+{
+setValue("IFservice_INDEX","3");
+}
+else if(getValue("Frm_Name")=="VDDNS")
+{
+setValue("IFservice_INDEX","4");
+}
+else
+{
+}
+}
+function pageCheckValue()
+{
+if(checkNull(getValue("Frm_Server")) != true)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_Server","Fnt_Server",msg);
+return false;
+}
+if(checkGenStringForASC(getValue("Frm_Server")) != true)
+{
+msg = getmsg(114);
+ShowErrorForCom("Frm_Server","Fnt_Server",msg);
+return false;
+}
+var value = getValue("Frm_Server");
+if(checkStrLengthRange(value, 1, 256) != true)
+{
+msg = getmsg(102,1,256);
+ShowErrorForCom("Frm_Server","Fnt_Server",msg);
+return false;
+}
+if(checkNull(getValue("Frm_Username")) != true)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_Username","Fnt_Username",msg);
+return false;
+}
+if(checkGenStringForASC(getValue("Frm_Username")) != true)
+{
+msg = getmsg(114);
+ShowErrorForCom("Frm_Username","Fnt_Username",msg);
+return false;
+}
+var value = getValue("Frm_Username");
+if(checkStrLengthRange(value, 1, 256) != true)
+{
+msg = getmsg(102,1,256);
+ShowErrorForCom("Frm_Username","Fnt_Username",msg);
+return false;
+}
+if(checkGenStringForASC(getValue("Frm_Password")) != true)
+{
+msg = getmsg(114);
+ShowErrorForCom("Frm_Password","Fnt_Password",msg);
+return false;
+}
+var value = getValue("Frm_Password");
+if(checkStrLengthRange(value, 1, 256) == -3)
+{
+msg = getmsg(102,1,256);
+ShowErrorForCom("Frm_Password","Fnt_Password",msg);
+return false;
+}
+if(getValue("Frm_Name")!="DtDNS")
+{
+if(checkNull(getValue("Frm_DomainName")) != true)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_DomainName","Fnt_DomainName",msg);
+return false;
+}
+var value = getValue("Frm_DomainName");
+if(checkStrLengthRange(value, 1, 64) != true)
+{
+msg = getmsg(102,1,64);
+ShowErrorForCom("Frm_DomainName","Fnt_DomainName",msg);
+return false;
+}
+if(getValue("Frm_Name")=="dyndns")
+{
+if(checkHostName(getValue("Frm_DomainName"),64) != true)
+{
+msg = getmsg(106);
+ShowErrorForCom("Frm_DomainName","Fnt_DomainName",msg);
+return false;
+}
+}
+else if((getValue("Frm_Name")=="dipc")||(getValue("Frm_Name")=="GnuDIP"))
+{
+if(checkDomainName(getValue("Frm_DomainName")) != true)
+{
+msg = getmsg(104);
+ShowErrorForCom("Frm_DomainName","Fnt_DomainName",msg);
+return false;
+}
+}
+else if(getValue("Frm_Name")=="No-IP")
+{
+if(checkHostName(getValue("Frm_DomainName"),64) != true)
+{
+msg = getmsg(106);
+ShowErrorForCom("Frm_DomainName","Fnt_DomainName",msg);
+return false;
+}
+}
+else if(getValue("Frm_Name")=="VDDNS")
+{
+if(checkDomainName(getValue("Frm_DomainName")) != true)
+{
+msg = getmsg(104);
+ShowErrorForCom("Frm_DomainName","Fnt_DomainName",msg);
+return false;
+}
+}
+else
+{
+}
+}
+return true;
+}
+function pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+if(pageCheckValue() == true)
+{
+pageSetValue();
+setValue("IF_ACTION", "apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+else
+{
+}
+}
+function Slect_Servise()
+{
+if(getValue("Frm_Name")=="dyndns")
+{
+document.getElementById("Fnt_DomainName").innerHTML="&?ddns006;";
+setValue("IFservice_INDEX","1");
+setValue("IF_NAME","dyndns");
+}
+else if((getValue("Frm_Name")=="dipc")||(getValue("Frm_Name")=="GnuDIP"))
+{
+document.getElementById("Fnt_DomainName").innerHTML="&?ddns004;";
+setValue("IFservice_INDEX","0");
+<%
+if(getenv("CurrentVersionInfo") == 85)
+{
+%>
+setValue("IF_NAME","GnuDIP");
+<%
+}
+else
+{
+%>
+setValue("IF_NAME","dipc");
+<%
+}
+%>
+}
+else if(getValue("Frm_Name")=="DtDNS")
+{
+setValue("IFservice_INDEX","2");
+setValue("IF_NAME","DtDNS");
+}
+else if(getValue("Frm_Name")=="No-IP")
+{
+document.getElementById("Fnt_DomainName").innerHTML="&?ddns006;";
+setValue("IFservice_INDEX","3");
+setValue("IF_NAME","No-IP");
+}
+else if(getValue("Frm_Name")=="VDDNS")
+{
+document.getElementById("Fnt_DomainName").innerHTML="&?ddns004;";
+setValue("IFservice_INDEX","4");
+setValue("IF_NAME","VDDNS");
+}
+else
+{
+}
+jslSetValue("Name", "Frm_Name");
+jslSetValue("Service", "Frm_Name");
+setValue("IF_ACTION", "delete");
+DisableALL();
+getObj("fSubmit").submit();
+}
+function checkHostName(strName, iLeng)
+{
+var len       = strName.length;
+var firstChar = strName.substr(0,1);
+var lastChar  = strName.substr(len-1,1);
+var leftChar  = "";
+var rightChar = "";
+var iDotCount = 0;
+var i         = 0;
+var preDotPos = 0;
+var statu = checkStrLengthRange(strName, 1, iLeng);
+if(statu != true)
+{
+return statu;
+}
+if (strName.match("[^0-9a-zA-Z.@#_&$!*-]") != null)
+{
+return false;
+}
+if(firstChar.match("[^0-9a-zA-Z]") != null)
+{
+return false;
+}
+if(lastChar.match("[^0-9a-zA-Z]") != null)
+{
+return false;
+}
+var pos = strName.lastIndexOf(".");
+if(pos == -1)
+{
+var str = strName;
+var len = strName.length;
+for(var i=0;i<len;i++)
+{
+var value = str.substring(i,i+1);
+if(isNaN(parseInt(value)))
+{
+return true;
+}
+}
+return false;
+}
+else
+{
+var str = strName.substr(pos+1);
+var len = strName.length - (pos + 1);
+for(var i=0;i<len;i++)
+{
+var value = str.substring(i,i+1);
+if(isNaN(parseInt(value)))
+{
+return true;
+}
+}
+return false;
+}
+return true;
+}
+</script>

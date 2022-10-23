@@ -1,0 +1,26 @@
+<%
+IMPORT FILE "common_gch.gch";
+var FP_OBJNAME      = "OBJ_USERIF_ID";
+var FP_MULTIDISPLAY = 0;
+var FP_PARANUM      = 1;
+var FP_ERRORSTR     = "SUCC";
+var FP_IDENTITY     = "";
+var FP_HANDLE, FP_ACTION;
+var PARA[2] =
+{
+"Timeout",
+"NULL"
+};
+create_form_start("fSubmit", "");
+createSubmitHidden(FP_MULTIDISPLAY, PARA, FP_PARANUM, "");
+FP_ACTION = request("IF_ACTION");
+if( FP_ACTION == "apply" && request("_SESSION_TOKEN") != getenv("_SESSION_TOKEN"))
+{
+FP_ACTION = "";
+FP_ERRORSTR = "&?cmret_260;";
+set_hidden("IF_ERRORSTR", FP_ERRORSTR);
+}
+FP_ERRORSTR = applyOrNewOrDelInst(FP_OBJNAME, FP_ACTION, FP_IDENTITY, PARA, FP_PARANUM, FP_ERRORSTR);
+FP_ERRORSTR = displayOldSingleInst(FP_OBJNAME, FP_IDENTITY, PARA, FP_PARANUM, FP_ERRORSTR);
+create_form_end();
+%>

@@ -1,0 +1,50 @@
+<%
+IMPORT FILE "common_gch.gch";
+var FP_OBJNAME      = "OBJ_VLAN_ID";
+var FP_PARANUM      = 11;
+var FP_MULTIDISPLAY = 1;
+var PARA[11] =
+{
+"FilterTblType",
+"Dir",
+"MatchOutPri",
+"MatchOutVid",
+"MatchInnerPri",
+"MatchInnerVid",
+"Target",
+"TargetOutPri",
+"TargetOutVid",
+"TargetInnerPri",
+"TargetInnerVid"
+};
+create_form_start("fSubmit", "");
+var FP_ERRORSTR = "SUCC";
+create_hidden_sep("IF_ERRORSTR", "SUCC");
+create_hidden_sep("IF_ERRORPARAM", "SUCC");
+create_hidden_sep("IF_ERRORTYPE", -1);
+create_hidden_sep("IF_INSTNUM", "");
+create_hidden_sep("IF_IDENTITY", "");
+var FP_INSTNUM  = 0;
+var FP_IDENTITY = "";
+FP_IDENTITY = request("IF_IDENTITY");
+if (FP_IDENTITY IS NULL)
+{
+FP_IDENTITY = "";
+}
+set_hidden("IF_IDENTITY", FP_IDENTITY);
+if (FP_IDENTITY IS NOT NULL && FP_IDENTITY != "")
+{
+FP_INSTNUM = query_list(FP_OBJNAME, FP_IDENTITY);
+for (var i=0; i<FP_INSTNUM; i++)
+{
+var FP_HANDLE = create_paralist();
+FP_IDENTITY   = query_identity(i);
+get_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+create_hidden_multiinstpara(FP_HANDLE, PARA, i, FP_PARANUM);
+destroy_paralist(FP_HANDLE);
+}
+}
+set_hidden("IF_INSTNUM", FP_INSTNUM);
+getDisplayInstError(FP_ERRORSTR);
+create_form_end();
+%>

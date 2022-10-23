@@ -1,0 +1,114 @@
+<%
+IMPORT FILE "common_gch.gch";
+var FP_ERRORSTR = "SUCC";
+var FP_HANDLE, FP_ACTION;
+create_form_start("fSubmit", "quickSetup.ghtml");
+createBasicHidden();
+FP_ACTION = request("IF_ACTION");
+if( FP_ACTION == "apply")
+{
+create_hidden_sep("IF_SAVE_FLAG", "1");
+}
+var FP_WAN_OBJNAME      = "OBJ_QUICK_SETUP_ID";
+var FP_WAN_PARANUM      = 2;
+var WAN_PARA[2] =
+{
+"WanUsername",
+"WanPassword"
+};
+if( FP_ACTION == "apply")
+{
+FP_HANDLE = create_paralist();
+for(var i=0; i< FP_WAN_PARANUM; i++)
+{
+setpara(FP_HANDLE, WAN_PARA[i]);
+}
+set_inst(FP_HANDLE, FP_WAN_OBJNAME, "IGD");
+FP_ERRORSTR = getNewInstError(FP_ERRORSTR);
+}
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, FP_WAN_OBJNAME, "IGD");
+create_hidden_para(FP_HANDLE, WAN_PARA, FP_WAN_PARANUM);
+destroy_paralist(FP_HANDLE);
+FP_ERRORSTR = getDisplayInstError(FP_ERRORSTR);
+var FP_WIFI_FLAG = getenv("IsOnuWifi");
+create_hidden_sep("IF_WIFI_FLAG", FP_WIFI_FLAG);
+if( FP_WIFI_FLAG == "1")
+{
+var FP_WLAN_CONFIG_OBJNAME = "OBJ_WLANCONFIG_ID";
+var FP_WLAN_CONFIG_PARANUM = 8;
+var WLAN_CONFIG_PARA[8] =
+{
+"RadioStatus",
+"Enable",
+"ESSIDPrefix",
+"ESSID",
+"BeaconType",
+"WPAAuthMode",
+"11iAuthMode",
+"WEPAuthMode"
+};
+var WLAN_PSK_OBJNAME = "OBJ_WLANPSK_ID";
+var WLAN_PSK_PARANUM = 2;
+var WLAN_PSK_PARA[2] =
+{
+"KeyPassphrase",
+"zte"
+};
+var WLAN_WEP_OBJNAME      = "OBJ_WLANWEPKEY_ID";
+var WLAN_WEP_PARANUM      = 2;
+var WLAN_WEP_PARA[2]  =
+{
+"WEPKey",
+"zte"
+};
+query_list("OBJ_WLANCONFIG_ID", "IGD");
+var FP_WLAN_IDENTITY = query_identity(0);
+if( FP_WLAN_IDENTITY == "")
+{
+FP_WLAN_IDENTITY = "IGD.LD1.WLAN1";
+}
+query_list(WLAN_PSK_OBJNAME, FP_WLAN_IDENTITY);
+var FP_PSK_IDENTITY = query_identity(0);
+if( FP_PSK_IDENTITY == "")
+{
+FP_PSK_IDENTITY = "IGD.LD1.WLAN1.PSK1";
+}
+if( FP_ACTION == "apply")
+{
+FP_HANDLE = create_paralist();
+for(var i=0; i< FP_WLAN_CONFIG_PARANUM; i++)
+{
+setpara(FP_HANDLE, WLAN_CONFIG_PARA[i]);
+}
+set_inst(FP_HANDLE, FP_WLAN_CONFIG_OBJNAME, FP_WLAN_IDENTITY);
+FP_ERRORSTR = getNewInstError(FP_ERRORSTR);
+FP_HANDLE = create_paralist();
+setpara(FP_HANDLE, "KeyPassphrase");
+set_inst(FP_HANDLE, WLAN_PSK_OBJNAME, FP_PSK_IDENTITY);
+FP_ERRORSTR = getNewInstError(FP_ERRORSTR);
+}
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, FP_WLAN_CONFIG_OBJNAME, FP_WLAN_IDENTITY);
+create_hidden_para(FP_HANDLE, WLAN_CONFIG_PARA, FP_WLAN_CONFIG_PARANUM);
+destroy_paralist(FP_HANDLE);
+FP_ERRORSTR = getDisplayInstError(FP_ERRORSTR);
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, WLAN_PSK_OBJNAME, FP_PSK_IDENTITY);
+create_hidden_para(FP_HANDLE, WLAN_PSK_PARA, WLAN_PSK_PARANUM);
+destroy_paralist(FP_HANDLE);
+FP_ERRORSTR = getDisplayInstError(FP_ERRORSTR);
+query_list(WLAN_WEP_OBJNAME, FP_WLAN_IDENTITY);
+var FP_WEP_IDENTITY = query_identity(0);
+if( FP_WEP_IDENTITY == "")
+{
+FP_WEP_IDENTITY = "IGD.LD1.WLAN1.WEP1";
+}
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, WLAN_WEP_OBJNAME, FP_WEP_IDENTITY);
+create_hidden_para(FP_HANDLE, WLAN_WEP_PARA, WLAN_WEP_PARANUM);
+destroy_paralist(FP_HANDLE);
+FP_ERRORSTR = getDisplayInstError(FP_ERRORSTR);
+}
+create_form_end();
+%>

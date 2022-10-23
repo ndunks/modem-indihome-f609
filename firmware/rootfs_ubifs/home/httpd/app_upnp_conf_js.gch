@@ -1,0 +1,136 @@
+<script language="javascript">
+var UPNP_PARA =  new Array(
+"EnableUPnPIGD",
+"WanName",
+"Wanv6Name",
+"LanName",
+"ADPeriod",
+"TTL"
+);
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var msg = "";
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+moveErrLayer(408,200);
+pageGetValue();
+}
+function getmsg(id)
+{
+var str      = new Array();
+str[0]   = new Array(101, "&?error_101;");
+str[1]   = new Array(118, "&?error_118;");
+str[2]   = new Array(119, "&?error_119;");
+str[3]   = new Array(122, "&?error_122;");
+str[4]   = new Array(127, "&?error_127;");
+str[5]   = new Array(115, "&?error_115;");
+str[6]   = new Array(116, "&?error_116;");
+str[7]   = new Array(117, "&?error_117;");
+return getMsgFormArray(str, arguments);
+}
+function pageGetValue()
+{
+jslPostToViewCheckBox("Frm_EnableUPnPIGD", "EnableUPnPIGD");
+jslSetValue("Frm_ADPeriod","ADPeriod");
+jslSetValue("Frm_TTL","TTL");
+var obj = getObj("Frm_WanName");
+jslDoShowComboBox("Frm_WanName", "WanName");
+if(-1 == obj.selectedIndex)
+{
+setSelOtherValue(obj, "", null);
+obj.selectedIndex = 0;
+}
+obj = getObj("Frm_Wanv6Name");
+jslDoShowComboBox("Frm_Wanv6Name", "Wanv6Name");
+if(-1 == obj.selectedIndex)
+{
+setSelOtherValue(obj, "", null);
+obj.selectedIndex = 0;
+}
+<%
+if ( 0 == getenv("DevIPv6Effect") )
+{
+%>
+jslDiDisplay("fs_ipv6");
+<%
+}
+else
+{
+%>
+jslEnDisplay("fs_ipv6");
+<%
+}
+%>
+}
+function pageSetValue()
+{
+HiddenParaInit(UPNP_PARA);
+jslViewToPostCheckBox("EnableUPnPIGD", "Frm_EnableUPnPIGD");
+jslSetValue("WanName", "Frm_WanName");
+jslSetValue("Wanv6Name", "Frm_Wanv6Name");
+jslSetValue("ADPeriod", "Frm_ADPeriod");
+jslSetValue("TTL", "Frm_TTL");
+}
+function pageCheckValue()
+{
+var msg = "";
+if(false ==  checkPort("Frm_ADPeriod", "Fnt_ADPeriod", 1, 4, 1440))
+{
+return false;
+}
+if(false ==  checkPort("Frm_TTL", "Fnt_TTL", 1, 1, 255))
+{
+return false;
+}
+return true;
+}
+function pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+ReSetValueRmZero("Frm_ADPeriod","Frm_TTL");
+if(true == pageCheckValue())
+{
+pageSetValue();
+setValue("IF_ACTION", "apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+else
+{
+}
+}
+function checkPort(frm_id, fnt_id, isNull, minValue, maxValue)
+{
+var msg = "";
+if( 0 == isNull && false == checkNull(getValue(frm_id)) )
+{
+return  true;
+}
+var portCheck = checkIntegerRange(getValue(frm_id), minValue, maxValue);
+if("-1" == portCheck)
+{
+msg = getmsg(101);
+ShowErrorForCom(frm_id, fnt_id, msg);
+return false;
+}
+if("-2" == portCheck)
+{
+msg = getmsg(115);
+ShowErrorForCom(frm_id, fnt_id, msg);
+return false;
+}
+if("-3" == portCheck)
+{
+msg = getmsg(116, minValue, maxValue);
+ShowErrorForCom(frm_id, fnt_id, msg);
+return false;
+}
+return true;
+}
+</script>

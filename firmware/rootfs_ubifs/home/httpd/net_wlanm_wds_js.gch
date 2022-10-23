@@ -1,0 +1,315 @@
+<script language="javascript">
+var WDS_PARA = new Array
+(
+"WDSMac1",
+"WDSMac2",
+"WDSMac3",
+"WDSMac4",
+"WDSConnectStatus1",
+"WDSConnectStatus2",
+"WDSConnectStatus3",
+"WDSConnectStatus4"
+);
+var CONFIG_PARA = new Array(
+"Enable",
+"RadioStatus",
+"Standard",
+"BeaconInterval",
+"RtsCts",
+"Fragment",
+"DTIM",
+"TxPower",
+"CountryCode",
+"TxRate",
+"Channel",
+"ESSID",
+"ESSIDPrefix",
+"ACLPolicy",
+"BeaconType",
+"WEPAuthMode",
+"WEPEncryptionLevel",
+"WEPKeyIndex",
+"WPAAuthMode",
+"WPAEncryptType",
+"WPAGroupRekey",
+"WPAEAPServerIp",
+"RadiusPort",
+"RadiusServerPort",
+"WPAEAPSecret",
+"PossibleChannels",
+"BasicDataRates",
+"OpDataRates",
+"PossibleTxRates",
+"OOBAccessEnabled",
+"BeaconEnabled",
+"ESSIDHideEnable",
+"RegulatoryDomain",
+"WlanMode",
+"DistanceFromRoot",
+"PeerBSSID",
+"AuthServiceMode",
+"QosType",
+"Priority",
+"UAPSDEnabled",
+"AutoChannelEnabled",
+"ChannelsInUse",
+"11iAuthMode",
+"11iEncryptType",
+"MaxUserNum",
+"SSIDIsolationEnable",
+"VapIsolationEnable"
+);
+function getmsg(id)
+{
+
+var str      = new Array();
+str[0]       = new Array(101, "&?error_101;");
+str[1]       = new Array(118, "&?error_118;");
+str[2]       = new Array(119, "&?error_119;");
+str[3]       = new Array(122, "&?error_122;");
+str[4]       = new Array(520, "&?error_520;");
+str[5]       = new Array(521, "&?error_521;");
+str[6]       = new Array(522, "&?error_522;");
+str[7]       = new Array(110, "&?error_110;");
+
+return getMsgFormArray(str, arguments);
+}
+function pageGetValue()
+{
+jslSetValue("Frm_WDS_Mode", "WdsMode");
+setHTML("Fnt_wds_interface_mac_value", getValue("Bssid"));
+var wdsMode = getValue("WdsMode");
+if ( "WDS_Root" == wdsMode )
+{
+setHTML("Fnt_wds_mac_label1", "&?WDS003;"+"-1");
+}
+else if ( "WDS_Repeater" == wdsMode )
+{
+setHTML("Fnt_wds_mac_label1", "&?WDS005;");
+}
+if( "WDS_Repeater" == wdsMode)
+{
+var mac = getValue("WDSMac1");
+if ("00:00:00:00:00:00" != mac)
+{
+var macArr = mac.split(":");
+if (6 != macArr.length)
+{
+alert("mac length error.");
+return false;
+}
+for (var j=0; j<macArr.length; j++)
+{
+if (2 != macArr[j].length)
+{
+alert("mac cell length should be 2.");
+return false;
+}
+var order_j = j+1;
+setValue("mac1"+order_j, macArr[j]);
+}
+}
+jslEnDisplay("tr_wds_interface", "tr_wds_first_mac", "tr_wds_mac_set");
+}
+else if ( "WDS_Root"==wdsMode)
+{
+for (var i=0; i<4; i++)
+{
+var order_i = i+1;
+var mac = getValue("WDSMac"+order_i);
+if ("00:00:00:00:00:00" == mac)
+{
+continue;
+}
+var macArr = mac.split(":");
+if (6 != macArr.length)
+{
+alert("mac length error.");
+return false;
+}
+for (var j=0; j<macArr.length; j++)
+{
+if (2 != macArr[j].length)
+{
+alert("mac cell length should be 2.");
+return false;
+}
+var order_j = j+1;
+setValue("mac"+order_i+order_j, macArr[j]);
+}
+}
+jslEnDisplay("tr_wds_interface", "tr_wds_first_mac", "tr_wds_second_mac", "tr_wds_third_mac", "tr_wds_fourth_mac", "tr_wds_mac_set");
+}
+}
+function Wireless_switch()
+{
+if( "1" == getValue("RealRF") )
+{
+if ( "0" == getValue("CardIsIn") )
+{
+setHTML("tipTdFst", "&?cwt024;");
+jslEnDisplay("trFst");
+}
+else
+{
+var wdsMode = getValue("WdsMode");
+if ( "WDS_Root"==wdsMode || "WDS_Repeater"==wdsMode  )
+{
+setHTML("tipTdFst", "1&?cordersym;&nbsp;&?WDS0011;&?pub000;");
+jslEnDisplay("trFst");
+setHTML("tipTdSec", "2&?cordersym;&nbsp;&?cwd01;");
+jslEnDisplay("trSec");
+}
+else
+{
+setHTML("tipTdFst", "&?WDS0011;&?pub000;");
+jslEnDisplay("trFst");
+}
+}
+}
+else
+{
+setHTML("tipTdFst", "&?wlan079;");
+jslEnDisplay("trFst");
+DisableALL();
+}
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+pageGetValue();
+Wireless_switch();
+}
+function toNext(obj)
+{
+}
+function getMacValue(i)
+{
+var value = getValue("mac"+i+"1");
+value += ":" + getValue("mac"+i+"2");
+value += ":" + getValue("mac"+i+"3");
+value += ":" + getValue("mac"+i+"4");
+value += ":" + getValue("mac"+i+"5");
+value += ":" + getValue("mac"+i+"6");
+if( ":::::" == value)
+{
+value = "";
+}
+return value;
+}
+function CheckMac(Addr)
+{
+var c = '';
+var i = 0, j = 0;
+var addrParts = Addr.split(':');
+if ( addrParts.length != 6 )
+return false;
+for (i = 0; i < 6; i++)
+{
+if (addrParts[i].length != 2)
+return  false;
+for ( j = 0; j < addrParts[i].length; j++ )
+{
+c = addrParts[i].toLowerCase().charAt(j);
+if ( (c >= '0' && c <= '9') ||(c >= 'a' && c <= 'f') )
+continue;
+else
+return false;
+}
+}
+return true;
+}
+function X_CheckMac(Addr, order, Fnt)
+{
+var msg = "";
+var value = Addr;
+if(value == "")
+{
+return true;
+}
+if( CheckMac(value) != true )
+{
+msg = getmsg(110);
+ShowErrorForCom("mac"+order+"1",Fnt,msg);
+return false;
+}
+if ( value.toLowerCase() == "ff:ff:ff:ff:ff:ff" )
+{
+msg = getmsg(110);
+ShowErrorForCom("mac"+order+"1",Fnt,msg);
+return false;
+}
+if ( value.toLowerCase() == "00:00:00:00:00:00" )
+{
+msg = getmsg(110);
+ShowErrorForCom("mac"+order+"1",Fnt,msg);
+return false;
+}
+return true;
+}
+function pageCheckValue()
+{
+var macArr = new Array(4);
+
+for (var i=0; i<4; i++)
+{
+if( getValue("Frm_WDS_Mode") == "WDS_Repeater")
+{
+if ( i > 0 )
+{
+break;
+}
+}
+macArr[i] = getMacValue(i+1);
+var order = i+1;
+if (X_CheckMac(macArr[i], order, "Fnt_wds_mac_label"+order) == false)
+{
+return false;
+}
+}
+return true;
+}
+
+function WDS_Mode_switch()
+{
+HiddenParaInit(CONFIG_PARA);
+HiddenParaInit(WDS_PARA);
+jslSetValue("WdsMode", "Frm_WDS_Mode");
+setValue("IF_ACTION", "apply");
+setValue("IF_CONFIGTAG", "Y");
+DisableALL();
+getObj("fSubmit").submit();
+}
+function wds_mac_set()
+{
+if (pageCheckValue() == true)
+{
+HiddenParaInit(CONFIG_PARA);
+HiddenParaInit(WDS_PARA);
+for (var i=0; i<4; i++)
+{
+if( getValue("Frm_WDS_Mode") == "WDS_Repeater")
+{
+if ( i > 0 )
+{
+break;
+}
+}
+var order = i+1;
+var macAddr = getMacValue(order);
+if ("" == macAddr)
+{
+macAddr = "00:00:00:00:00:00";
+}
+setValue("WDSMac"+order, macAddr);
+}
+setValue("IF_ACTION", "apply");
+setValue("IF_WDSTAG", "Y");
+DisableALL();
+getObj("fSubmit").submit();
+}
+}
+</script>

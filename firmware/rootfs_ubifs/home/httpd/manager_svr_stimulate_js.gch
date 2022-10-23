@@ -1,0 +1,600 @@
+<script language="javascript">
+var PPPOE_SET_PARA = new Array(
+"PPPOE_PortViewName",
+"PPPOE_UseVlan",
+"PPPOE_VlanId",
+"PPPOE_VlanPri",
+"PPPOE_AuthType",
+"PPPOE_PppoeUserName",
+"PPPOE_PppoePassWord",
+"PPPOE_RetryTimes"
+);
+var DHCP_SET_PARA = new Array(
+"DHCP_PortViewName",
+"DHCP_UseVlan",
+"DHCP_VlanId",
+"DHCP_VlanPri",
+"DHCP_SimuMAC",
+"DHCP_SimuTimeOut",
+"DHCP_OptCode",
+"DHCP_OptLen",
+"DHCP_OptContent",
+"DHCP_UserNameOpt60",
+"DHCP_PassWordOpt60",
+"DHCP_Opt60Mode"
+,
+"DHCP_BNeedPing",
+"DHCP_BNeedRelease",
+"DHCP_PingDestIP",
+"DHCP_PingTimes",
+"DHCP_PingTimeOut"
+);
+function getmsg(id)
+{
+var str     = new Array();
+str[0]   = new Array(116, "&?error_116;");
+str[1]   = new Array(117, "&?error_117;");
+str[2]   = new Array(175, "&?error_175;");
+str[3]   = new Array(115, "&?error_115;");
+str[4]   = new Array(101, "&?error_101;");
+str[5]   = new Array(102, "&?error_102;");
+str[6]   = new Array(103, "&?error_103;");
+str[7]   = new Array(114, "&?error_114;");
+str[8]   = new Array(110, "&?error_110;");
+str[9]   = new Array(108, "&?error_108;");
+str[10]   = new Array(241, "&?error_241;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+setValue("Btn_Submit", "&?Stimulate005;");
+setValue("Btn_Cancel", "&?Stimulate006;");
+pageGetValue();
+}
+function simulateTypeChange()
+{
+SimulationTypeAuxDisplay();
+jslSetValue("SimulationType", "Frm_SimulationType");
+DisableALL();
+getObj("fSubmit").submit();
+}
+function Opt60ModeChange()
+{
+var Opt60Mode = getValue("Frm_Opt60Mode");
+if ("0" == Opt60Mode)
+{
+jslEnDisplay("Tr_UseVlan","Tr_VlanId","Tr_VlanPri","Tr_SimuMAC","Tr_SimuTimeOut",
+"Tr_Opt60Mode","Tr_UserNameOpt60","Tr_PassWordOpt60"
+,"Tr_PingDestIP","Tr_PingTimes","Tr_PingTimeOut"
+);
+jslDiDisplay("Tr_PppoeUserName","Tr_PppoePassWord","Tr_OptCode","Tr_OptLen",
+"Tr_OptContent","Tr_AuthType","Tr_RetryTimes"
+,"Tr_BNeedPing","Tr_BNeedRelease"
+);
+}
+else if ("1" == Opt60Mode)
+{
+jslEnDisplay("Tr_UseVlan","Tr_VlanId","Tr_VlanPri","Tr_SimuMAC","Tr_SimuTimeOut",
+"Tr_Opt60Mode","Tr_OptContent"
+,"Tr_PingDestIP","Tr_PingTimes","Tr_PingTimeOut"
+);
+jslDiDisplay("Tr_PppoeUserName","Tr_PppoePassWord","Tr_UserNameOpt60","Tr_PassWordOpt60",
+"Tr_OptCode","Tr_OptLen","Tr_AuthType","Tr_RetryTimes"
+,"Tr_BNeedPing","Tr_BNeedRelease"
+);
+}
+else
+{
+}
+}
+function SimulationTypeAuxDisplay()
+{
+var simulationType = getValue("Frm_SimulationType");
+if ( "PPPoE" == simulationType )
+{
+jslEnDisplay("Tr_PppoeUserName","Tr_PppoePassWord","Tr_UseVlan",
+"Tr_VlanId","Tr_VlanPri","Tr_AuthType","Tr_RetryTimes");
+jslDiDisplay("Tr_SimuMAC","Tr_SimuTimeOut","Tr_OptCode","Tr_Opt60Mode",
+"Tr_UserNameOpt60","Tr_PassWordOpt60","Tr_OptLen","Tr_OptContent"
+,"Tr_PingDestIP","Tr_PingTimes","Tr_PingTimeOut","Tr_BNeedPing","Tr_BNeedRelease"
+);
+}
+else if ( "DHCP" == simulationType)
+{
+jslEnDisplay("Tr_UseVlan","Tr_VlanId","Tr_VlanPri","Tr_SimuMAC","Tr_SimuTimeOut",
+"Tr_Opt60Mode","Tr_UserNameOpt60","Tr_PassWordOpt60"
+,"Tr_PingDestIP","Tr_PingTimes","Tr_PingTimeOut"
+);
+jslDiDisplay("Tr_PppoeUserName","Tr_PppoePassWord","Tr_OptCode","Tr_OptLen",
+"Tr_OptContent","Tr_AuthType","Tr_RetryTimes"
+,"Tr_BNeedPing","Tr_BNeedRelease"
+);
+}
+else
+{
+}
+}
+function UseVlanAuxDisplay()
+{
+var useVlan = getChecked("Frm_UseVlan");
+if ( true == useVlan )
+{
+jslEnable("Frm_VlanId", "Frm_VlanPri");
+}
+else if ( false == useVlan )
+{
+setValue("Frm_VlanId", "");
+setValue("Frm_VlanPri", "0");
+jslDisable("Frm_VlanId", "Frm_VlanPri");
+}
+else
+{
+}
+}
+function refreshPage()
+{
+DisableALL();
+jslEnable("Btn_Cancel");
+getObj("fSubmit").submit();
+}
+function getTestParaValue(paraName)
+{
+var paraValue = "";
+var simulationType = getValue("Frm_SimulationType");
+if ( "PPPoE" == simulationType )
+{
+paraValue = getValue("PPPOE_GET_"+paraName+"0");
+}
+else if ( "DHCP" == simulationType )
+{
+paraValue = getValue("DHCP_GET_"+paraName+"0");
+}
+else
+{
+}
+return paraValue;
+}
+function isSimulated()
+{
+var portState = getTestParaValue("PortState");
+if ( "2" == portState || "3" == portState )
+{
+return 1;
+}
+return 0;
+}
+function showTestResult()
+{
+var testResult = "";
+var portView = getTestParaValue("PortViewName");
+var sid = "Frm_PortViewName";
+var sobj = getObj(sid);
+var portIndex = getOptionIndexByValue(sid, portView);
+if ( -1 == portIndex )
+{
+return;
+}
+var portName = sobj.options[portIndex].text;
+testResult += "Port     : " + portName + "\r\n";
+var portState = getTestParaValue("PortState");
+if ("0" == portState)
+{
+portState = "None";
+}
+else if ("1" == portState)
+{
+portState = "Running";
+}
+else if ("2" == portState)
+{
+portState = "Complete";
+}
+else if ("3" == portState)
+{
+portState = "Complete";
+}
+else
+{
+}
+testResult += "PortState : " + portState + "\r\n";
+var issucceed = getTestParaValue("Issucceed");
+var simulationType = getTestParaValue("SimulationType");
+var PPPoEAuthType = getTestParaValue("AuthType");
+var Opt60Mode = getTestParaValue("Opt60Mode");
+if ( "1" == simulationType )
+{
+testResult += "Simulation Type : " + "PPPoE" + "\r\n";
+testResult += "RetryTimes      : "
++ getTestParaValue("RetryTimes") + "\r\n";
+if("0" == PPPoEAuthType)
+{
+testResult += "AuthType        : " + "AUTO" + "\r\n";
+}
+else if("1" == PPPoEAuthType)
+{
+testResult += "AuthType        : " + "CHAP" + "\r\n";
+}
+else if("2" == PPPoEAuthType)
+{
+testResult += "AuthType        : " + "PAP" + "\r\n";
+}
+else
+{
+}
+testResult += "UserName        : "
++ getTestParaValue("UserName") + "\r\n";
+testResult += "PassWord        : "
++ getTestParaValue("PassWord") + "\r\n";
+if ( "1" == issucceed )
+{
+testResult += "Result          : Succeeded!\r\n";
+testResult += "SimuGateWay     : "
++ getTestParaValue("SimuGateWay") + "\r\n";
+testResult += "IP Address      : "
++ getTestParaValue("SimuIp") + "\r\n";
+}
+else
+{
+testResult += "Result          : Failed!\r\n";
+testResult += "Failed Reason   : "
++ getTestParaValue("FailReason") + "\r\n";
+}
+testResult += "SessionID       : "
++ getTestParaValue("SessionID") + "\r\n";
+}
+else
+{
+testResult += "Simulation Type : " + "IPoE" + "\r\n";
+testResult += "SimuMAC         : "
++ getTestParaValue("SimuMAC") + "\r\n";
+testResult += "Opt60 Mode      : "
++ getTestParaValue("Opt60Mode") + "\r\n";
+if("0" == Opt60Mode)
+{
+testResult += "UserName        : "
++ getTestParaValue("UserName") + "\r\n";
+testResult += "PassWord        : "
++ getTestParaValue("PassWord") + "\r\n";
+}
+else if("1" == Opt60Mode)
+{
+testResult += "VendorClassID   : "
++ getTestParaValue("OptContent") + "\r\n";
+}
+else
+{
+}
+if ("1" == issucceed )
+{
+testResult += "Result          : Succeeded\r\n";
+testResult += "SimuGateWay     : "
++ getTestParaValue("SimuGateWay") + "\r\n";
+testResult += "IP Address      : "
++ getTestParaValue("SimuIp") + "\r\n";
+}
+else
+{
+testResult += "Result          : Failed!\r\n";
+testResult += "Failed Reason   : "
++ getTestParaValue("FailReason") + "\r\n";
+}
+testResult += "PingDestIPAddress : "
++ getTestParaValue("PingDestIP") + "\r\n";
+testResult += "PingTimes   : "
++ getTestParaValue("PingTimes") + "\r\n";
+testResult += "PingTimeOut : "
++ getTestParaValue("PingTimeOut") + " ms"+"\r\n";
+testResult += "PingSuccessCount : "
++ getTestParaValue("PingSuccessCount") + "\r\n";
+testResult += "PingFailCount       : "
++ getTestParaValue("PingFailCount") + "\r\n";
+testResult += "MaximumResponseTime : "
++ getTestParaValue("PingResTimeMax") + " ms"+ "\r\n";
+testResult += "MinimumResponseTime : "
++ getTestParaValue("PingResTimeMin") + " ms"+ "\r\n";
+testResult += "AverageResponseTime : "
++ getTestParaValue("PingResTimeAver") + " ms"+ "\r\n";
+}
+setValue("textarea_Stimulate", testResult);
+}
+function pageGetValue()
+{
+deleteSelectOptions("Frm_PortViewName", "WLAN");
+deleteSelectOptions("Frm_PortViewName", "WDS");
+jslSetValue("Frm_SimulationType", "SimulationType");
+SimulationTypeAuxDisplay();
+UseVlanAuxDisplay();
+if ( "1"==getValue("SimulationStarted")
+&& 0 == isSimulated()
+&& getValue("IF_ERRORSTR") == "SUCC" )
+{
+jslEnDisplay("Tbl_Stimulate_tip");
+jslDisable("Btn_Submit", "Frm_SimulationType");
+jslEnable("Btn_Cancel");
+setTimeout("refreshPage()", 3000);
+}
+else
+{
+showTestResult();
+setValue("SimulationStarted", "0");
+jslDisable("Btn_Cancel");
+jslEnable("Btn_Submit");
+}
+}
+function Check_StrLengthRange(value,min,max,Frm,Fnt)
+{
+var temp = checkStrLengthRange(value,min,max);
+if(temp==-1)
+{
+msg = getmsg(101);
+ShowErrorForCom(Frm,Fnt,msg);
+return false;
+}
+else if(temp==-3)
+{
+msg =  getmsg(102,min,max);
+ShowErrorForCom(Frm,Fnt,msg);
+return false;
+}
+return true;
+}
+function pageCheckValue()
+{
+var msg  = "";
+var useVlan = getChecked("Frm_UseVlan");
+if ( true == useVlan )
+{
+var vlanId = getValue("Frm_VlanId");
+var mm = checkIntegerRange(vlanId, 1, 4094);
+if(-1 == mm)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_VlanId","Fnt_VlanId",msg);
+return false;
+}
+else if(-2 == mm)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_VlanId", "Fnt_VlanId",msg);
+return false;
+}
+else if(-3 == mm)
+{
+msg = getmsg(116, 1, 4094);
+ShowErrorForCom("Frm_VlanId", "Fnt_VlanId",msg);
+return false;
+}
+}
+var simulationType = getValue("Frm_SimulationType");
+if ( "PPPoE" == simulationType )
+{
+var frmUserID = "Frm_PppoeUserName";
+var fntUserID = "Fnt_PppoeUserName";
+var username = getValue(frmUserID);
+if(checkGenStringForASC(username) != true)
+{
+msg = getmsg(114);
+ShowErrorForCom(frmUserID, fntUserID, msg);
+return false;
+}
+if(Check_StrLengthRange(username, 1, 64, frmUserID, fntUserID) != true)
+{
+return false;
+}
+var frmPassID = "Frm_PppoePassWord";
+var fntPassID = "Fnt_PppoePassWord";
+var pass = getValue(frmPassID);
+if(checkGenStringForASC(pass) != true)
+{
+msg = getmsg(114);
+ShowErrorForCom(frmPassID, fntUserID, msg);
+return false;
+}
+var pass_range=checkStrLengthRange(pass, 0, 64);
+if(pass_range == -3)
+{
+msg =  getmsg(102, 0, 64);
+ShowErrorForCom(frmPassID, fntPassID, msg);
+return false;
+}
+var PPPoERetryTimes = getValue("Frm_RetryTimes");
+if(true != checkInteger(PPPoERetryTimes) )
+{
+msg = getmsg(241);
+ShowErrorForCom("Frm_RetryTimes", "Fnt_RetryTimes", msg);
+return false;
+}
+if(!(parseInt(PPPoERetryTimes,10) > 0) )
+{
+msg = getmsg(241);
+ShowErrorForCom("Frm_RetryTimes", "Fnt_RetryTimes", msg);
+return false;
+}
+}
+if ( "DHCP" == simulationType )
+{
+if( true != checkMACAddress(getValue("Frm_SimuMAC")))
+{
+msg = getmsg(110);
+ShowErrorForCom("Frm_SimuMAC", "Fnt_SimuMAC", msg);
+return false;
+}
+var Opt60Mode = getValue("Frm_Opt60Mode");
+if("0" == Opt60Mode)
+{
+var frmUserID = "Frm_UserNameOpt60";
+var fntUserID = "Fnt_UserNameOpt60";
+var username = getValue(frmUserID);
+if(checkGenStringForASC(username) != true)
+{
+msg = getmsg(114);
+ShowErrorForCom(frmUserID, fntUserID, msg);
+return false;
+}
+if(Check_StrLengthRange(username, 1, 64, frmUserID, fntUserID) != true)
+{
+return false;
+}
+var frmPassID = "Frm_PassWordOpt60";
+var fntPassID = "Fnt_PassWordOpt60";
+var pass = getValue(frmPassID);
+if(checkGenStringForASC(pass) != true)
+{
+msg = getmsg(114);
+ShowErrorForCom(frmPassID, fntUserID, msg);
+return false;
+}
+var pass_range=checkStrLengthRange(pass, 0, 64);
+if(pass_range == -3)
+{
+msg =  getmsg(102, 0, 64);
+ShowErrorForCom(frmPassID, fntPassID, msg);
+return false;
+}
+}
+var IPoETimeOut = getValue("Frm_SimuTimeOut");
+if(true != checkInteger(IPoETimeOut) )
+{
+msg = getmsg(241);
+ShowErrorForCom("Frm_SimuTimeOut","Fnt_SimuTimeOut", msg);
+return false;
+}
+else if(!(parseInt(IPoETimeOut,10) > 0) )
+{
+msg = getmsg(241);
+ShowErrorForCom("Frm_SimuTimeOut", "Fnt_SimuTimeOut", msg);
+return false;
+}
+if( true != checkIpAddress(getValue("Frm_PingDestIP")))
+{
+msg = getmsg(108);
+ShowErrorForCom("Frm_PingDestIP", "Fnt_PingDestIP", msg);
+return false;
+}
+var DHCPPingTimes = getValue("Frm_PingTimes");
+if(true != checkInteger(DHCPPingTimes) )
+{
+msg = getmsg(241);
+ShowErrorForCom("Frm_PingTimes", "Fnt_PingTimes", msg);
+return false;
+}
+else if(!(parseInt(DHCPPingTimes,10) > 0) )
+{
+msg = getmsg(241);
+ShowErrorForCom("Frm_PingTimes", "Fnt_PingTimes", msg);
+return false;
+}
+var DHCPPingTimeOut = getValue("Frm_PingTimeOut");
+if(true != checkInteger(DHCPPingTimeOut) )
+{
+msg = getmsg(241);
+ShowErrorForCom("Frm_PingTimeOut","Fnt_PingTimeOut", msg);
+return false;
+}
+else if(!(parseInt(DHCPPingTimeOut,10) > 0) )
+{
+msg = getmsg(241);
+ShowErrorForCom("Frm_PingTimeOut", "Fnt_PingTimeOut", msg);
+return false;
+}
+}
+return true;
+}
+function pageSetValue()
+{
+HiddenParaInit(PPPOE_SET_PARA);
+HiddenParaInit(DHCP_SET_PARA);
+var simulationType = getValue("Frm_SimulationType");
+if ( "PPPoE" == simulationType )
+{
+jslSetValue("PPPOE_PortViewName", "Frm_PortViewName");
+jslViewToPostCheckBox("PPPOE_UseVlan", "Frm_UseVlan");
+var useVLAN = getChecked("Frm_UseVlan");
+if ( true == useVLAN )
+{
+jslSetValue("PPPOE_VlanId", "Frm_VlanId");
+jslSetValue("PPPOE_VlanPri", "Frm_VlanPri");
+}
+jslSetValue("PPPOE_PppoeUserName", "Frm_PppoeUserName");
+jslSetValue("PPPOE_PppoePassWord", "Frm_PppoePassWord");
+jslSetValue("PPPOE_AuthType", "Frm_AuthType");
+jslSetValue("PPPOE_RetryTimes", "Frm_RetryTimes");
+setValue("PPPOE_IACTION", "apply");
+}
+else if ( "DHCP" == simulationType )
+{
+jslSetValue("DHCP_PortViewName", "Frm_PortViewName");
+jslViewToPostCheckBox("DHCP_UseVlan", "Frm_UseVlan");
+var Opt60Mode = getValue("Frm_Opt60Mode");
+var OptLen =getValue("Frm_OptContent");
+OptLen = OptLen.length;
+var useVLAN = getChecked("Frm_UseVlan");
+if ( true == useVLAN )
+{
+jslSetValue("DHCP_VlanId", "Frm_VlanId");
+jslSetValue("DHCP_VlanPri", "Frm_VlanPri");
+}
+if("0" == Opt60Mode)
+{
+setValue("DHCP_Opt60Mode", 0);
+jslSetValue("DHCP_UserNameOpt60", "Frm_UserNameOpt60");
+jslSetValue("DHCP_PassWordOpt60", "Frm_PassWordOpt60");
+}
+else if("1" == Opt60Mode)
+{
+setValue("DHCP_Opt60Mode", 1);
+setValue("DHCP_OptLen", OptLen);
+jslSetValue("DHCP_OptContent", "Frm_OptContent");
+}
+else
+{
+}
+jslSetValue("DHCP_SimuMAC", "Frm_SimuMAC");
+jslSetValue("DHCP_SimuTimeOut", "Frm_SimuTimeOut");
+jslSetValue("DHCP_OptCode", "Frm_OptCode");
+jslSetValue("DHCP_BNeedPing", "Frm_BNeedPing");
+jslSetValue("DHCP_BNeedRelease", "Frm_BNeedRelease");
+jslSetValue("DHCP_PingTimes", "Frm_PingTimes");
+jslSetValue("DHCP_PingDestIP", "Frm_PingDestIP");
+jslSetValue("DHCP_PingTimeOut", "Frm_PingTimeOut");
+setValue("DHCP_IACTION", "apply");
+}
+else
+{
+}
+jslSetValue("SimulationType", "Frm_SimulationType");
+setValue("SimulationStarted", "1");
+}
+function pageSubmit()
+{
+ReSetIpRmZero("Frm_PingDestIP");
+ReSetValueRmZero("Frm_VlanId");
+if(pageCheckValue()==true)
+{
+pageSetValue();
+DisableALL();
+getObj("fSubmit").submit();
+}
+}
+function pageCancel()
+{
+var simulationType = getValue("Frm_SimulationType");
+if ( "PPPoE" == simulationType )
+{
+setValue("PPPOE_IACTION", "delete");
+}
+else if ( "DHCP" == simulationType )
+{
+setValue("DHCP_IACTION", "delete");
+}
+else
+{
+}
+DisableALL();
+getObj("fSubmit").submit();
+}
+</script>

@@ -1,0 +1,241 @@
+<script language="javascript">
+var FAXT38_PARA = new Array(
+"Enable",
+"PLC",
+"HighSpeedRedundancy",
+"LowSpeedRedundancy",
+"BitRate",
+"TCFMethod",
+"NumOfFEC",
+"NumOfIFP",
+"ERM"
+);
+var VoipEXT_PARA = new Array(
+"ProtocolSet",
+"FaxVbdEnable"
+);
+var FAXMODEM_PARA = new Array(
+"MGInteract",
+"CNGRpt",
+"CEDRpt",
+"V21Rpt",
+"CNGCtrl",
+"ModemToneRpt",
+"FaxPassThrough",
+"ModemPassThrough"
+);
+<%
+var cver = getenv("CurrentVersionInfo");
+%>
+function getmsg(id)
+{
+var str      = new Array();
+str[0]   = new Array(101, "&?error_101;");
+str[1]   = new Array(118, "&?error_118;");
+str[2]   = new Array(119, "&?error_119;");
+str[3]   = new Array(122, "&?error_122;");
+return getMsgFormArray(str, arguments);
+}
+function ChangeSelect()
+{
+<%
+if(85 == cver)
+{
+%>
+if (getValue("Frm_FaxProto") == 1)
+{
+jslEnable("Frm_FaxModem3");
+}
+else
+{
+if(getObj("Frm_FaxModem3").checked == true)
+{
+getObj("Frm_FaxModem3").checked = false;
+getObj("Frm_FaxModem2").checked = true;
+}
+jslDisable("Frm_FaxModem3");
+}
+<%
+}
+else
+{
+%>
+if (getChecked("Frm_fax_T38") == false)
+{
+jslEnable("Frm_FaxModem3");
+}
+else
+{
+if(getObj("Frm_FaxModem3").checked == true)
+{
+getObj("Frm_FaxModem3").checked = false;
+getObj("Frm_FaxModem2").checked = true;
+}
+jslDisable("Frm_FaxModem3");
+}
+<%
+}
+%>
+}
+function pageLoad(url)
+{
+moveErrLayer(580,95);
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+ProcessRet(errstr, errpara);
+pageGetValue();
+}
+function pageGetValue()
+{
+var instNum = getValue("VP_INSTNUM");
+var j = 0;
+for (var i=0; i<instNum; i++)
+{
+j = i+1;
+addSelectOption("Frm_VP", i, "VP"+j);
+}
+if(instNum < 2)
+{
+jslDiDisplay("TR_VP");
+}
+jslSetValue("Frm_VP", "IF_INDEX");
+var Enable = getValue("Enable");
+<%
+if(85 == cver)
+{
+%>
+jslSetValue("Frm_FaxProto","Enable");
+jslSetValue("Frm_FaxMode","MGInteract");
+<%
+}
+else
+{
+%>
+if (Enable == 1)
+{
+setChecked("Frm_fax_T38", true);
+}
+else
+{
+setChecked("Frm_fax_T38", false);
+}
+<%
+}
+%>
+var tem = getValue("Enable");
+var faxmodem = getValue("MGInteract");
+if (tem == "1")
+{
+getObj("Frm_FaxModem2").checked = true;
+jslDisable("Frm_FaxModem3");
+}
+else
+{
+jslEnable("Frm_FaxModem3");
+if(faxmodem == "2")
+{
+getObj("Frm_FaxModem2").checked = true;
+}
+else if(faxmodem == "0")
+{
+getObj("Frm_FaxModem3").checked = true;
+}
+}
+<%
+if(cver == 1)
+{
+%>
+jslDiDisplay("tr_FaxModem");
+<%
+}
+%>
+}
+function pageSetValue()
+{
+HiddenParaInit(FAXT38_PARA);
+HiddenParaInit(FAXMODEM_PARA);
+<%
+if(cver == 85)
+{
+%>
+jslSetValue("Enable","Frm_FaxProto");
+jslSetValue("MGInteract","Frm_FaxMode");
+<%
+}
+else
+{
+%>
+if (getChecked("Frm_fax_T38") == true)
+{
+setValue("Enable", 1);
+}
+else
+{
+setValue("Enable", 0);
+}
+<%
+}
+%>
+var state = document.getElementsByName("Frm_FaxModem");
+for( var i = 0;i<state.length;i++)
+{
+if(state[i].checked == true)
+{
+statevalue = state[i].value;
+}
+}
+<%
+if(cver != 85)
+{
+%>
+if (getValue("Frm_fax_T38") == true)
+{
+if(statevalue == "1")
+{
+setValue("MGInteract", "1");
+}
+else if(statevalue == "2")
+{
+setValue("MGInteract", "2");
+}
+}
+else
+{
+if(statevalue == "3")
+{
+setValue("MGInteract", "0");
+}
+else if(statevalue == "1")
+{
+setValue("MGInteract", "1");
+}
+else if(statevalue == "2")
+{
+setValue("MGInteract", "2");
+}
+}
+<%
+}
+%>
+}
+function pageSubmit()
+{
+jslSetValue("IF_INDEX", "Frm_VP");
+pageSetValue();
+setValue("IF_ACTION", "apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+function pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+function ChangeVP()
+{
+jslSetValue("IF_INDEX", "Frm_VP");
+DisableALL();
+getObj("fSubmit").submit();
+}
+</script>

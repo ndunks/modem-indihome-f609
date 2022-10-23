@@ -1,0 +1,247 @@
+<script language="javascript">
+var H248MAIN_PARA = new Array(
+"MGMIDType",
+"MGMID",
+"LocalPort",
+"MGCAddr1",
+"MGCPort1",
+"MGCAddr2",
+"MGCPort2",
+"ServiceChangeType",
+"RestartInterval",
+"HeartBeatInterval",
+"HeartBeatMessageType",
+"ThreeHandShake",
+"LongTimer",
+"MaxExecTimer",
+"PendingTimerInit",
+"MaxPendingTimes",
+"PendingType",
+"RetranIntervalTimer",
+"MaxRetranCount",
+"RetranTimerType",
+"AuthenticationMethID",
+"MD5AuthMGIDType",
+"MD5AuthMGID",
+"InitPublicKey",
+"DhPara_P",
+"DhPara_G",
+"PhysicalTermIDConfigMethod",
+"PhysicalTermIDPrefix",
+"PhysicalTermIDAddLen",
+"EphemeralTermIDPrefix",
+"EphemeralTermIDAddLen",
+"EphemeralTermIDUniform",
+"EphemeralTermIDStart",
+"DSCPMark",
+"QueueNum",
+"EthernetPriorityMark"
+);
+var H248SubCFG_PARA= new Array(
+"TransPrtl",
+"Version",
+"CodecType",
+"ProfileVersion",
+"Profile",
+"MessageAuthenticationMethod",
+"MessageAuthenticationAHParameter",
+"MessageAuthenticationLen",
+"RootDefaultEventDes",
+"PhyDefaultEventDes",
+"DigitMapStarChar",
+"DigitMapPoundChar",
+"DigitMapLongTimer",
+"DigitMapShortTimer",
+"DigitMapStartTimer",
+"DigitMapZTimer",
+"DefaultDigitmapDes",
+"VoiceParameterFrom",
+"ServiceChangeReasonType",
+"ServiceChangeTimestampType",
+"DSType",
+"RtpProtectType",
+"SDPO",
+"SDPS",
+"SDPT",
+"DigitMapShortMatch",
+"InterCtrl",
+"ActiveMGC"
+);
+function getmsg(id)
+{
+var str  = new Array();
+str[0]   = new Array(101, "&?error_101;");
+str[1]   = new Array(134, "&?error_134;");
+str[2]   = new Array(115, "&?error_115;");
+str[3]   = new Array(116, "&?error_116;");
+str[4]   = new Array(117, "&?error_117;");
+str[5]   = new Array(118, "&?error_118;");
+str[6]   = new Array(119, "&?error_119;");
+str[7]   = new Array(122, "&?error_122;");
+str[8]   = new Array(102, "&?error_102;");
+str[9]   = new Array(103, "&?error_103;");
+str[10]  = new Array(167, "&?error_167;");
+str[11]  = new Array(114, "&?error_114;");
+str[12]  = new Array(913, "&?error_913;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+moveErrLayer(580,95);
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errparam = getValue("IF_ERRORPARAM");
+ProcessRet(errstr, errparam);
+moveErrLayer(592,20);
+pageGetValue();
+}
+function pageGetValue()
+{
+var strValue = "";
+jslSetValue("Frm_HeartBeatMessageType", "HeartBeatMessageType" );
+strValue = getValue("RtpProtectType");
+if (strValue == 1)
+{
+setChecked("Frm_RtpProtectType", true);
+}
+else
+{
+setChecked("Frm_RtpProtectType", false);
+}
+strValue = getValue("DigitMapShortMatch");
+jslSetValue("Frm_DigitMapShortMatch", "DigitMapShortMatch" );
+jslSetValue("Frm_DigitMapLongTimer", "DigitMapLongTimer" );
+jslSetValue("Frm_DigitMapShortTimer", "DigitMapShortTimer" );
+jslSetValue("Frm_DigitMapStartTimer", "DigitMapStartTimer" );
+jslSetValue("Frm_DigitMapZTimer", "DigitMapZTimer" );
+}
+function pageSetValue()
+{
+HiddenParaInit(H248MAIN_PARA);
+HiddenParaInit(H248SubCFG_PARA);
+jslSetValue("HeartBeatMessageType", "Frm_HeartBeatMessageType");
+if (getChecked("Frm_RtpProtectType") == true)
+{
+setValue("RtpProtectType", 1);
+}
+else
+{
+setValue("RtpProtectType", 0);
+}
+jslSetValue("DigitMapShortMatch", "Frm_DigitMapShortMatch");
+jslSetValue("DigitMapLongTimer", "Frm_DigitMapLongTimer");
+jslSetValue("DigitMapShortTimer", "Frm_DigitMapShortTimer");
+jslSetValue("DigitMapStartTimer", "Frm_DigitMapStartTimer");
+jslSetValue("DigitMapZTimer", "Frm_DigitMapZTimer");
+}
+function pageCheckValue()
+{
+var msg = "";
+var cResult;
+var srvValue;
+cResult = checkIntegerRange(getValue("Frm_DigitMapLongTimer"), 200, 6000);
+if(cResult == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_DigitMapLongTimer", "Fnt_DigitMapLongTimer", msg);
+return false;
+}
+else if(cResult == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_DigitMapLongTimer", "Fnt_DigitMapLongTimer", msg);
+return false;
+}
+else if(cResult == -3)
+{
+msg = getmsg(116, 200, 6000);
+ShowErrorForCom("Frm_DigitMapLongTimer", "Fnt_DigitMapLongTimer", msg);
+return false;
+}
+cResult = checkIntegerRange(getValue("Frm_DigitMapShortTimer"), 200, 6000);
+if(cResult == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_DigitMapShortTimer", "Fnt_DigitMapShortTimer", msg);
+return false;
+}
+else if(cResult == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_DigitMapShortTimer", "Fnt_DigitMapShortTimer", msg);
+return false;
+}
+else if(cResult == -3)
+{
+msg = getmsg(116, 200, 6000);
+ShowErrorForCom("Frm_DigitMapShortTimer", "Fnt_DigitMapShortTimer", msg);
+return false;
+}
+var min = getObj("Fnt_DigitMapShortTimer").innerHTML;
+if(parseInt(getValue("Frm_DigitMapShortTimer"))>parseInt(getValue("Frm_DigitMapLongTimer")))
+{
+msg = getmsg(913);
+msg = msg + min +"&?wmedia009;";
+ShowErrorForCom("Frm_DigitMapLongTimer","Fnt_DigitMapLongTimer",msg);
+return false;
+}
+cResult = checkIntegerRange(getValue("Frm_DigitMapStartTimer"), 200, 6000);
+if(cResult == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_DigitMapStartTimer", "Fnt_DigitMapStartTimer", msg);
+return false;
+}
+else if(cResult == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_DigitMapStartTimer", "Fnt_DigitMapStartTimer", msg);
+return false;
+}
+else if(cResult == -3)
+{
+msg = getmsg(116, 200, 6000);
+ShowErrorForCom("Frm_DigitMapStartTimer", "Fnt_DigitMapStartTimer", msg);
+return false;
+}
+cResult = checkIntegerRange(getValue("Frm_DigitMapZTimer"), 200, 6000);
+if(cResult == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_DigitMapZTimer", "Fnt_DigitMapZTimer", msg);
+return false;
+}
+else if(cResult == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_DigitMapZTimer", "Fnt_DigitMapZTimer", msg);
+return false;
+}
+else if(cResult == -3)
+{
+msg = getmsg(116, 200, 6000);
+ShowErrorForCom("Frm_DigitMapZTimer", "Fnt_DigitMapZTimer", msg);
+return false;
+}
+return true;
+}
+function pageCancel()
+{
+jslDisable("Btn_Submit", "Btn_Cancel");
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+ReSetValueRmZero("Frm_DigitMapLongTimer", "Frm_DigitMapShortTimer", "Frm_DigitMapStartTimer", "Frm_DigitMapZTimer");
+if(pageCheckValue() == true)
+{
+jslDisable("Btn_Submit","Btn_Cancel");
+pageSetValue();
+setValue("IF_ACTION", "apply");
+getObj("fSubmit").submit();
+}
+else
+{
+}
+}
+</script>

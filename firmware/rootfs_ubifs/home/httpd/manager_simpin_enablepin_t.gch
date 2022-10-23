@@ -1,0 +1,40 @@
+
+<div style="text-align:center;width:430px;">
+<table id="Frm_ConfigNote" class="table" width="450px" border="0" style="display:none;">
+<tr>
+<td align=center>&?cmn20;</td>
+</tr>
+<tr>
+<td align=center>&nbsp;</td>
+</tr>
+</table>
+<table id="Frm_EnablePin" class="table" width="450px" border="0">
+<tr>
+<td class="td1">&?cmn28;</td>
+<td class="td2">
+<select id="Frm_EnablePin" name="Frm_EnablePin" size="1" class="list_6" id="config" disabled>
+<option value="EnablePin">&?cmn35;</option>
+</select></td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_PinCode">&?cmn21;</font></td>
+<td class="td2"><input type="password" id="Frm_PinCode" class="inputId5" value=""/></td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_PinCode_cf">&?cmn31;</font></td>
+<td class="td2"><input type="password" id="Frm_PinCode_cf" class="inputId5" value=""/></td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_PinStatus">&?cmn32;</font></td>
+<td class="td2"><font id="Fnt_PinStatusValue"></font></td>
+</tr>
+<tr>
+<td class="td1">&?cmn22;</td>
+<td class="td2"><font id="Fnt_PinRemain"></font></td>
+</tr>
+<tr>
+<td class="td1">&?cmn52;</td>
+<td class="td2"><input type="checkbox" id="Frm_RemPin" name="Frm_RemPin" value="" /></td>
+</tr>
+</table>
+</div>

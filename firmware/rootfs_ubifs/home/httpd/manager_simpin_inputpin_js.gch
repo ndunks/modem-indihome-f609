@@ -1,0 +1,44 @@
+function pageGetValue()
+{
+var pinRemain = getValue("PinRemain");
+setFontValue("Fnt_PinRemain", pinRemain);
+var refresh_flag = getValue("IF_REFRESH_FLAG");
+if (refresh_flag == 1)
+{
+jslDisable("Btn_Submit", "Btn_Cancel");
+jslEnDisplay("Frm_ConfigNote");
+setTimeout("refreshPage()", refresh_seconds);
+}
+var rempin = getValue("RemPin");
+if (rempin == 1)
+{
+setChecked("Frm_RemPin", true);
+}
+else
+{
+setChecked("Frm_RemPin", false);
+}
+}
+function pageCheckValue()
+{
+var pinCode = getValue("Frm_PinCode");
+if (checkPinCode(pinCode, "Frm_PinCode", "Fnt_PinCode") == false)
+{
+return false;
+}
+return true;
+}
+function pageSetValue()
+{
+jslSetValue("SimPin", "Frm_PinCode");
+setValue("SimPinOP", opChkPin);
+var tmp = getChecked("Frm_RemPin");
+if (tmp == true)
+{
+setValue("RemPin", 1);
+}
+else
+{
+setValue("RemPin", 0);
+}
+}

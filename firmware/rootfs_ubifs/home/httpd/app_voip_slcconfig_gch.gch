@@ -1,0 +1,13 @@
+<%
+IMPORT FILE "common_gch.gch";
+IMPORT FILE "app_voip_sipslc_gch.gch";
+IMPORT FILE "app_voip_SLCTime_gch.gch";
+var FP_ACTION = request("IF_ACTION");
+var FP_INDEX = 0;
+var FP_ERRORSTR = "SUCC";
+create_form_start("fSubmit", "");
+createBasicHidden();
+FP_ERRORSTR = sip_slccfg_func(FP_ACTION, FP_INDEX, FP_ERRORSTR);
+FP_ERRORSTR = SLCTime_func(FP_ACTION, FP_INDEX, FP_ERRORSTR);
+create_form_end();
+%>

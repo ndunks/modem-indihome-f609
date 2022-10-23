@@ -1,0 +1,131 @@
+#!/bin/sh
+
+echo "Pre-initialization script ..."
+
+echo "  Mounting ramdisk at /var"
+mount -t tmpfs -o size=15360k tmpfs /var
+test -e /var/ct/tmp || mkdir -p /var/ct/tmp/
+mkdir -p /var/tmp
+mkdir -p /var/log
+mkdir -p /var/run
+
+mkdir -p /var/iproute2
+echo "" > /var/iproute2/rt_tables
+
+#
+#	Check for flash partition mtd5 and obtain its size
+#
+
+mtd5_valid=0
+if [ -x /sbin/mtd_debug -a -e /dev/mtd5 ]; then
+  mtd5_size=`/sbin/mtd_debug info /dev/mtd5 | \
+    egrep '^mtd\.size' | \
+    sed -e 's/^mtd\.size \= \(.*\)\ (.*)/\1/'`
+  if [ -n "$mtd5_size" ]; then
+    if [ $mtd5_size -gt 0 ]; then
+      mtd5_valid=1
+    fi
+  fi
+fi
+
+#
+#	Check for a jffs2 filesystem on mtd5 and mount mtd5 to /userconfig
+#
+
+erase_mtd5=0
+#
+#    only norflash, nand flash the first block of the partition is "1985" 
+#    only when the block has been used!!!
+#
+#if [ $mtd5_valid = "1" ]; then
+#  mtd_debug read /dev/mtd5 0 2 /var/tmp/jffs2test >/dev/null && \
+#    hexdump /var/tmp/jffs2test | grep '0000000 1985' >/dev/null
+#  if [ $? = "0" ]; then
+#    echo "  Mounting /dev/mtdblock5 to /userconfig" && \
+#      /bin/mount -n -t jffs2 /dev/mtdblock5 /userconfig || \
+#        (echo "  Mount failed" && erase_mtd5=1)
+#  else
+#    erase_mtd5=1
+#  fi
+#  rm -f /var/tmp/jffs2test
+#fi
+
+# set mtd4_valid=1 for F460BR
+mtd5_valid=1
+if [ $mtd5_valid = "1" ]; then
+    echo "  Mounting /dev/mtdblock5 to /userconfig"
+    /bin/mount -n -t jffs2 /dev/mtdblock5 /userconfig
+      if [ $? = "0" ]; then
+      	echo "  Mount ok!"
+      else	
+        erase_mtd5=1 
+        echo "  Mount failed!!!!"
+      fi  
+fi
+
+#
+# If mtd5 needs erasing, do so and then mount it to /userconfig
+#
+if [ $mtd5_valid = "1" -a $erase_mtd5 = "1" ]; then
+    (echo "  Eraseing & mounting /dev/mtdblock5 to /userconfig, wait ..." && \
+    /sbin/flash_eraseall -j /dev/mtd5 && \
+    /bin/mount -n -t jffs2 /dev/mtdblock5 /userconfig || mtd5_valid=0)
+fi
+# /userconfig/cfg used by csp 
+mkdir -p /userconfig/cfg
+
+###########################################################################
+#
+#	Check for flash partition mtd6(midware partition) and obtain its size
+#
+
+mtd6_valid=0
+if [ -x /sbin/mtd_debug -a -e /dev/mtd6 ]; then
+  mtd6_size=`/sbin/mtd_debug info /dev/mtd6 | \
+    egrep '^mtd\.size' | \
+    sed -e 's/^mtd\.size \= \(.*\)\ (.*)/\1/'`
+  if [ -n "$mtd6_size" ]; then
+    if [ $mtd6_size -gt 0 ]; then
+      mtd6_valid=1
+    fi
+  fi
+fi
+
+#
+#	Check for a jffs2 filesystem on mtd4 and mount mtd4 to /usr/local/ct
+#
+
+erase_mtd6=0
+#if [ $mtd4_valid = "1" ]; then
+#  mtd_debug read /dev/mtd4 0 2 /var/tmp/jffs2test >/dev/null && \
+#    hexdump /var/tmp/jffs2test | grep '0000000 1985' >/dev/null
+#  if [ $? = "0" ]; then
+#    echo "  Mounting /dev/mtdblock4 to /usr/local/ct" && \
+#      /bin/mount -n -t jffs2 /dev/mtdblock4 /usr/local/ct || \
+#        (echo "  Mount failed" && erase_mtd4=1)
+#  else
+#    erase_mtd4=1
+#  fi
+#  rm -f /var/tmp/jffs2test
+#fi
+
+# set mtd6_valid=1 for F460BR
+mtd6_valid=0
+if [ $mtd6_valid = "1" ]; then
+    echo "  Mounting /dev/mtdblock6 to /usr/local/ct"
+    /bin/mount -n -t jffs2 /dev/mtdblock6 /usr/local/ct
+      if [ $? = "0" ]; then
+      	echo "  Mount ok!"
+      else	
+        erase_mtd6=1 
+        echo "  Mount failed!!!!"
+      fi  
+fi
+#
+# If mtd4 needs erasing, do so and then mount it to /usr/local/ct
+#
+
+[ $mtd6_valid = "1" -a $erase_mtd6 = "1" ] && \
+(echo "  Eraseing & mounting /dev/mtdblock6 to /usr/local/ct, wait ..." && \
+    /sbin/flash_eraseall -j /dev/mtd6 && \
+    /bin/mount -n -t jffs2 /dev/mtdblock6 /usr/local/ct || mtd6_valid=0)

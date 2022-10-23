@@ -1,0 +1,41 @@
+<%
+IMPORT FILE "common_gch.gch";
+var FP_OBJNAME      = "OBJ_VOIPHOMELINE_ID";
+var FP_IDENTITY     = "";
+var FP_MULTIDISPLAY = 1;
+var FP_PARANUM      = 3;
+var PARA[3]         =
+{
+"PhyNumber",
+"Enable",
+"Password"
+};
+var FP_ACTION   = request("IF_ACTION");
+var FP_INDEX    = getInstIndex("new");
+var FP_ERRORSTR = "SUCC";
+create_form_start("fSubmit", "");
+createSubmitHidden(FP_MULTIDISPLAY, PARA, FP_PARANUM, FP_INDEX);
+if(1 == FP_MULTIDISPLAY && (FP_ACTION == "apply" || FP_ACTION == "delete"))
+{
+var FP_INSTNUM = query_list(FP_OBJNAME, "IGD");
+if (FP_INSTNUM != 888 && FP_INSTNUM > 0 && FP_INDEX >= 0)
+{
+FP_IDENTITY = query_identity(FP_INDEX);
+}
+}
+FP_ERRORSTR = applyOrNewOrDelInst(FP_OBJNAME, FP_ACTION, FP_IDENTITY, PARA,
+FP_PARANUM, FP_ERRORSTR);
+var FP_INSTNUM = query_list(FP_OBJNAME, "IGD");
+for (var i=0; i<FP_INSTNUM; i++)
+{
+var FP_HANDLE = create_paralist();
+FP_IDENTITY   = query_identity(i);
+get_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+create_hidden_multiinstpara(FP_HANDLE, PARA, i, FP_PARANUM-1);
+create_hidden_sep("Password"+i, "******");
+destroy_paralist(FP_HANDLE);
+}
+getDisplayInstError(FP_ERRORSTR);
+setInstNumHidden(FP_OBJNAME, FP_MULTIDISPLAY);
+create_form_end();
+%>

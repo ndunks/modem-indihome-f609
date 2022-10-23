@@ -1,0 +1,52 @@
+<%
+IMPORT FILE "pon_voip_h248_servs.gch";
+IMPORT FILE "pon_voip_h248_servs_js.gch";
+%>
+<table id="PONH248Services" class="table" width="550px" border="0">
+<tr>
+<td class="td1">&?ponh248servs001;</td>
+<td class="td2">
+<select id="Frm_HeartBeatMessageType" name="select2" size="1" class="list_2">
+<option value="0">&?ponh248servs002;</option>
+<option value="1">&?ponh248servs003;</option>
+<option value="2">&?ponh248servs004;</option>
+</select>
+</td>
+</tr>
+<tr>
+<td class="td1">&?ponh248servs005;</td>
+<td class="td2"><input id="Frm_RtpProtectType" name="Frm_RtpProtectType" type="checkbox" value=""/></td>
+</tr>
+<!--
+<tr>
+<td class="td1">&?ponh248servs006;</td>
+<td class="td2"><input id="Frm_DigitMapShortMatch" name="Frm_DigitMapShortMatch" type="checkbox" value=""/></td>
+</tr>
+-->
+<tr>
+<td class="td1">&?ponh248servs006;</td>
+<td class="td2">
+<select id="Frm_DigitMapShortMatch" name="select2" size="1" class="list_2">
+<option value="0">&?ponh248servs011;</option>
+<option value="1">&?ponh248servs012;</option>
+<option value="2">&?ponh248servs013;</option>
+</select>
+</td>
+</tr>
+<tr>
+<td id="Fnt_DigitMapLongTimer" class="td1">&?ponh248servs007;</td>
+<td class="td2"><input name="Frm_DigitMapLongTimer" id="Frm_DigitMapLongTimer" type="text" class="inputId" value=""/>10&?wlan013;</td>
+</tr>
+<tr>
+<td id="Fnt_DigitMapShortTimer" class="td1">&?ponh248servs008;</td>
+<td class="td2"><input name="Frm_DigitMapShortTimer" id="Frm_DigitMapShortTimer" type="text" class="inputId" value="" />10&?wlan013;</td>
+</tr>
+<tr>
+<td id="Fnt_DigitMapStartTimer" class="td1">&?ponh248servs009;</td>
+<td class="td2"><input name="Frm_DigitMapStartTimer" id="Frm_DigitMapStartTimer" type="text" class="inputId" value="" />10&?wlan013;</td>
+</tr>
+<tr style="display:none">
+<td id="Fnt_DigitMapZTimer" class="td1">&?ponh248servs010;</td>
+<td class="td2"><input name="Frm_DigitMapZTimer" id="Frm_DigitMapZTimer" type="text" class="inputId" value=""/>10&?wlan013;</td>
+</tr>
+</table>

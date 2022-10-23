@@ -1,0 +1,39 @@
+
+<%
+IMPORT FILE "common_gch.gch";
+var FP_OBJNAME  = "OBJ_ONUMODE_ID";
+var FP_PARANUM  = 1;
+var FP_ACTION   = request("IF_ACTION");
+var FP_ERRORSTR = "SUCC";
+var FP_IDENTITY = "";
+var FP_ERRORPARAM;
+var FP_ERRORTYPE;
+var PARA[1] =
+{
+"OnuMode",
+};
+create_form_start("fSubmit", "");
+create_hidden_newpara(PARA, FP_PARANUM);
+createBasicHidden();
+if (FP_ACTION == "apply")
+{
+setInst(FP_OBJNAME, FP_IDENTITY, PARA, FP_PARANUM);
+}
+create_hidden_sep("NEW_OnuMode",request("OnuMode"));
+var FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, "OBJ_PON_BOARD_FUNC_INFO_ID", "IGD");
+var OnuModeValue  = get_para(FP_HANDLE, "OnuMode");
+destroy_paralist(FP_HANDLE);
+create_hidden_sep("OnuMode", OnuModeValue);
+FP_ERRORSTR = getDisplayInstError(FP_ERRORSTR);
+var isApplyAndSucc = 0;
+if ( "apply" == FP_ACTION && "SUCC" == FP_ERRORSTR )
+{
+isApplyAndSucc = 1;
+}
+else
+{
+}
+create_hidden_sep("isApplyAndSucc", isApplyAndSucc);
+create_form_end();
+%>

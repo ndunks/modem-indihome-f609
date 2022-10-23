@@ -1,0 +1,42 @@
+/* 地区码，地区名称，定制硬件版本号，定制sip软件版本号，定制h248软件版本号 */
+/* 国家码 */
+#define DEFAULT_CFG                    0    /* 基本默认配置文件 */
+/* 地区码 */
+#define DEFAULT_JIANGSU_CFG            200    /* 江苏省默认配置文件 */
+#define DEFAULT_XINJIANG_CFG           201   /* 新疆默认配置文件 */
+#define DEFAULT_HAINANDIANXIN_CFG      202   /* 海南电信默认配置文件 */
+#define DEFAULT_TIANJIN_CFG            203   /* 天津默认配置文件 */
+#define DEFAULT_ANHUI_CFG              204   /* 安徽默认配置文件 */
+#define DEFAULT_SHANGHAI_CFG           205   /* 上海默认配置文件 */
+#define DEFAULT_CHONGQING_CFG          206   /* 重庆默认配置文件 */
+#define DEFAULT_BEIJING_CFG            207   /* 北京默认配置文件 */
+#define DEFAULT_SICHUAN_CFG            208   /* 四川默认配置文件 */
+#define DEFAULT_SHANDONG_CFG           209   /* 山东默认配置文件 */
+#define DEFAULT_GUANGDONG_CFG          210   /* 广东默认配置文件 */
+#define DEFAULT_HUBEI_CFG              211   /* 湖北默认配置文件 */
+#define DEFAULT_FUJIAN_CFG             212   /* 福建默认配置文件 */
+#define DEFAULT_SUZHOU_CFG             213   /* 苏州默认配置文件 */
+#define DEFAULT_ZHEJIANG_CFG           214   /* 浙江默认配置文件 */
+#define DEFAULT_SHANXI_CFG             215   /* 陕西默认配置文件 */
+#define DEFAULT_HUNAN_CFG              216   /* 湖南默认配置文件 */
+#define DEFAULT_YUNNAN_CFG             217   /* 云南默认配置文件 */
+#define DEFAULT_XIZANG_CFG             218   /* 西藏默认配置文件 */
+#define DEFAULT_HEILONGJIANG_CFG       219   /* 黑龙江默认配置文件 */
+#define DEFAULT_GUIZHOU_CFG            220   /* 贵州默认配置文件*/
+#define DEFAULT_SHANXI2_CFG            221   /* 山西默认配置文件*/
+#define DEFAULT_HEBEI_CFG              222   /* 河北默认配置文件*/
+#define DEFAULT_NINGXIA_CFG            223   /* 宁夏默认配置文件*/
+#define DEFAULT_GUANGXI_CFG            224   /* 广西默认配置文件*/
+#define DEFAULT_JIANGXI_CFG            225   /* 江西默认配置文件*/
+#define DEFAULT_GANSU_CFG              226   /* 甘肃默认配置文件*/
+#define DEFAULT_QINGHAI_CFG            227   /* 青海默认配置文件*/
+#define DEFAULT_XIAN_CFG               228   /* 西安-咸阳默认配置文件*/
+#define DEFAULT_LIAONING_CFG           229   /* 辽宁默认配置文件*/
+#define DEFAULT_JILIN_CFG              230   /* 吉林默认配置文件*/
+#define DEFAULT_NEIMENG_CFG            231   /* 内蒙默认配置文件*/
+#define DEFAULT_HENAN_CFG              232   /* 河南默认配置文件*/
+
+/* 请在下面按格式填写地区的定制软件版本号 */
+
+
+

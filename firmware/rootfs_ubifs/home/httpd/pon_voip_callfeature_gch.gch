@@ -1,0 +1,77 @@
+<%
+IMPORT FILE "common_gch.gch";
+function callfeature_func(FP_ACTION,FP_INDEX,FP_ERRORSTR)
+{
+var FP_OBJNAME      = "OBJ_PON_VOIPVPCALLFEATURE_ID";
+var FP_IDENTITY     = "";
+var FP_INSTNUM, FP_HANDLE;
+var FP_MULTIDISPLAY = 1;
+var FP_PARANUM      = 29;
+var PARA[29] =
+{
+"CallWaitingEnable",
+"AntiPole",
+"CallForwardUnconditionalEnable",
+"CallForwardUnconditionalNumber",
+"CallForwardOnBusyEnable",
+"CallForwardOnBusyNumber",
+"CallForwardOnNoAnswerEnable",
+"CallForwardOnNoAnswerNumber",
+"SoftSwitchUnconditionalEnable",
+"SoftSwitchOnBusyEnable",
+"SoftSwitchOnNoReachable",
+"OneNumber",
+"CidDisplayEnable",
+"CallerIDEnable",
+"CallerIDNameEnable",
+"CallerIDName",
+"MWIEnable",
+"MessageWaiting",
+"CallHoldFlag",
+"CallTransfer",
+"3WayTalkingBySelf",
+"3WayTalkingBySS",
+"DoNotDisturbEnable",
+"TTYDevice",
+"SipDelayHookonFlag",
+"HotLine",
+"HLNumber",
+"ConfUri",
+"ServInfoReport"
+};
+create_hidden_newpara(PARA, FP_PARANUM);
+if(FP_ACTION == "apply")
+{
+if(FP_INDEX == -1)
+{
+FP_INSTNUM = query_list(FP_OBJNAME, "IGD");
+for(var index = 0 ; index < FP_INSTNUM ; index++)
+{
+FP_IDENTITY = query_identity(index);
+FP_HANDLE = create_paralist();
+for(var i=0; i< FP_PARANUM; i++)
+{
+set_multiinst_para(FP_HANDLE, PARA[i], index);
+}
+FP_IDENTITY = set_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+}
+}
+else if(FP_INDEX >= 0)
+{
+FP_INSTNUM = query_list(FP_OBJNAME, "IGD");
+FP_IDENTITY = query_identity(FP_INDEX);
+FP_HANDLE = create_paralist();
+for(var i=0; i< FP_PARANUM; i++)
+{
+
+set_multiinst_para(FP_HANDLE, PARA[i], FP_INDEX);
+}
+FP_IDENTITY = set_inst(FP_HANDLE, FP_OBJNAME, FP_IDENTITY);
+}
+}
+set_hidden("IF_INSTNUM", query_list(FP_OBJNAME, "IGD"));
+FP_ERRORSTR = getNewInstError(FP_ERRORSTR);
+
+return displayFunctionInst(FP_OBJNAME, FP_MULTIDISPLAY, PARA, FP_PARANUM, FP_ERRORSTR);
+}
+%>

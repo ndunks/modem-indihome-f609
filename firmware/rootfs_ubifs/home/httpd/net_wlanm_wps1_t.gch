@@ -1,0 +1,5 @@
+<%
+query_list("OBJ_WLANSETTING_ID", "IGD");
+setenv("g_wlanSettingID", query_identity(0));
+IMPORT FILE "net_wlanm_wps_t.gch";
+%>

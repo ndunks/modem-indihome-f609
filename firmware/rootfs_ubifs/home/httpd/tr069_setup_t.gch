@@ -1,0 +1,229 @@
+<%
+IMPORT FILE "global.gch";
+IMPORT FILE "auth/api.gch";
+var sess_id = auth_sessid();
+var is_login = 0;
+var is_banned = 0;
+session_start(sess_id, 0);
+if( getenv("elogin") != 1 && auth_check(sess_id) == 0 )
+{
+var login_status = auth_get_status("login");
+if (login_status == "logined")
+{
+is_login = 1;
+}
+else if (login_status == "banned")
+{
+auth_logout();
+is_banned = 1;
+}
+}
+if (is_login == 0)
+{
+setenv("thaild3bb", 1);
+header("Location: /tr069");
+return;
+}
+else
+{
+session_start(sess_id, -1);
+}
+auth_env_sync();
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" style="background-color:#eeeeee;">
+<head>
+<META HTTP-EQUIV="pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title><%=getenv("WEBTitle");%></title>
+<LINK REL="stylesheet" HREF='<%=getenv("css_path_template");%>' TYPE="text/css" />
+<LINK REL="stylesheet" HREF="&?csslang;" TYPE="text/css" />
+<script src="js/common.js"></script>
+<script language="javascript">
+<%
+setenv("request/callback", "relogin()");
+IMPORT FILE "auth/timeout_ctl_js.gch";
+IMPORT FILE "js/common_check.js";
+IMPORT FILE "js/pro_commom.js";
+IMPORT FILE "js/commom.js";
+IMPORT FILE "pagefunc_js.gch";
+%>
+function relogin()
+{
+alert("&?note_003;");
+setValue("logout",1);
+document.flogout.submit();
+}
+</script>
+</head>
+<body onload="pageLoad();" style="background-color:#eeeeee;">
+<div id="container" style="margin:10px 20px auto;">
+<%
+IMPORT FILE "manage_server_gch.gch";
+IMPORT FILE "tr069_setup_js.gch";
+var session_token = get_csrf_session_token();
+setenv("UPLOAD_ENV",session_token);
+%>
+<!--head部分开始-->
+<form name="flogout" id="flogout" method="post"  onsubmit="return false;" action="/" target="_top">
+<input type="hidden" name="logout" id="logout" value="" >
+</form>
+<!--head部分结束-->
+<!--content部分开始-->
+<div class="content" id="content" style="border-left:0;border-right:0;">
+<div class="title" style="width:776px;color:blue;background-color:#eeeeee;">
+<div class="title_left" id="title_path" style="width:576px;">
+<font size="+1" face="Arial">
+<strong style=" color:#0000FF">&?sbb_001;</strong>
+</font>
+</div>
+</div>
+<!--导航条结束-->
+<!--内容开始-->
+<div id="div1" style="min-height:275px;height: auto !important;">
+<table id="WizardTable" width="800px" border="0" cellpadding="0" cellspacing="10px" style="font-size:12px;">
+<tr>
+<td colspan="2" class="hreftext">
+<font>&?sbb_002;</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" class="hreftext">
+<hr />
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<font>&?sbb_005;</font>
+</td>
+</tr>
+<tr>
+<td class="td1" width="30%">&?comm001;:</td>
+<td class="td2" width="70%"><input type="checkbox" id="Frm_modify_enable" name="Frm_modify_enable" checked="checked"/></td>
+</tr>
+<tr>
+<td class="td1" width="30%"><font id="Fnt_URL">&?sbb_003;</font>:</td>
+<td class="td2" width="70%"><input name="Frm_URL" id="Frm_URL" type="text" class="inputId"/></td>
+</tr>
+<tr>
+<td class="td1" width="30%"><font id="Fnt_UserName">&?snmpv3_009;</font>:</td>
+<td class="td2" width="70%"><input type="text" id="Frm_UserName" name="Frm_UserName" class="inputId" /></td>
+</tr>
+<tr>
+<td class="td1" width="30%"><font id="Fnt_UserPassword">&?va02;</font>:</td>
+<td class="td2" width="70%"><input type="password" id="Frm_UserPassword" name="Frm_UserPassword" class="inputId"></input>&?ftp007;</td>
+</tr>
+<tr>
+<td class="td1" width="30%">&?trbs007;:</td>
+<td class="td2" width="70%" onclick="Enable_Reported();">
+<input type="radio" name="Frm_PeriodicInformEnable" id="Frm_PeriodicInformOff" value="0" />&?wlan028;
+<input type="radio" name="Frm_PeriodicInformEnable" id="Frm_PeriodicInformOn" style="margin-left:80px;" value="1" checked="checked" />&?comm001;
+</td>
+</tr>
+<tr>
+<td class="td1" width="30%"><font id="Fnt_PeriodicInformInterval">&?trbs008;</font>:</td>
+<td class="td2" width="70%">
+<input type="text" name="Frm_PeriodicInformInterval" id="Frm_PeriodicInformInterval" class="inputId"></input>
+[<img style="heigth:12px;width:12px;" src="img/skype.png">
+<font color="#10bef2">1 - 42949672</font>](s)
+</td>
+</tr>
+<tr>
+<td colspan="2" class="hreftext">
+<hr />
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<font>&?sbb_004;:</font>
+</td>
+</tr>
+<tr>
+<td class="td1" width="30%"><font id="Fnt_ConnectionRequestUsername">&?snmpv3_009;</font>:</td>
+<td class="td2" width="70%"><input type="text" id="Frm_ConnectionRequestUsername" name="Frm_ConnectionRequestUsername" class="inputId" /></td>
+</tr>
+<tr>
+<td class="td1" width="30%"><font id="Fnt_ConnectionRequestPassword">&?va02;</font>:</td>
+<td class="td2" width="70%"><input type="password" id="Frm_ConnectionRequestPassword" name="Frm_ConnectionRequestPassword" class="inputId" />&?ftp007;</td>
+</tr>
+<tr>
+<td class="td1" width="30%"><font id="Fnt_path">&?usb06;</font>:</td>
+<td class="td2" width="70%"><input name="Frm_path" id="Frm_path" type="text" class="inputId"/></td>
+</tr>
+<tr>
+<td class="td1" width="30%"><font id="Fnt_ConnectionRequestPort">&?dhcp_d014;</font>:</td>
+<td class="td2" width="70%"><input name="Frm_ConnectionRequestPort" id="Frm_ConnectionRequestPort" type="text" class="inputId"/></td>
+</tr>
+<tr>
+<td colspan="2" class="hreftext">
+<hr />
+</td>
+</tr>
+</table>
+</div>
+<!--内容结束-->
+<div class="bottom_div" id="bottom">
+<table class='bottom_table' border='0' cellpadding='0' cellspacing='0'>
+<tr>
+<td class='bottom_td3' style='background-color:#eeeeee;text-align:left;'>
+<input name="BtnExit" type="button" style="margin-left:250px" id="BtnExit" onclick="tr069pageSubmit();" value="&?btn017;" />
+<input name="BtnCancel" type="button" id="BtnCancel" onclick="tr069pageCancel();" value="&?btn004;"/>
+&nbsp;&nbsp;&nbsp;
+</td>
+</tr>
+</table>
+</div>
+<!--content部分结束-->
+<!--bottom部分开始-->
+</div>
+<div id="bottomx"></div>
+<!--bottom部分结束-->
+</div>
+</body>
+<script language="javascript">
+<%
+var session_token = get_csrf_session_token();
+session_set("_SESSION_TOKEN", session_token);
+setenv("_SESSION_TOKEN", session_token);
+%>
+function addToken2AllForms()
+{
+function doAddLogic()
+{
+var session_token = "<%=encodeJS(session_token);%>";
+var forms = document.getElementsByTagName("form");
+for ( var i=0; i<forms.length; i++ )
+{
+var tempform = forms[i];
+var sEnctype = tempform.getAttribute("enctype");
+if ( sEnctype != null &&
+"multipart/form-data" == sEnctype.toLowerCase() )
+{
+continue;
+}
+var tokenInput = document.createElement("input");
+tokenInput.setAttribute("id", "_SESSION_TOKEN");
+tokenInput.setAttribute("name", "_SESSION_TOKEN");
+tokenInput.setAttribute("type", "hidden");
+tokenInput.setAttribute("value", session_token);
+tempform.appendChild(tokenInput);
+}
+}
+if( window.onload == null )
+{
+window.onload=function(){
+doAddLogic();
+}
+}
+else
+{
+var tempfunction = window.onload;
+window.onload=function(){
+tempfunction();
+doAddLogic();
+}
+}
+}
+addToken2AllForms();
+</script>
+</html>

@@ -1,0 +1,569 @@
+<script language="javascript">
+var SIPSERV_PARA=  new Array(
+"ProxyServer1",
+"ProxyServer2",
+"ProxyServerPort1",
+"ProxyServerPort2",
+"OutboundProxy1",
+"OutboundProxy2",
+"OutboundProxyPort1",
+"OutboundProxyPort2",
+"RegistrarServer1",
+"RegistrarServer2",
+"RegistrarServerPort1",
+"RegistrarServerPort2",
+"PublishServer"
+);
+var SIP_PARA=  new Array(
+"UserAgentDoimain",
+"UserAgentPort",
+"UserAgentTransport",
+"100rel",
+"Precondition",
+"EarlySession",
+"Timer",
+"Replace",
+"ExtPath",
+"DNSRetryInterval",
+"RegisterExpires",
+"DeRegister",
+"LinkTest",
+"LinkTestInterval",
+"LineDownTime",
+"PeerCall",
+"RemotePartyID",
+"PPreferredID",
+"PAssertedID",
+"PEarlyMedia",
+"TelUrl",
+"Filter",
+"DNSMode",
+"Organization",
+"InviteExpires",
+"ReInviteExpires",
+"RegistersMinExpires",
+"RegisterRetryInterval",
+"SubscribeRetryInterval",
+"InboundAuth",
+"DSCPMark",
+"VLANIDMark",
+"EthernetPriorityMark",
+"QueueNum",
+"EventSubscribeNumber"
+);
+var SIPEXT_PARA = new Array(
+"FaxVbdEnable",
+"ProtocolSet",
+"Opt120FlagControl"
+);
+function getmsg(id)
+{
+var str  = new Array();
+str[0]   = new Array(101, "&?error_101;");
+str[1]   = new Array(134, "&?error_134;");
+str[2]   = new Array(115, "&?error_115;");
+str[3]   = new Array(116, "&?error_116;");
+str[4]   = new Array(117, "&?error_117;");
+str[5]   = new Array(118, "&?error_118;");
+str[6]   = new Array(119, "&?error_119;");
+str[7]   = new Array(122, "&?error_122;");
+str[8]   = new Array(102, "&?error_102;");
+str[9]   = new Array(103, "&?error_103;");
+str[10]  = new Array(160, "&?error_160;");
+str[11]  = new Array(167, "&?error_167;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+ProcessRet(errstr, errpara);
+pageGetValue();
+<%
+var userright = getenv("Right");
+var cver = getenv("CurrentVersionInfo");
+if(cver == 74)
+{
+%>
+jslDiDisplay("TR_DeRegister");
+jslEnDisplay("TR_SessionExpireEnable", "TR_SessionExpire");
+<%
+}
+%>
+}
+function ChangeLinkValue()
+{
+if(getChecked("Frm_LinkTest") == true)
+{
+setValue("LinkTest", 2);
+}
+else
+{
+setValue("LinkTest", 0);
+}
+}
+function ChangeSessionExpire()
+{
+if (getChecked("Frm_SessionExpireEnable") == true)
+{
+jslEnable("Frm_SessionExpire");
+}
+else
+{
+jslDisable("Frm_SessionExpire");
+}
+}
+function pageGetValue()
+{
+var instNum = getValue("VP_INSTNUM");
+var j = 0;
+for (var i=0; i<instNum; i++)
+{
+j = i+1;
+addSelectOption("Frm_VP", i, "VP"+j);
+}
+if(instNum < 2)
+{
+jslDiDisplay("TR_VP");
+}
+jslSetValue("Frm_VP", "IF_INDEX");
+if("0" == getValue("Opt120FlagControl"))
+{
+setChecked("Frm_Opt120FlagControl", false);
+}
+else
+{
+setChecked("Frm_Opt120FlagControl", true);
+}
+jslSetValue("Frm_DNSMode", "DNSMode");
+jslSetValue("Frm_UserAgentPort","UserAgentPort" );
+jslSetValue("Frm_RegisterServer1","RegistrarServer1");
+jslSetValue("Frm_ProxyServer1","ProxyServer1");
+jslSetValue("Frm_OutboundProxy1","OutboundProxy1" );
+jslSetValue("Frm_ProxyServerPort1","ProxyServerPort1");
+jslSetValue("Frm_RegisterServer2","RegistrarServer2");
+jslSetValue("Frm_ProxyServer2","ProxyServer2");
+jslSetValue("Frm_OutboundProxy2","OutboundProxy2" );
+jslSetValue("Frm_ProxyServerPort2","ProxyServerPort2" );
+jslSetValue("Frm_RegisterExpires","RegisterExpires" );
+if("0" == getValue("DeRegister"))
+{
+setChecked("Frm_DeRegister", false);
+}
+else
+{
+setChecked("Frm_DeRegister", true);
+}
+if("2" == getValue("LinkTest"))
+{
+setChecked("Frm_LinkTest", true);
+}
+else
+{
+setChecked("Frm_LinkTest", false);
+}
+jslSetValue("Frm_LinkTestInterval","LinkTestInterval" );
+if("0" == getValue("Timer"))
+{
+setChecked("Frm_SessionExpireEnable", false);
+}
+else
+{
+setChecked("Frm_SessionExpireEnable", true);
+}
+jslSetValue("Frm_SessionExpire", "InviteExpires");
+ChangeSessionExpire();
+}
+function pageSetValue()
+{
+HiddenParaInit(SIPSERV_PARA);
+HiddenParaInit(SIP_PARA);
+HiddenParaInit(SIPEXT_PARA);
+if(getChecked("Frm_Opt120FlagControl") == true)
+{
+setValue("Opt120FlagControl", 1);
+}
+else
+{
+setValue("Opt120FlagControl", 0);
+}
+jslSetValue("DNSMode", "Frm_DNSMode");
+jslSetValue("UserAgentPort", "Frm_UserAgentPort");
+jslSetValue("RegistrarServer1", "Frm_RegisterServer1");
+jslSetValue("ProxyServer1", "Frm_ProxyServer1");
+jslSetValue("OutboundProxy1", "Frm_OutboundProxy1");
+jslSetValue("ProxyServerPort1", "Frm_ProxyServerPort1");
+jslSetValue("RegistrarServer2", "Frm_RegisterServer2");
+jslSetValue("ProxyServer2", "Frm_ProxyServer2");
+jslSetValue("OutboundProxy2", "Frm_OutboundProxy2");
+jslSetValue("ProxyServerPort2", "Frm_ProxyServerPort2");
+jslSetValue("RegisterExpires","Frm_RegisterExpires" );
+if(getChecked("Frm_DeRegister") == true)
+{
+setValue("DeRegister", 1);
+}
+else
+{
+setValue("DeRegister", 0);
+}
+ChangeLinkValue();
+jslSetValue("LinkTestInterval","Frm_LinkTestInterval" );
+if(getChecked("Frm_SessionExpireEnable") == true)
+{
+setValue("Timer", "1");
+jslSetValue("InviteExpires", "Frm_SessionExpire");
+}
+else
+{
+setValue("Timer", "0");
+}
+}
+function pageCheckValue()
+{
+var msg = "";
+var cResult;
+var srvValue;
+var register;
+var pResult;
+cResult = checkIntegerRange(getValue("Frm_UserAgentPort"),1024,65535);
+if(cResult == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_UserAgentPort","Fnt_UserAgentPort",msg);
+return false;
+}
+else if(cResult == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_UserAgentPort","Fnt_UserAgentPort",msg);
+return false;
+}
+else if(cResult == -3)
+{
+msg = getmsg(116,1024,65535);
+ShowErrorForCom("Frm_UserAgentPort","Fnt_UserAgentPort",msg);
+return false;
+}
+srvValue = getValue("Frm_RegisterServer1");
+if(checkNull(srvValue) == false)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_RegisterServer1","Fnt_RegisterServer1",msg);
+return false;
+}
+if(checkStrLengthRange(srvValue,1,63) != true)
+{
+msg = getmsg(102,1,63);
+ShowErrorForCom("Frm_RegisterServer1","Fnt_RegisterServer1",msg);
+return false;
+}
+if((checkIpAddress(srvValue) != true && checkDomainName(srvValue) != true )
+<%
+if ( 0 != getenv("DevIPv6Effect") )
+{
+%>
+&& (checkIPV6Address(srvValue) !=true)
+<%
+}
+%>
+)
+{
+msg = getmsg(134);
+ShowErrorForCom("Frm_RegisterServer1","Fnt_RegisterServer1",msg);
+return false;
+}
+srvValue = getValue("Frm_ProxyServer1");
+if(checkNull(srvValue) == false)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_ProxyServer1","Fnt_ProxyServer1",msg);
+return false;
+}
+if(checkStrLengthRange(srvValue,1,63) != true)
+{
+msg = getmsg(102,1,63);
+ShowErrorForCom("Frm_ProxyServer1","Fnt_ProxyServer1",msg);
+return false;
+}
+if((checkIpAddress(srvValue) != true && checkDomainName(srvValue) != true )
+<%
+if ( 0 != getenv("DevIPv6Effect") )
+{
+%>
+&& (checkIPV6Address(srvValue) !=true)
+<%
+}
+%>
+)
+{
+msg = getmsg(134);
+ShowErrorForCom("Frm_ProxyServer1","Fnt_ProxyServer1",msg);
+return false;
+}
+srvValue = getValue("Frm_OutboundProxy1");
+if(checkNull(srvValue) == false)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_OutboundProxy1","Fnt_OutboundProxy1",msg);
+return false;
+}
+if(checkStrLengthRange(srvValue,1,63) != true)
+{
+msg = getmsg(102,1,63);
+ShowErrorForCom("Frm_OutboundProxy1","Fnt_OutboundProxy1",msg);
+return false;
+}
+if((checkIpAddress(srvValue) != true  && checkDomainName(srvValue) != true)
+<%
+if ( 0 != getenv("DevIPv6Effect") )
+{
+%>
+&& (checkIPV6Address(srvValue) !=true)
+<%
+}
+%>
+)
+{
+msg = getmsg(134);
+ShowErrorForCom("Frm_OutboundProxy1","Fnt_OutboundProxy1",msg);
+return false;
+}
+cResult = checkIntegerRange(getValue("Frm_ProxyServerPort1"),1024,65535);
+if(cResult == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_ProxyServerPort1","Fnt_ProxyServerPort1",msg);
+return false;
+}
+else if(cResult == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_ProxyServerPort1","Fnt_ProxyServerPort1",msg);
+return false;
+}
+else if(cResult == -3)
+{
+msg = getmsg(116,1024,65535);
+ShowErrorForCom("Frm_ProxyServerPort1","Fnt_ProxyServerPort1",msg);
+return false;
+}
+srvValue = getValue("Frm_RegisterServer2");
+if(checkNull(srvValue) == false)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_RegisterServer2","Fnt_RegisterServer2",msg);
+return false;
+}
+if(checkStrLengthRange(srvValue,1,63) != true)
+{
+msg = getmsg(102,1,63);
+ShowErrorForCom("Frm_RegisterServer2","Fnt_RegisterServer2",msg);
+return false;
+}
+if((checkIpAddress(srvValue) != true && checkDomainName(srvValue) != true )
+<%
+if ( 0 != getenv("DevIPv6Effect") )
+{
+%>
+&& (checkIPV6Address(srvValue) !=true)
+<%
+}
+%>
+)
+{
+msg = getmsg(134);
+ShowErrorForCom("Frm_RegisterServer2","Fnt_RegisterServer2",msg);
+return false;
+}
+srvValue = getValue("Frm_ProxyServer2");
+if(checkNull(srvValue) == false )
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_ProxyServer2","Fnt_ProxyServer2",msg);
+return false;
+}
+if(checkStrLengthRange(srvValue,1,63) != true)
+{
+msg = getmsg(102,1,63);
+ShowErrorForCom("Frm_ProxyServer2","Frm_ProxyServer2",msg);
+return false;
+}
+if((checkIpAddress(srvValue) != true && checkDomainName(srvValue) != true)
+<%
+if ( 0 != getenv("DevIPv6Effect") )
+{
+%>
+&& (checkIPV6Address(srvValue) !=true)
+<%
+}
+%>
+)
+{
+msg = getmsg(134);
+ShowErrorForCom("Frm_ProxyServer2","Fnt_ProxyServer2",msg);
+return false;
+}
+srvValue = getValue("Frm_OutboundProxy2");
+if(checkNull(srvValue) == false)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_OutboundProxy2","Fnt_OutboundProxy2",msg);
+return false;
+}
+if(checkStrLengthRange(srvValue,1,63) != true)
+{
+msg = getmsg(102,1,63);
+ShowErrorForCom("Frm_OutboundProxy2","Fnt_OutboundProxy2",msg);
+return false;
+}
+if((checkIpAddress(srvValue) != true && checkDomainName(srvValue) != true)
+<%
+if ( 0 != getenv("DevIPv6Effect") )
+{
+%>
+&& (checkIPV6Address(srvValue) !=true)
+<%
+}
+%>
+)
+{
+msg = getmsg(134);
+ShowErrorForCom("Frm_OutboundProxy2","Fnt_OutboundProxy2",msg);
+return false;
+}
+cResult = checkIntegerRange(getValue("Frm_ProxyServerPort2"),1024,65535);
+if(cResult == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_ProxyServerPort2","Fnt_ProxyServerPort2",msg);
+return false;
+}
+else if(cResult == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_ProxyServerPort2","Fnt_ProxyServerPort2",msg);
+return false;
+}
+else if(cResult == -3)
+{
+msg = getmsg(116,1024,65535);
+ShowErrorForCom("Frm_ProxyServerPort2","Fnt_ProxyServerPort2",msg);
+return false;
+}
+pResult = checkIntegerRange(getValue("Frm_RegisterExpires"),1,4294967295);
+if(pResult == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_RegisterExpires","Fnt_RegisterExpires",msg);
+return false;
+}
+else if(pResult == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_RegisterExpires","Fnt_RegisterExpires",msg);
+return false;
+}
+else if(pResult == -3)
+{
+msg = getmsg(116,1,4294967295);
+ShowErrorForCom("Frm_RegisterExpires","Fnt_RegisterExpires",msg);
+return false;
+}
+var register = getValue("Frm_RegisterExpires");
+if(checkNull(register) == false)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_RegisterExpires","Fnt_RegisterExpires",msg);
+return false;
+}
+if(0 == register || false == checkUnSingleInt(register))
+{
+msg = getmsg(160);
+ShowErrorForCom("Frm_RegisterExpires","Fnt_RegisterExpires",msg);
+return false;
+}
+if(pResult == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_LinkTestInterval","Fnt_LinkTestInterval",msg);
+return false;
+}
+else if(pResult == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_LinkTestInterval","Fnt_LinkTestInterval",msg);
+return false;
+}
+else if(pResult == -3)
+{
+msg = getmsg(116,1,4294967295);
+ShowErrorForCom("Frm_LinkTestInterval","Fnt_LinkTestInterval",msg);
+return false;
+}
+var register = getValue("Frm_LinkTestInterval");
+if(checkNull(register) == false)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_LinkTestInterval","Fnt_LinkTestInterval",msg);
+return false;
+}
+if(0 == register || false == checkUnSingleInt(register))
+{
+msg = getmsg(160);
+ShowErrorForCom("Frm_LinkTestInterval","Fnt_LinkTestInterval",msg);
+return false;
+}
+
+if (getChecked("Frm_SessionExpireEnable") == true)
+{
+if (checkNull(getValue("Frm_SessionExpire")) != true)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_SessionExpire", "Fnt_SessionExpire", msg);
+return false;
+}
+if(checkInteger(getValue("Frm_SessionExpire")) != true)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_SessionExpire", "Fnt_SessionExpire", msg);
+return false;
+}
+if(checkIntegerRange(getValue("Frm_SessionExpire"), 90, 4294967295) != true)
+{
+msg = getmsg(116, 90, 4294967295);
+ShowErrorForCom("Frm_SessionExpire", "Fnt_SessionExpire", msg);
+return false;
+}
+}
+return true;
+}
+function pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+ReSetValueRmZero("Frm_UserAgentPort","Frm_ProxyServerPort1","Frm_ProxyServerPort2","Frm_RegisterExpires","Frm_SessionExpire");
+ReSetIpRmZero("Frm_ProxyServer1","Frm_OutboundProxy1","Frm_ProxyServer2","Frm_OutboundProxy2");
+ReSetIpRmZero("Frm_RegisterServer1","Frm_RegisterServer2");
+if(pageCheckValue() == true)
+{
+jslSetValue("IF_INDEX", "Frm_VP");
+pageSetValue();
+setValue("IF_ACTION", "apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+else
+{
+}
+}
+function ChangeVP()
+{
+jslSetValue("IF_INDEX", "Frm_VP");
+DisableALL();
+getObj("fSubmit").submit();
+}
+</script>

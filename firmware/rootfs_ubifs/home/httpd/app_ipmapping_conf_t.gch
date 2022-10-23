@@ -1,0 +1,82 @@
+<%
+IMPORT FILE "ipmap_gch.gch";
+IMPORT FILE "app_ipmapping_conf_js.gch";
+%>
+<div class="space_0" id="note">
+<table width="500px" border="0" class="table">
+<tbody>
+<tr>
+<td valign="top" style="width:30px;"><img src="img/info.gif"></td>
+<td height="18" align="left" style="padding-left:10px;">
+&?pro_ipmap_014;<br>
+&?pro_ipmap_015;<br>
+&?pro_ipmap_016;<br>
+<br>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<table id="TestContent"  class="table" width="550px" border="0">
+<tr>
+<td class="td1"><font id="Fnt_WANCViewName">&?pro_ipmap_003;</font></td>
+<td class="td2">
+<select name="Frm_WANCViewName" id="Frm_WANCViewName"  size="1" class="list_2">
+<% IMPORT FILE "wan_func.gch";
+wanV4QueryByApp("firewall");
+%>
+</select>
+</td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_RuleType">&?pro_ipmap_004;</font></td>
+<td class="td2">
+<select name="Frm_RuleType" id="Frm_RuleType"  size="1" class="list_2" onchange="changeRuleType()">
+<option value="One-to-One" selected="selected">&?pro_ipmap_005;</option>
+<option value="Many-to-One">&?pro_ipmap_006;</option>
+<option value="Server">&?pro_ipmap_007;</option>
+</select>
+</td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_LocalIP">&?pro_ipmap_008;</font></td>
+<td class="td2"><input name="Frm_LocalIP" id="Frm_LocalIP" type="text" class="inputId5"  value="" size="15" /></td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_EndLocalIP" disabled="disabled">&?pro_ipmap_009;</font></td>
+<td class="td2"><input name="Frm_EndLocalIP" id="Frm_EndLocalIP" type="text" class="inputId5"  value="" size="15" disabled="disabled"/></td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_PublicIP">&?pro_ipmap_010;</font></td>
+<td class="td2"><input name="Frm_PublicIP" id="Frm_PublicIP" type="text" class="inputId5"  value="" size="15" /></td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_EndPublicIP" disabled="disabled">&?pro_ipmap_011;</font></td>
+<td class="td2"><input name="Frm_EndPublicIP" id="Frm_EndPublicIP" type="text" class="inputId5"  value="" size="15" disabled="disabled"/></td>
+</tr>
+<tr>
+<td class="td3" colspan="4">
+<input  type="button" name="Btn_Add" id="Btn_Add" class="button2" value="&?btn007;" onclick="pageAdd()"/>
+<input  type="button" name="Btn_Edit" id="Btn_Edit" class="button2" value="&?btn003;" onclick="pageEdit()" style="display:none" />
+<input name="back" type="button" id="back" value="&?btn004;"  class="button2" onclick="back4add()" style="display:none"/>
+</td>
+</tr>
+<tr>
+<td class="td1" colspan="4"></td>
+</tr>
+</table>
+<table id="fwpm_Table" class="item" width="530px" border="0" cellpadding="0" cellspacing="1" bgcolor="#979797">
+<tr class="h2_s title_1">
+<td width="50" rowspan="2">&?pro_ipmap_003;</td>
+<td width="50" rowspan="2">&?pro_ipmap_004;</td>
+<td width="">&?pro_ipmap_008;</td>
+<td width="">&?pro_ipmap_010;</td>
+<td width="50" rowspan="2">&?btn003;</td>
+<td width="50" rowspan="2">&?btn006;</td>
+</tr>
+<tr class="h2_s title_1">
+<td width="">&?pro_ipmap_009;</td>
+<td width="">&?pro_ipmap_011;</td>
+</tr>
+</table>
+<div id="div4"></div>

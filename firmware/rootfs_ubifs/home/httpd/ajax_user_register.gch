@@ -1,0 +1,31 @@
+<%
+IMPORT FILE "common_gch.gch";
+var PARANUM = 12;
+var PARA[12] =
+{
+"UserID",
+"UserName",
+"RegisterStatus",
+"ErrorCode",
+"Result",
+"Status",
+"Limit",
+"Times",
+"NeedReboot",
+"ServiceNum",
+"ServiceName",
+"RegType"
+};
+var FP_ACTION = request("IF_ACTION");
+var FP_HANDLE;
+if(FP_ACTION == "register")
+{
+FP_HANDLE = create_paralist();
+setpara(FP_HANDLE, "UserName");
+setpara(FP_HANDLE, "UserID");
+setpara(FP_HANDLE, "RegType");
+set_inst(FP_HANDLE, "OBJ_USER_REGISTER", "");
+}
+var devXML = getSIXML("OBJ_USER_REGISTER", PARA, PARANUM);
+outputXML(devXML);
+%>

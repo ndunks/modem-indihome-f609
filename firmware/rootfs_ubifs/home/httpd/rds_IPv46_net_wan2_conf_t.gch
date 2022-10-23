@@ -1,0 +1,4 @@
+<%
+setenv("upModeValue", 2);
+IMPORT FILE  "rds_IPv46_net_wan_conf_t.gch";
+%>

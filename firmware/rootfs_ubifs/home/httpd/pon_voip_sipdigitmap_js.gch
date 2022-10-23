@@ -1,0 +1,146 @@
+<script language="javascript">
+var DIGITMAP_PARA = new Array(
+"Enable",
+"Name",
+"DigitMap",
+"DigitMapEnable"
+);
+var DMTIMER_PARA =  new Array(
+"ShortTimer",
+"LongTimer"
+);
+<%
+var cver = getenv("CurrentVersionInfo");
+%>
+function getmsg(id)
+{
+var str = new Array();
+str[0]  = new Array(101, "&?error_101;");
+str[1]  = new Array(102, "&?error_102;");
+str[2]  = new Array(103, "&?error_103;");
+str[3]  = new Array(108, "&?error_108;");
+str[4]  = new Array(116, "&?error_116;");
+str[5]  = new Array(117, "&?error_117;");
+return getMsgFormArray(str, arguments)
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+moveErrLayer(570,4);
+pageGetValue();
+if("<%=cver;%>" == "85")
+{
+jslEnDisplay("TR_LongTimer","TR_ShortTimer");
+}
+}
+function pageGetValue()
+{
+var instNum = getValue("VP_INSTNUM");
+var j = 0;
+for (var i=0; i<instNum; i++)
+{
+j = i+1;
+addSelectOption("Frm_VP", i, "VP"+j);
+}
+if(instNum < 2)
+{
+jslDiDisplay("TR_VP");
+}
+jslSetValue("Frm_VP", "IF_INDEX");
+jslSetValue("Frm_DigitMap","DigitMap");
+jslSetValue("Frm_LongTimer","LongTimer");
+jslSetValue("Frm_ShortTimer","ShortTimer");
+}
+function pageSetValue()
+{
+HiddenParaInit(DIGITMAP_PARA);
+HiddenParaInit(DMTIMER_PARA);
+jslSetValue("DigitMap","Frm_DigitMap");
+jslSetValue("LongTimer","Frm_LongTimer");
+jslSetValue("ShortTimer","Frm_ShortTimer");
+}
+function pageCheckValue()
+{
+var  DigitMap_Result = checkStrLengthRange(getValue("Frm_DigitMap"),1,4096);
+if(DigitMap_Result == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_DigitMap","Fnt_DigitMap",msg);
+return false;
+}
+else if(DigitMap_Result == -3)
+{
+msg = getmsg(102,1,4096);
+ShowErrorForCom("Frm_DigitMap","Fnt_DigitMap",msg);
+return false;
+}
+var LongTimer_Result = checkIntegerRange(getValue("Frm_LongTimer"),400,2000);
+if(LongTimer_Result == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_LongTimer","Fnt_LongTimer",msg);
+return false;
+}
+else if(LongTimer_Result == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_LongTimer","Fnt_LongTimer",msg);
+return false;
+}
+else if(LongTimer_Result == -3)
+{
+msg = getmsg(116,400,2000);
+ShowErrorForCom("Frm_LongTimer","Fnt_LongTimer",msg);
+return false;
+}
+var ShortTimer_Result = checkIntegerRange(getValue("Frm_ShortTimer"),0,1000);
+if(ShortTimer_Result == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_ShortTimer","Fnt_ShortTimer",msg);
+return false;
+}
+else if(ShortTimer_Result == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_ShortTimer","Fnt_ShortTimer",msg);
+return false;
+}
+else if(ShortTimer_Result == -3)
+{
+msg = getmsg(116,0,1000);
+ShowErrorForCom("Frm_ShortTimer","Fnt_ShortTimer",msg);
+return false;
+}
+return true;
+}
+function pageSubmit()
+{
+
+if( pageCheckValue() == true )
+{
+jslSetValue("IF_INDEX", "Frm_VP");
+jslDisable("Btn_Submit","Btn_Cancel");
+pageSetValue();
+setValue("IF_ACTION", "apply");
+getObj("fSubmit").submit();
+}
+else
+{
+}
+}
+function pageCancel()
+{
+jslDisable("Btn_Submit","Btn_Cancel");
+getObj("fSubmit").submit();
+}
+function ChangeVP()
+{
+jslSetValue("IF_INDEX", "Frm_VP");
+DisableALL();
+getObj("fSubmit").submit();
+}
+</script>

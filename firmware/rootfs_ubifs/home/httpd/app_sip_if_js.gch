@@ -1,0 +1,155 @@
+<script language="javascript">
+var SIPPRO_PARA= new Array(
+"WanConn"
+,"MediaWanConn"
+);
+function getmsg(id)
+{
+var str  = new Array();
+str[0]   = new Array(167, "&?error_167;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+pageGetValue();
+}
+function pageGetValue()
+{
+setSelOtherValue(getObj("Frm_WanConn"),"", null);
+jslDoShowComboBox("Frm_WanConn", "WanConn");
+getObj("Frm_WanConn").onchange = function() {
+initMediaWanOptions();
+};
+initMediaWanOptions();
+jslDoShowComboBox("Frm_MediaWanConn","MediaWanConn");
+}
+function setSelOtherValue(obj, value, id)
+{
+var flag = 0;
+var mm = "";
+if(id == null)
+{
+mm = "";
+}
+else
+{
+mm = getValue(id);
+}
+if (("" == mm) || ("N/A" == mm) || (null == mm))
+{
+var num = obj.length;
+for (var i = num ;i > 0 ;i-- )
+{
+var name = obj.options[i-1].value;
+var text = obj.options[i-1].text;
+var mode = obj.options[i-1].getAttribute("ipmode");
+obj.options[i] = new Option(text, text);
+obj.options[i].value = name;
+obj.options[i].setAttribute("ipmode",mode);
+}
+obj.options[0] = new Option(value,value);
+obj.options[0].value = value;
+obj.options[0].text = value;
+obj.options[0].setAttribute("ipmode",0);
+flag = 1;
+}
+return flag;
+}
+function initWanOptions()
+{
+var wanEle = getObj("Frm_WanConn");
+var defaultOption = document.createElement("option");
+defaultOption.setAttribute("ipmode", 0);
+defaultOption.value = "";
+var defaultOptionTxt = document.createTextNode("");
+defaultOption.appendChild(defaultOptionTxt);
+wanEle.insertBefore(defaultOption, wanEle.firstChild);
+if (wanEle.selectedIndex < 0)
+{
+wanEle.selectedIndex = 0;
+}
+}
+function initMediaWanOptions()
+{
+var wanEle = getObj("Frm_WanConn");
+if (!wanEle.options || wanEle.selectedIndex < 0)
+{
+return;
+}
+var ipmodeFilter = wanEle.options[wanEle.selectedIndex]
+.getAttribute("ipmode");
+var mediaWanEle = getObj("Frm_MediaWanConn");
+var mediaWanValue = "";
+if (mediaWanEle.options && mediaWanEle.selectedIndex > -1)
+{
+mediaWanValue = mediaWanEle.options[mediaWanEle.selectedIndex].value;
+}
+mediaWanEle.innerHTML = "";
+var mediaWanSelectedIndex = -1;
+var index = 0;
+for (var i = 0; i < wanEle.options.length; i++)
+{
+var option = wanEle.options[i];
+var ipmode = option.getAttribute("ipmode");
+if (ipmodeFilter == 0 || ipmode == 0
+|| i == wanEle.selectedIndex
+|| (ipmodeFilter == 1 && ipmode == 1)
+|| (ipmodeFilter == 2 && ipmode == 2))
+{
+if (option.value == mediaWanValue)
+{
+mediaWanSelectedIndex = index;
+}
+mediaWanEle.options[index] = new Option();
+mediaWanEle.options[index].value = option.value;
+mediaWanEle.options[index].text  = option.text;
+var tmp=option.getAttribute("ipmode");
+if (tmp !=null)
+{
+mediaWanEle.options[index].setAttribute("ipmode",tmp)
+}
+
+
+index++;
+}
+}
+mediaWanEle.selectedIndex = mediaWanSelectedIndex;
+}
+function pageSetValue()
+{
+HiddenParaInit(SIPPRO_PARA);
+jslSetValue("WanConn", "Frm_WanConn");
+jslSetValue("MediaWanConn", "Frm_MediaWanConn");
+}
+function pageCheckValue()
+{
+return true;
+}
+function pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+if(pageCheckValue() == true)
+{
+pageSetValue();
+setValue("IF_ACTION", "apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+else
+{
+}
+}
+function ChangeVP()
+{
+jslSetValue("IF_INDEX", "Frm_VP");
+DisableALL();
+getObj("fSubmit").submit();
+}
+</script>

@@ -1,0 +1,205 @@
+<script language="javascript">
+var TESTFTP_CONTROL_PARA = new Array(
+"Control",
+"None"
+);
+var TESTFTP_PARA = new Array(
+"Host",
+"Port",
+"User",
+"Pass",
+"FilePath",
+"Curfile",
+"Ratio",
+"Abbrevsize",
+"Remaining",
+"ReceivedBytes",
+"Pastseconds",
+"ByteSec",
+"Flag"
+);
+
+
+function getmsg(id)
+{
+
+var str     = new Array();
+str[0]   = new Array(118, "&?error_118;");
+str[1]   = new Array(122, "&?error_122;");
+str[2]   = new Array(108, "&?error_108;");
+str[3]   = new Array(101, "&?error_101;");
+str[4]   = new Array(115, "&?error_115;");
+str[5]   = new Array(116, "&?error_116;");
+str[6]   = new Array(117, "&?error_117;");
+str[7]   = new Array(114, "&?error_114;");
+str[8]   = new Array(102, "&?error_102;");
+str[9]   = new Array(103, "&?error_103;");
+str[10]  = new Array(111, "&?error_111;");
+str[11]  = new Array(197, "&?error_197;");
+
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+OldProcessRet(errstr, errpara);
+if("SUCC" != errstr)
+{
+jslEnable("Btn_Download");
+}
+moveErrLayer(595,93);
+pageGetValue();
+if(getValue("Flag") == 1)
+{
+jslDisable("Btn_Download");
+}
+else if(getValue("Flag") == 0 || getValue("Flag") == -1 )
+{
+jslEnable("Btn_Download");
+}
+return true;
+}
+function pageGetValue()
+{
+jslSetValue("Frm_Host","Host");
+jslSetValue("Frm_Port","Port");
+jslSetValue("Frm_User","User");
+jslSetValue("Frm_Pass","Pass","GET");
+jslSetValue("Frm_FilePath","FilePath");
+}
+function Check_IntegerRange(value,min,max,Frm,Fnt)
+{
+var tem = checkIntegerRange(value,min,max);
+if(tem==-1)
+{
+msg = getmsg(101);
+ShowErrorForCom(Frm,Fnt,msg);
+return false;
+}
+else if(tem==-2)
+{
+msg = getmsg(115);
+ShowErrorForCom(Frm,Fnt,msg);
+return false;
+}
+else if(tem==-3)
+{
+msg = getmsg(116,min,max);
+ShowErrorForCom(Frm,Fnt,msg);
+return false;
+}
+return true;
+}
+function Check_CharRange(value,min,max,Frm,Fnt)
+{
+if(checkStrLengthRange(value, min, max) != true)
+{
+msg = getmsg(102,min,max);
+ShowErrorForCom(Frm,Fnt,msg);
+return false;
+}
+return true;
+}
+function pageCheckValue()
+{
+var IP = getValue("Frm_Host");
+if(IP == "")
+{
+msg =  getmsg(101);
+ShowErrorForCom("Frm_Host","Fnt_Host",msg);
+return false;
+}
+else if(checkIpAddress(IP,"")!=true)
+{
+msg =  getmsg(108);
+ShowErrorForCom("Frm_Host", "Fnt_Host", msg);
+return false;
+}
+var Port = getValue("Frm_Port");
+if(Check_IntegerRange(Port,1,65535,"Frm_Port","Fnt_Port")!=true)
+{
+return false;
+}
+var User = getValue("Frm_User");
+if(Check_CharRange(User,1,64,"Frm_User","Fnt_User")!=true)
+{
+return false;
+}
+var Pass = getValue("Frm_Pass");
+if(Check_CharRange(Pass,1,64,"Frm_Pass","Fnt_Pass")!=true)
+{
+return false;
+}
+var FilePath = getValue("Frm_FilePath");
+if(FilePath == "")
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_FilePath","Fnt_FilePath",msg);
+return false;
+}
+else if(Check_CharRange(FilePath,1,256,"Frm_FilePath","Fnt_FilePath") != true)
+{
+return false;
+}
+else if(FilePath.match("[\":*?<>|]") != null)
+{
+msg = getmsg(111);
+ShowErrorForCom("Frm_FilePath","Fnt_FilePath",msg);
+return false;
+}
+var length = FilePath.length;
+for(var j = 0 ;j < length; j++)
+{
+var xx = FilePath.charCodeAt(j);
+if(xx == 92)
+{
+msg = getmsg(111);
+ShowErrorForCom("Frm_FilePath","Fnt_FilePath",msg);
+return false;
+}
+}
+var char_first = FilePath.substr(0, 1);
+var len= FilePath.length;
+var char_end = FilePath.substr(len-1, 1);
+if(char_first != "/")
+{
+msg = getmsg(197);
+ShowErrorForCom("Frm_FilePath","",msg);
+return false;
+}
+if(char_end == "/")
+{
+msg = getmsg(197);
+ShowErrorForCom("Frm_FilePath","",msg);
+return false;
+}
+return true;
+}
+function pageSetValue()
+{
+HiddenParaInit(TESTFTP_PARA);
+HiddenParaInit(TESTFTP_CONTROL_PARA);
+jslSetValue("Host","Frm_Host");
+jslSetValue("Port","Frm_Port");
+jslSetValue("User","Frm_User");
+jslSetValue("Pass","Frm_Pass","SET");
+jslSetValue("FilePath","Frm_FilePath");
+setValue("Control","1");
+}
+function PageDownLoad()
+{
+ReSetIpRmZero("Frm_Host");
+if(pageCheckValue() == true)
+{
+pageSetValue();
+setValue("IF_ACTION", "apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+else
+{
+}
+}
+</script>

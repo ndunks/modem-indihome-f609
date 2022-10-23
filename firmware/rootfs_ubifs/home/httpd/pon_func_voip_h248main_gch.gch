@@ -1,0 +1,49 @@
+<%
+IMPORT FILE "common_gch.gch";
+function h248main_func(FP_ACTION, FP_INDEX, FP_ERRORSTR)
+{
+var FP_OBJNAME      = "OBJ_PON_VOIPH248MAIN_ID";
+var FP_PARANUM      = 36;
+var FP_MULTIDISPLAY = 0;  
+var PARA[36] =
+{
+"MGMIDType",
+"MGMID",
+"LocalPort",
+"MGCAddr1",
+"MGCPort1",
+"MGCAddr2",
+"MGCPort2",
+"ServiceChangeType",
+"RestartInterval",
+"HeartBeatInterval",
+"HeartBeatMessageType",
+"ThreeHandShake",
+"LongTimer",
+"MaxExecTimer",
+"PendingTimerInit",
+"MaxPendingTimes",
+"PendingType",
+"RetranIntervalTimer",
+"MaxRetranCount",
+"RetranTimerType",
+"AuthenticationMethID",
+"MD5AuthMGIDType",
+"MD5AuthMGID",
+"InitPublicKey",
+"DhPara_P",
+"DhPara_G",
+"PhysicalTermIDConfigMethod",
+"PhysicalTermIDPrefix",
+"PhysicalTermIDAddLen",
+"EphemeralTermIDPrefix",
+"EphemeralTermIDAddLen",
+"EphemeralTermIDUniform",
+"EphemeralTermIDStart",
+"DSCPMark",
+"QueueNum",
+"EthernetPriorityMark"
+};
+return getOldFunctionGCH(FP_OBJNAME, FP_MULTIDISPLAY, PARA, FP_PARANUM, FP_ACTION, FP_INDEX, FP_ERRORSTR);
+}
+%>

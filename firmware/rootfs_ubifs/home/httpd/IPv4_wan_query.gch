@@ -1,0 +1,44 @@
+
+<%
+IMPORT FILE "common_gch.gch";
+var ALL_OBJNAME = "OBJ_ALLWANC_ID";
+var IP_PPP_INSTNUM = query_list(ALL_OBJNAME, "IGD");
+var identity = "";
+var name = "";
+var IpMode = "";
+var Tun_OBJNAME = "OBJ_TUNNEL_ID";
+var type = "";
+if(IP_PPP_INSTNUM >= 1 && IP_PPP_INSTNUM != 888)
+{
+for(var i = 0; i < IP_PPP_INSTNUM; i++ )
+{
+identity = query_identity(i);
+type = query_wanctype(i);
+name     = query_name(i);
+IpMode   = get_IPMode(identity);
+if ("2" != IpMode && "bridge"!=type)
+{
+%>
+<option value="<%=identity;%>" ><%=encodeHTML(name);%></option>
+<%
+}
+}
+}
+%>
+<%
+if ( 0 != getenv("DevIPv6Effect") )
+{
+var TUN_INSTNUM = query_list(Tun_OBJNAME, "IGD");
+if(TUN_INSTNUM >= 1 && TUN_INSTNUM != 888)
+{
+for(var i = 0; i < TUN_INSTNUM; i++ )
+{
+identity = query_identity(i);
+name     = query_name(i);
+%>
+<option value="<%=identity;%>" ><%=name;%></option>
+<%
+}
+}
+}
+%>

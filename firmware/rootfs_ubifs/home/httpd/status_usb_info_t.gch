@@ -1,0 +1,124 @@
+<%
+IMPORT FILE "common_gch.gch";
+var FP_IDENTITY, FP_HANDLE,FP_INSTNUM;
+var PanelPort,DevName,DevID,ClassInfoStr,DevSpeed,ftpEnable;
+ftpEnable=0;
+FP_INSTNUM = query_list("OBJ_BRGRP_ID", "IGD");
+FP_IDENTITY = query_identity(0);
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, "OBJ_BRGRP_ID", FP_IDENTITY);
+var IPAddr = get_para(FP_HANDLE,"IPAddr");
+destroy_paralist(FP_HANDLE);
+FP_INSTNUM = query_list("OBJ_FMFTPSERVERCFG_ID", "IGD");
+FP_IDENTITY = query_identity(0);
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, "OBJ_FMFTPSERVERCFG_ID", FP_IDENTITY);
+ftpEnable = get_para(FP_HANDLE, "FtpEnable");
+destroy_paralist(FP_HANDLE);
+FP_INSTNUM = query_list("OBJ_USBDEV_ID", "IGD");
+if(FP_INSTNUM == 0 || FP_INSTNUM == "0")
+{
+%>
+<table class="inforContent" cellpadding="0" cellspacing="1">
+<tr>
+<td align="center">&?usb10;</td>
+</tr>
+</table>
+<%
+}
+for (var i=0; i<FP_INSTNUM; i++)
+{
+FP_HANDLE = create_paralist();
+FP_IDENTITY = query_identity(i);
+get_inst(FP_HANDLE, "OBJ_USBDEV_ID", FP_IDENTITY);
+PanelPort     = get_para(FP_HANDLE,"PanelPort");
+DevName    = get_para(FP_HANDLE,"DevName");
+DevID          = get_para(FP_HANDLE,"DevID");
+ClassInfoStr = get_para(FP_HANDLE,"ClassInfoStr");
+DevSpeed = get_para(FP_HANDLE,"DevSpeed");
+destroy_paralist(FP_HANDLE);
+switch (DevSpeed)
+{
+case "0":
+{
+DevSpeed = "&?usb17;";
+break;
+}
+case "1":
+{
+DevSpeed = "&?usb18;";
+break;
+}
+case "2":
+{
+DevSpeed = "&?usb19;";
+break;
+}
+case "3":
+{
+DevSpeed = "&?usb20;";
+break;
+}
+case "4":
+{
+DevSpeed = "&?usb21;";
+break;
+}
+default:
+break;
+}
+%>
+<table id="TestContent"  class="infor" cellpadding="0" cellspacing="1">
+<tr class="white_1">
+<td class="tdleft">&?usb01;</td>
+<td class="tdright"><% = PanelPort;%></td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft">&?usb02;</td>
+<td class="tdright"><% = encodeHTML(DevName);%></td>
+</tr>
+<tr class="white_1">
+<td class="tdleft">&?usb03;</td>
+<td class="tdright"><% = encodeHTML(ClassInfoStr);%></td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft">&?usb04;</td>
+<td class="tdright"><% = encodeHTML(DevID);%></td>
+</tr>
+<tr class="white_1">
+<td class="tdleft">&?usb12;</td>
+<td class="tdright"><% = DevSpeed;%></td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft">&?usb13;</td>
+<td class="tdright">&?usb14;</td>
+</tr>
+<%
+if((ftpEnable == 1) && (ClassInfoStr == "USB Mass Storage"))
+{
+%>
+<tr class="white_1">
+<td class="tdleft">&?usb22;</td>
+<td class="tdright"><a href="ftp://<%=IPAddr;%>" target="_blank"><%="ftp://" + IPAddr;%></a></td>
+</tr>
+<%
+}
+%>
+</table>
+<%
+}
+%>
+<form id="fSubmit" method="post" action="">
+<input type="hidden" id="IF_ERRORSTR" name="IF_ERRORSTR" value="">
+</form>
+<script>
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+}
+function pageReFresh()
+{
+jslDisable("Btn_ReFresh");
+getObj("fSubmit").submit();
+}
+</script>

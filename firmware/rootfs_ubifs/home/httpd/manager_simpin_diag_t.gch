@@ -1,0 +1,65 @@
+<%
+IMPORT FILE "simpin_diag_gch.gch";
+IMPORT FILE "manager_simpin_diag_js.gch";
+var SimPinStatus = getenv("SimPinStatus");
+if(SimPinStatus == "INPUT_PIN")
+{
+IMPORT FILE "manager_simpin_inputpin_t.gch";
+}
+else if(SimPinStatus == "INPUT_PUK")
+{
+IMPORT FILE "manager_simpin_inputpuk_t.gch";
+}
+else if(SimPinStatus == "DISABLE_PIN")
+{
+IMPORT FILE "manager_simpin_disablepin_t.gch";
+}
+else if(SimPinStatus == "ENABLE_PIN")
+{
+IMPORT FILE "manager_simpin_enablepin_t.gch";
+}
+else
+{
+%>
+<table id="Frm_ConfigNote" class="table" width="450px" border="0" style="display:none;">
+<tr>
+<td align=center>&?cmn39;</td>
+</tr>
+<tr>
+<td align=center>&nbsp;</td>
+</tr>
+</table>
+<div class="space_0">
+<div style="text-align:center;width:500px;margin-left:0px">
+<div style="position:absolute; left:284px; height:30px;margin-top:3px;">
+</div>
+<ul>
+<li style="margin-top:5px;text-align:left; margin-left:50px;">
+<%
+if ( SimPinStatus == "SIM_FAILURE" )
+{
+%>
+&?cmn37;
+<%
+}
+else if ( SimPinStatus == "SIM_BUSY" )
+{
+%>
+&?cmn38;
+<%
+}
+else
+{
+%>
+&?cmn36;
+<%
+}
+%>
+</li>
+</ul>
+</div>
+</div>
+<div id="div4"></div>
+<%
+}
+%>

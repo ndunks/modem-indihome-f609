@@ -1,0 +1,770 @@
+<script language="javascript">
+var CONFIG_PARA = new Array(
+"SettingStatus",
+"CardIsIn",
+"MaxInterface",
+"DeviceMode",
+"CardMode",
+"CardRev",
+"Class",
+"PID",
+"VID",
+"ValidIf",
+"Enable",
+"RadioStatus",
+"Standard",
+"BeaconInterval",
+"RtsCts",
+"Fragment",
+"DTIM",
+"TxPower",
+"CountryCode",
+"TxRate",
+"Channel",
+"ESSID",
+"ESSIDPrefix",
+"ACLPolicy",
+"BeaconType",
+"WEPAuthMode",
+"WEPEncryptionLevel",
+"WEPKeyIndex",
+"WPAAuthMode",
+"WPAEncryptType",
+"WPAGroupRekey",
+"WPAEAPServerIp",
+"RadiusPort",
+"RadiusServerPort",
+"WPAEAPSecret",
+"PossibleChannels",
+"BasicDataRates",
+"OpDataRates",
+"PossibleTxRates",
+"OOBAccessEnabled",
+"BeaconEnabled",
+"ESSIDHideEnable",
+"RegulatoryDomain",
+"WlanMode",
+"DistanceFromRoot",
+"PeerBSSID",
+"AuthServiceMode",
+"QosType",
+"Priority",
+"UAPSDEnabled",
+"AutoChannelEnabled",
+"ChannelsInUse",
+"11iAuthMode",
+"11iEncryptType",
+"MaxUserNum",
+"SSIDIsolationEnable",
+"VapIsolationEnable",
+"Band",
+"11nMode",
+"BandWidth",
+"SideBand",
+"11nRate",
+"SGIEnabled",
+"GreenField",
+"11acMode"
+);
+var b_rate = new Array(
+"1",
+"2",
+"5.5",
+"11"
+);
+var g_bg_rate = new Array(
+"1",
+"2",
+"5.5",
+"11",
+"6",
+"9",
+"12",
+"18",
+"24",
+"36",
+"48",
+"54"
+);
+<%
+var cver = getenv("CurrentVersionInfo");
+%>
+function getmsg(id)
+{
+var str  = new Array();
+str[0]   = new Array(101, "&?error_101;");
+str[1]   = new Array(102, "&?error_102;");
+str[2]   = new Array(103, "&?error_103;");
+str[3]   = new Array(113, "&?error_113;");
+str[4]   = new Array(115, "&?error_115;");
+str[5]   = new Array(116, "&?error_116;");
+str[6]   = new Array(117, "&?error_117;");
+str[7]   = new Array(118, "&?error_118;");
+str[8]   = new Array(119, "&?error_119;");
+str[9]   = new Array(122, "&?error_122;");
+return getMsgFormArray(str, arguments);
+}
+function fulfilSideBandOption(countryCode, channel)
+{
+clearSelect("Frm_SideBand");
+if (countryCode == "caI" || countryCode == "usI")
+{
+if ((channel == "1") || (channel == "2") || (channel == "3") || (channel == "4"))
+{
+addSelectOption("Frm_SideBand", "Upper", "Upper");
+}
+else if ((channel == "8") || (channel == "9") || (channel == "10") || (channel == "11"))
+{
+addSelectOption("Frm_SideBand", "Lower", "Lower");
+}
+else if ((channel == "5") || (channel == "6") || (channel == "7"))
+{
+addSelectOption("Frm_SideBand", "Lower", "Lower");
+addSelectOption("Frm_SideBand", "Upper", "Upper");
+}
+}
+else
+{
+if ((channel == "1") || (channel == "2") || (channel == "3") || (channel == "4"))
+{
+addSelectOption("Frm_SideBand", "Upper", "Upper");
+}
+else if ((channel == "10") || (channel == "11") || (channel == "12") || (channel == "13"))
+{
+addSelectOption("Frm_SideBand", "Lower", "Lower");
+}
+else if ((channel == "5") || (channel == "6") || (channel == "7") || (channel == "8") || (channel == "9"))
+{
+addSelectOption("Frm_SideBand", "Lower", "Lower");
+addSelectOption("Frm_SideBand", "Upper", "Upper");
+}
+}
+}
+function parasDispCtrl()
+{
+if ( (getValue("Frm_Standard") == "n")
+|| (getValue("Frm_Standard") == "g,n")
+|| (getValue("Frm_Standard") == "a,n")
+|| (getValue("Frm_Standard") == "b,g,n")
+|| (getValue("Frm_Standard") == "a,n,ac"))
+{
+jslEnDisplay("11n_BandWidth", "11n_SGIEnabled");
+if ( ((getValue("Frm_BandWidth") == "40MHz") || (getValue("Frm_BandWidth") == "Auto"))
+&& (getValue("Frm_Channel") != "Auto")
+&& (getValue("Band") != "5G"))
+{
+jslEnDisplay("11n_SideBand");
+}
+else
+{
+jslDiDisplay("11n_SideBand");
+}
+jslDiDisplay("tr_fragment");
+jslSetValue("Frm_Fragment","Fragment");
+}
+else
+{
+jslDiDisplay("11n_BandWidth", "11n_SideBand", "11n_SGIEnabled");
+jslEnDisplay("tr_fragment");
+}
+}
+function PageUpdate(id)
+{
+var channel = getValue("Frm_Channel");
+fulfilChannelOption(getValue("Frm_CountryCode"));
+if ( 1 == isValInSelect(channel, "Frm_Channel") )
+{
+setValue("Frm_Channel", channel);
+}
+else
+{
+setValue("Frm_Channel", "Auto");
+}
+var sideband = getValue("Frm_SideBand");
+fulfilSideBandOption(getValue("Frm_CountryCode"), getValue("Frm_Channel"));
+if ( 1 == isValInSelect(sideband, "Frm_SideBand") )
+{
+setValue("Frm_SideBand", sideband);
+}
+parasDispCtrl();
+if ( "Frm_Standard" == id )
+{
+if ( "n"==getValue("Frm_Standard")
+&& "Disabled"==getValue("Frm_QosType") )
+{
+alert("&?wlan0771;");
+}
+fulfilBandWidthOption(getValue("Frm_Standard"));
+}
+}
+function qosTypeChange()
+{
+if ( "n"==getValue("Frm_Standard")
+&& "Disabled"==getValue("Frm_QosType") )
+{
+alert("&?wlan0771;");
+}
+}
+function SubParaGetValue()
+{
+if(getValue("SSIDIsolationEnable") == "1")
+{
+setChecked("Frm_SSIDIsolationEnable", true);
+}
+else
+{
+setChecked("Frm_SSIDIsolationEnable", false);
+}
+jslSetValue("Frm_Standard", "Standard");
+if(getValue("CountryCode") == "")
+{
+setValue("Frm_CountryCode", "cnI");
+}
+else
+{
+jslSetValue("Frm_CountryCode","CountryCode");
+}
+if((getValue("AutoChannelEnabled") == "1") || (getValue("Channel") == "")
+|| (getValue("Channel") == "0"))
+{
+setValue("Frm_Channel", "Auto");
+}
+else
+{
+jslSetValue("Frm_Channel","Channel");
+}
+jslSetValue("Frm_BandWidth","BandWidth");
+jslSetValue("Frm_SideBand","SideBand");
+if(getValue("SGIEnabled") == "1")
+{
+setChecked("Frm_SGIEnabled", true);
+}
+else
+{
+setChecked("Frm_SGIEnabled", false);
+}
+jslSetValue("Frm_BeaconInterval","BeaconInterval");
+if(getValue("TxPower") == "")
+{
+if(<%=cver;%> == 14)
+{
+setValue("Frm_TxPower", "Low");
+}
+else
+{
+setValue("Frm_TxPower", "100%");
+}
+}
+else
+{
+jslSetValue("Frm_TxPower","TxPower");
+}
+if(getValue("QosType") == "")
+{
+setValue("Frm_QosType", "Disabled");
+}
+else
+{
+jslSetValue("Frm_QosType","QosType");
+}
+jslSetValue("Frm_RtsCts","RtsCts");
+jslSetValue("Frm_DTIM","DTIM");
+jslSetValue("Frm_Fragment","Fragment");
+}
+function disableParams()
+{
+jslDisable("Frm_Standard","Frm_CountryCode","Frm_Channel","Frm_BandWidth");
+jslDisable("Frm_SideBand","Frm_SGIEnabled","Frm_BeaconInterval","Frm_TxPower");
+jslDisable("Frm_QosType","Frm_RtsCts","Frm_DTIM","Frm_Fragment", "Frm_SSIDIsolationEnable");}
+function enableParams()
+{
+jslEnable("Frm_Standard","Frm_CountryCode","Frm_Channel","Frm_BandWidth");
+jslEnable("Frm_SideBand","Frm_SGIEnabled","Frm_BeaconInterval","Frm_TxPower");
+jslEnable("Frm_QosType","Frm_RtsCts","Frm_DTIM","Frm_Fragment", "Frm_SSIDIsolationEnable");
+}
+function Wireless_switch()
+{
+fulfilChannelOption(getValue("CountryCode"));
+fulfilSideBandOption(getValue("CountryCode"), getValue("Channel"));
+fulfilBandWidthOption(getValue("Standard"));
+SubParaGetValue();
+parasDispCtrl();
+var RFMode = getValue("Frm_RFMODE");
+var RealRF = getValue("RealRF");
+if( RFMode=="Disabled"
+|| (RFMode=="Scheduled" && RealRF=="0") )
+{
+disableParams();
+}
+else if ( RFMode=="Enabled"
+|| (RFMode=="Scheduled" && RealRF=="1") )
+{
+enableParams();
+}
+}
+function BeaconIntervalCheck()
+{
+var check;
+
+check = checkIntegerRange(getValue("Frm_BeaconInterval"), 40, 1000);
+if (check == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_BeaconInterval","Fnt_BeaconInterval",msg);
+return false;
+}
+if (check == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_BeaconInterval","Fnt_BeaconInterval",msg);
+return false;
+}
+if (check == -3)
+{
+msg = getmsg(116,40,1000);
+ShowErrorForCom("Frm_BeaconInterval","Fnt_BeaconInterval",msg);
+return false;
+}
+return true;
+}
+function RtsCtsCheck()
+{
+var check;
+
+check = checkIntegerRange(getValue("Frm_RtsCts"), 0, 2347);
+if (check == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_RtsCts","Fnt_RtsCts",msg);
+return false;
+}
+if (check == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_RtsCts","Fnt_RtsCts",msg);
+return false;
+}
+if (check == -3)
+{
+msg = getmsg(116,0,2347);
+ShowErrorForCom("Frm_RtsCts","Fnt_RtsCts",msg);
+return false;
+}
+return true;
+}
+function DTIMCheck()
+{
+var check;
+
+check = checkIntegerRange(getValue("Frm_DTIM"), 1, 5);
+if (check == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_DTIM","Fnt_DTIM",msg);
+return false;
+}
+if (check == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_DTIM","Fnt_DTIM",msg);
+return false;
+}
+if (check == -3)
+{
+msg = getmsg(116,1,5);
+ShowErrorForCom("Frm_DTIM","Fnt_DTIM",msg);
+return false;
+}
+return true;
+}
+function FragmentCheck()
+{
+var check;
+
+check = checkIntegerRange(getValue("Frm_Fragment"), 256, 2346);
+if (check == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_Fragment","Fnt_Fragment",msg);
+return false;
+}
+if (check == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_Fragment","Fnt_Fragment",msg);
+return false;
+}
+if (check == -3)
+{
+msg = getmsg(116,256,2346);
+ShowErrorForCom("Frm_Fragment","Fnt_Fragment",msg);
+return false;
+}
+return true;
+}
+function AllCheck()
+{
+if (BeaconIntervalCheck() == false)
+return false;
+if (RtsCtsCheck() == false)
+return false;
+if (DTIMCheck() == false)
+return false;
+if (FragmentCheck() == false)
+return false;
+return true;
+}
+function pageLoad(url)
+{
+moveErrLayer(580,95);
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+if (errstr != "SUCC" && errpara != "SUCC")
+{
+if((errpara == "BasicDataRates") || (errpara == "OpDataRates"))
+{
+errpara = "DataRates";
+}
+if((errpara == "Channel") || (errpara == "AutoChannelEnabled"))
+{
+errpara = "Channel";
+}
+}
+ProcessRet(errstr, errpara);
+pageGetValue();
+<%
+if((3 == cver) || (21 == cver) || (45 == cver) || (63 == cver) || (48 == cver) || (39 == cver) || (52 == cver) || (14 == cver) || (85 == cver) || (36 == cver) || (80 == cver))
+{
+%>
+jslEnDisplay("CountryCodeID");
+<%
+}
+%>
+}
+function fulfilChannelOption( countryCode )
+{
+clearSelect("Frm_Channel");
+addSelectOption("Frm_Channel", "Auto", "&?wan022;");
+var band = getValue("Band");
+var channelStr = getValue(countryCode + "," + band);
+var channelArr = channelStr.split(",");
+for (var i = 0; i < channelArr.length; i ++)
+{
+var temp_band = getValue("Frm_BandWidth");
+if("" == temp_band)
+var temp_band = getValue("BandWidth");
+if("5G" == band && (132 == channelArr[i] || 165 == channelArr[i] || 136 == channelArr[i] || 140 == channelArr[i]) && ("80MHz" == temp_band))
+{
+continue;
+}
+if("5G" == band && (165 == channelArr[i] || 140 == channelArr[i]) && ("40MHz" == temp_band))
+{
+continue;
+}
+addSelectOption("Frm_Channel", channelArr[i], channelArr[i]);
+}
+}
+function fulfilWorkModeOption()
+{
+var cardMode = getValue("CardMode");
+if ( "b,g,bg" == cardMode )
+{
+addSelectOption("Frm_Standard", "b", "IEEE 802.11b Only");
+addSelectOption("Frm_Standard", "g", "IEEE 802.11g Only");
+addSelectOption("Frm_Standard", "b,g", "Mixed(802.11b+802.11g)");
+}
+else if ( "b,g,n,bg,gn,bgn" == cardMode )
+{
+addSelectOption("Frm_Standard", "b", "IEEE 802.11b Only");
+addSelectOption("Frm_Standard", "g", "IEEE 802.11g Only");
+addSelectOption("Frm_Standard", "n", "IEEE 802.11n Only");
+addSelectOption("Frm_Standard", "b,g", "Mixed(802.11b+802.11g)");
+addSelectOption("Frm_Standard", "g,n", "Mixed(802.11g+802.11n)");
+addSelectOption("Frm_Standard", "b,g,n", "Mixed(802.11b+802.11g+802.11n)");
+}
+else if ( "a,n,an" == cardMode )
+{
+addSelectOption("Frm_Standard", "a", "IEEE 802.11a Only");
+addSelectOption("Frm_Standard", "n", "IEEE 802.11n Only");
+addSelectOption("Frm_Standard", "a,n", "Mixed(802.11a+802.11n)");
+}
+else if ( "a,b,g,n,an,bg,gn,bgn" == cardMode )
+{
+addSelectOption("Frm_Standard", "a", "IEEE 802.11a Only");
+addSelectOption("Frm_Standard", "b", "IEEE 802.11b Only");
+addSelectOption("Frm_Standard", "g", "IEEE 802.11g Only");
+addSelectOption("Frm_Standard", "n", "IEEE 802.11n Only");
+addSelectOption("Frm_Standard", "a,n", "Mixed(802.11a+802.11n)");
+addSelectOption("Frm_Standard", "b,g", "Mixed(802.11b+802.11g)");
+addSelectOption("Frm_Standard", "g,n", "Mixed(802.11g+802.11n)");
+addSelectOption("Frm_Standard", "b,g,n", "Mixed(802.11b+802.11g+802.11n)");
+}
+else if ( "2.4G n" == cardMode )
+{
+addSelectOption("Frm_Standard", "n", "IEEE 802.11n Only");
+}
+else if ( "5G n" == cardMode )
+{
+addSelectOption("Frm_Standard", "n", "IEEE 802.11n Only");
+}
+else if ( "2.4G n,5G n,2.4/5G n" == cardMode )
+{
+addSelectOption("Frm_Standard", "n", "IEEE 802.11n Only");
+}
+<%
+if (getenv("wlanIDname") == "5G")
+{
+%>
+else if ( "a,n,anac" == cardMode )
+{
+addSelectOption("Frm_Standard", "a", "IEEE 802.11a Only");
+addSelectOption("Frm_Standard", "n", "IEEE 802.11n Only");
+addSelectOption("Frm_Standard", "a,n", "Mixed(802.11a+802.11n)");
+addSelectOption("Frm_Standard", "a,n,ac", "Mixed(802.11a+802.11n+802.11ac)");
+}
+<%
+}
+%>
+}
+function fulfilBandWidthOption(value)
+{
+var wlanIDname = "<%=encodeJS(getenv("wlanIDname"));%>";
+var Standard = value;
+if (wlanIDname == "5G" && Standard == "a,n,ac")
+{
+addSelectOption("Frm_BandWidth", "Auto", "<%=encodeJS(load_string("wan022"));%>");
+addSelectOption("Frm_BandWidth", "20MHz", "20MHz");
+addSelectOption("Frm_BandWidth", "40MHz", "40MHz");
+addSelectOption("Frm_BandWidth", "80MHz", "80MHz");
+}
+else
+{
+clearSelect("Frm_BandWidth");
+addSelectOption("Frm_BandWidth", "Auto", "<%=load_string("wan022");%>");
+addSelectOption("Frm_BandWidth", "20MHz", "20MHz");
+addSelectOption("Frm_BandWidth", "40MHz", "40MHz");
+}
+}
+function pageGetValue()
+{
+if ( "0" == getValue("CardIsIn") )
+{
+setHTML("tipTdFst", "&?cwt024;");
+jslEnDisplay("trFst");
+}
+<%
+if(cver == 14)
+{
+%>
+addSelectOption("Frm_TxPower", "Low", "&?fico004;");
+addSelectOption("Frm_TxPower", "Middle", "&?fico010;");
+addSelectOption("Frm_TxPower", "High", "&?fico003;");
+<%
+}
+else
+{
+%>
+addSelectOption("Frm_TxPower", "100%", "100%");
+addSelectOption("Frm_TxPower", "80%", "80%");
+addSelectOption("Frm_TxPower", "60%", "60%");
+addSelectOption("Frm_TxPower", "40%", "40%");
+addSelectOption("Frm_TxPower", "20%", "20%");
+<%
+}
+%>
+setHTML("tipTdThird", "&?wlan084;");
+jslEnDisplay("trThird");
+var TimerEnable = getValue("TimerEnable");
+var RadioStatus = getValue("RadioStatus");
+var RFMode;
+if ( TimerEnable == "1" )
+{
+RFMode = "Scheduled";
+}
+else
+{
+if( RadioStatus == "1" )
+{
+RFMode = "Enabled";
+}
+else
+{
+RFMode = "Disabled";
+}
+}
+setValue("Frm_RFMODE", RFMode);
+<%
+if((getenv("CurrentVersionInfo") == 3) && (getenv("Right") == 2))
+{
+%>
+jslDisable("Frm_RFMODE");
+<%
+}
+%>
+fulfilWorkModeOption();
+Wireless_switch();
+}
+function pageSetValue()
+{
+var band = getValue("Band");
+HiddenParaInit(CONFIG_PARA);
+var RFMode = getValue("Frm_RFMODE");
+var TimerEnable, RadioStatus;
+if(RFMode == "Enabled")
+{
+TimerEnable = "0";
+RadioStatus = "1";
+}
+else if (RFMode == "Disabled")
+{
+TimerEnable = "0";
+RadioStatus = "0";
+}
+else
+{
+TimerEnable = "1";
+RadioStatus = "NULL";
+}
+setValue("TimerEnable", TimerEnable);
+setValue("RadioStatus", RadioStatus);
+if(getChecked("Frm_SSIDIsolationEnable") == true)
+{
+setValue("SSIDIsolationEnable", "1");
+}
+else
+{
+setValue("SSIDIsolationEnable", "0");
+}
+if(getValue("Frm_Standard") == "b")
+{
+setValue("BasicDataRates", "1,2");
+setValue("OpDataRates", "1,2,5.5,11");
+setValue("11nMode", "0");
+setValue("11acMode", "0");
+}
+else if(getValue("Frm_Standard") == "g")
+{
+setValue("BasicDataRates", "1,2,5.5,11,6,9,12,18,24");
+setValue("OpDataRates", "1,2,5.5,11,6,9,12,18,24,36,48,54");
+setValue("11nMode", "0");
+setValue("11acMode", "0");
+}
+else if(getValue("Frm_Standard") == "b,g")
+{
+setValue("BasicDataRates", "1,2,5.5,11");
+setValue("OpDataRates", "1,2,5.5,11,6,9,12,18,24,36,48,54");
+setValue("11nMode", "0");
+setValue("11acMode", "0");
+}
+else if(getValue("Frm_Standard") == "n")
+{
+setValue("BasicDataRates", "1,2,5.5,11");
+setValue("OpDataRates", "1,2,5.5,11,6,9,12,18,24,36,48,54");
+setValue("11nMode", "1");
+setValue("GreenField", "1");
+setValue("11acMode", "0");
+}
+else if(getValue("Frm_Standard") == "g,n")
+{
+setValue("BasicDataRates", "1,2,5.5,11,6,9,12,18,24");
+setValue("OpDataRates", "1,2,5.5,11,6,9,12,18,24,36,48,54");
+setValue("11nMode", "1");
+setValue("GreenField", "0");
+setValue("11acMode", "0");
+}
+else if(getValue("Frm_Standard") == "b,g,n")
+{
+setValue("BasicDataRates", "1,2,5.5,11");
+setValue("OpDataRates", "1,2,5.5,11,6,9,12,18,24,36,48,54");
+setValue("11nMode", "1");
+setValue("GreenField", "0");
+setValue("11acMode", "0");
+}
+if(getValue("Frm_Standard") == "a")
+{
+setValue("BasicDataRates", "1,2,5.5,11,6,9,12,18,24");
+setValue("OpDataRates", "1,2,5.5,11,6,9,12,18,24,36,48,54");
+setValue("11nMode", "0");
+setValue("GreenField", "0");
+setValue("11acMode", "0");
+}
+if(getValue("Frm_Standard") == "a,n")
+{
+setValue("BasicDataRates", "1,2,5.5,11,6,9,12,18,24");
+setValue("OpDataRates", "1,2,5.5,11,6,9,12,18,24,36,48,54");
+setValue("11nMode", "1");
+setValue("GreenField", "0");
+setValue("11acMode", "0");
+}
+if(getValue("Frm_Standard") == "a,n,ac")
+{
+setValue("BasicDataRates", "1,2,5.5,11,6,9,12,18,24");
+setValue("OpDataRates", "1,2,5.5,11,6,9,12,18,24,36,48,54");
+setValue("11nMode", "1");
+setValue("GreenField", "0");
+setValue("11acMode", "1");
+}
+jslSetValue("CountryCode","Frm_CountryCode");
+if(getValue("Frm_Channel") == "Auto")
+{
+setValue("AutoChannelEnabled", "1");
+}
+else
+{
+jslSetValue("Channel", "Frm_Channel");
+setValue("AutoChannelEnabled", "0");
+}
+if ( (getValue("Frm_Standard") == "n")
+|| (getValue("Frm_Standard") == "g,n")
+|| (getValue("Frm_Standard") == "b,g,n")
+|| (getValue("Frm_Standard") == "a,n")
+|| (getValue("Frm_Standard") == "a,n,ac") )
+{
+jslSetValue("BandWidth", "Frm_BandWidth");
+if(getChecked("Frm_SGIEnabled") == true)
+{
+setValue("SGIEnabled", "1");
+}
+else
+{
+setValue("SGIEnabled", "0");
+}
+if ( ((getValue("Frm_BandWidth") == "40MHz")
+|| (getValue("Frm_BandWidth") == "Auto"))
+&& ( getValue("Frm_Channel") != "Auto" )
+&& ( band != "5G" ))
+{
+jslSetValue("SideBand", "Frm_SideBand");
+}
+}
+jslSetValue("BeaconInterval","Frm_BeaconInterval");
+jslSetValue("TxPower","Frm_TxPower");
+jslSetValue("QosType","Frm_QosType");
+jslSetValue("RtsCts","Frm_RtsCts");
+jslSetValue("DTIM","Frm_DTIM");
+jslSetValue("Fragment","Frm_Fragment");
+}
+function pageSubmit()
+{
+if(AllCheck() == true)
+{
+ReSetValueRmZero("Frm_BeaconInterval");
+ReSetValueRmZero("Frm_RtsCts");
+ReSetValueRmZero("Frm_DTIM");
+ReSetValueRmZero("Frm_Fragment");
+jslDisable("Btn_Submit","Btn_Cancel");
+pageSetValue();
+setValue("IF_ACTION", "apply");
+setValue("IF_CONFIGTAG", "Y");
+DisableALL();
+getObj("fSubmit").submit();
+}
+}
+function pageCancel()
+{
+jslDisable("Btn_Submit","Btn_Cancel");
+DisableALL();
+getObj("fSubmit").submit();
+}
+</SCRIPT>

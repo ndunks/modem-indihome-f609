@@ -1,0 +1,33 @@
+
+<table id="Frm_ConfigNote" class="table" width="450px" border="0" style="display:none;">
+<tr>
+<td align=center>&?cmn20;</td>
+</tr>
+<tr>
+<td align=center>&nbsp;</td>
+</tr>
+</table>
+<div class="space_0">
+<div id="t_tip" style="width:450px;text-align:center;">
+<ul>
+<li style="padding-top:8px;text-align:left; margin-left:70px;">
+<span style="width:70px;display:inline-block;margin-left:-70px;text-align:right;">&?cwn2;&nbsp;</span>&?cmn23;
+</li>
+</ul>
+</div>
+</div>
+<div id="div4"></div>
+<table class="table" width="450px" border="0">
+<tr>
+<td class="td1"><font id="Fnt_PinCode">&?cmn21;</font></td>
+<td class="td2"><input type="password" id="Frm_PinCode" class="inputId5" value=""/></td>
+</tr>
+<tr>
+<td class="td1">&?cmn22;</td>
+<td class="td2"><font id="Fnt_PinRemain"></font></td>
+</tr>
+<tr>
+<td class="td1">&?cmn52;</td>
+<td class="td2"><input type="checkbox" id="Frm_RemPin" name="Frm_RemPin" value="" /></td>
+</tr>
+</table>

@@ -1,0 +1,245 @@
+<%
+IMPORT FILE "common_gch.gch";
+IMPORT FILE "wan_func.gch";
+var OBJ_HANDLE = create_paralist();
+var simulationType = request("SimulationType");
+if ( simulationType IS NULL )
+{
+simulationType = "PPPoE";
+}
+var simulationStarted = request("SimulationStarted");
+if ( simulationStarted IS NULL )
+{
+simulationStarted = "0";
+}
+set_para(OBJ_HANDLE, "SimulationType", simulationType);
+set_para(OBJ_HANDLE, "SimulationStarted", simulationStarted);
+set_para(OBJ_HANDLE, "OBJNAME0", "OBJ_SIMULATION_PPPOE_ID");
+set_para(OBJ_HANDLE, "OBJPREFIX0", "PPPOE_");
+set_para(OBJ_HANDLE, "OBJINSTDISP0", "NO");
+set_para(OBJ_HANDLE, "OBJNAME1", "OBJ_SIMULATION_DHCP_ID");
+set_para(OBJ_HANDLE, "OBJPREFIX1", "DHCP_");
+set_para(OBJ_HANDLE, "OBJINSTDISP1", "NO");
+if ( "PPPoE" == simulationType )
+{
+set_para(OBJ_HANDLE, "OBJNAME2", "OBJ_SIMULATION_PPPOE_GET_ID");
+set_para(OBJ_HANDLE, "OBJPREFIX2", "PPPOE_GET_");
+}
+else if ( "DHCP" == simulationType )
+{
+set_para(OBJ_HANDLE, "OBJNAME2", "OBJ_SIMULATION_DHCP_GET_ID");
+set_para(OBJ_HANDLE, "OBJPREFIX2", "DHCP_GET_");
+}
+else
+{
+}
+ModuleLogic(OBJ_HANDLE);
+destroy_paralist(OBJ_HANDLE);
+undoDBSave();
+IMPORT FILE "manager_svr_stimulate_js.gch";
+%>
+<table class="table" width="450px" border="0" style="margin:auto;">
+<!--测试进行中提示-->
+<tr id="Tbl_Stimulate_tip" style="display:none">
+<td class="td3" colspan="2">
+<span style="color:blue">&?Stimulate004;&?pub004;</span>
+&nbsp;&nbsp;<img src="img/uploading.gif">
+</td>
+</tr>
+<!-- 仿真类型 - 页面自己控制状态 -->
+<tr>
+<td class="td11"><font id="Fnt_SimulationType">&?Stimulate003;</font></td>
+<td class="td2">
+<select class="list_6" size="1" id="Frm_SimulationType" onchange="simulateTypeChange()">
+<option value="PPPoE">PPPoE</option>
+<option value="DHCP">IPoE</option>
+</select>
+</td>
+</tr>
+<!-- 端口 -->
+<tr id="Tr_PortViewName">
+<td class="td11"><font id="Fnt_PortViewName">&?dhcp_d014;</font></td>
+<td class="td2">
+<select class="list_6" size="1" id="Frm_PortViewName" name="Frm_PortViewName">
+<%
+LANQuery();
+%>
+</select>
+</td>
+</tr>
+<!-- 启用VLAN -->
+<tr id="Tr_UseVlan">
+<td class="td11"><font id="Fnt_UseVlan">&?wan066;</font></td>
+<td class="td2">
+<input type="checkbox" value="" id="Frm_UseVlan" name="Frm_UseVlan" onclick="UseVlanAuxDisplay()"/>
+</td>
+</tr>
+<!-- VLAN ID -->
+<tr id="Tr_VlanId">
+<td class="td11"><font id="Fnt_VlanId">VLAN ID</font></td>
+<td class="td2">
+<input type="text" name="Frm_VlanId" id="Frm_VlanId" class="inputId"/>(1 ~ 4094)
+</td>
+</tr>
+<!-- 802.1p -->
+<tr id="Tr_VlanPri">
+<td class="td11"><font id="Fnt_VlanPri">802.1p</font></td>
+<td class="td2">
+<select size="1" class="list_5" id="Frm_VlanPri" name="Frm_VlanPri">
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+</select>
+</td>
+</tr>
+<!-- PppoeUserName -->
+<tr id="Tr_PppoeUserName">
+<td class="td11"><font id="Fnt_PppoeUserName">&?wan019;</font></td>
+<td class="td2">
+<input type="text" id="Frm_PppoeUserName" value="" class="inputId"/>
+</td>
+</tr>
+<!-- PppoePassWord -->
+<tr id="Tr_PppoePassWord">
+<td class="td11"><font id="Fnt_PppoePassWord">&?va02;</font></td>
+<td class="td2">
+<input type="password" id="Frm_PppoePassWord" value="" class="inputId"/>
+</td>
+</tr>
+<!-- AuthType -->
+<tr id="Tr_AuthType">
+<td class="td11"><font id="Fnt_AuthType">&?wan021;</font></td>
+<td class="td2">
+<!--
+-->
+<select size="1" class="list_6" id="Frm_AuthType">
+<option value="0">&?wan022;</option> <!--auto-->
+<option value="2">&?wan023;</option> <!--PAP-->
+<option value="1">&?wan024;</option> <!--CHAP-->
+</select>
+</td>
+</tr>
+<!-- RetryTimes -->
+<tr id="Tr_RetryTimes">
+<td class="td11"><font id="Fnt_RetryTimes">&?Stimulate007;</font></td>
+<td class="td2">
+<input type="text" id="Frm_RetryTimes" value="" class="inputId"/>
+</td>
+</tr>
+<!-- SimuMAC -->
+<tr id="Tr_SimuMAC">
+<td class="td11"><font id="Fnt_SimuMAC">&?Stimulate008;</font></td>
+<td class="td2">
+<input type="text" id="Frm_SimuMAC" value="" class="inputId"/>
+</td>
+</tr>
+<!-- SimuTimeOut -->
+<tr id="Tr_SimuTimeOut">
+<td class="td11"><font id="Fnt_SimuTimeOut">&?Stimulate014;</font></td>
+<td class="td2">
+<input type="text" id="Frm_SimuTimeOut" value="" class="inputId"/>( s )
+</td>
+</tr>
+<!-- Opt60Mode -->
+<tr id="Tr_Opt60Mode">
+<td class="td11"><font id="Fnt_Opt60Mode">&?Stimulate015;</font></td>
+<td class="td2">
+<select size="1" class="list_6" id="Frm_Opt60Mode" onchange="Opt60ModeChange()">
+<option value="0">0</option>
+<option value="1">1</option>
+</select>
+</td>
+</tr>
+<!-- OptCode -->
+<tr id="Tr_OptCode">
+<td class="td11"><font id="Fnt_OptCode">OptCode</font></td>
+<td class="td2">
+<input type="text" id="Frm_OptCode" value="60" class="inputId"/>
+</td>
+</tr>
+<!-- UserNameOpt60 -->
+<tr id="Tr_UserNameOpt60">
+<td class="td11"><font id="Fnt_UserNameOpt60">&?wan019;</font></td>
+<td class="td2">
+<input type="text" id="Frm_UserNameOpt60" class="inputId"/>
+</td>
+</tr>
+<!-- PassWordOpt60 -->
+<tr id="Tr_PassWordOpt60">
+<td class="td11"><font id="Fnt_PassWordOpt60">&?va02;</font></td>
+<td class="td2">
+<input type="password" id="Frm_PassWordOpt60" class="inputId"/>
+</td>
+</tr>
+<!-- OptLen -->
+<tr id="Tr_OptLen">
+<td class="td11"><font id="Fnt_OptLen">OptLen</font></td>
+<td class="td2">
+<input type="text" id="Frm_OptLen" value="" class="inputId"/>
+</td>
+</tr>
+<!-- OptContent -->
+<tr id="Tr_OptContent">
+<td class="td11"><font id="Fnt_OptContent">&?Stimulate009;</font></td>
+<td class="td2">
+<input type="text" id="Frm_OptContent" value="" class="inputId"/>
+</td>
+</tr>
+<!-- BNeedPing -->
+<tr id="Tr_BNeedPing">
+<td class="td11"><font id="Fnt_BNeedPing"></font></td>
+<td class="td2">
+<input type="text" id="Frm_BNeedPing" value="1" class="inputId"/>
+</td>
+</tr>
+<!-- BNeedRelease -->
+<tr id="Tr_BNeedRelease">
+<td class="td11"><font id="Fnt_BNeedRelease"></font></td>
+<td class="td2">
+<input type="text" id="Frm_BNeedRelease" value="1" class="inputId"/>
+</td>
+</tr>
+<!-- PingDestIP -->
+<tr id="Tr_PingDestIP">
+<td class="td11"><font id="Fnt_PingDestIP">&?Stimulate010;</font></td>
+<td class="td2">
+<input type="text" id="Frm_PingDestIP" value="" class="inputId"/>
+</td>
+</tr>
+<!-- PingTimes -->
+<tr id="Tr_PingTimes">
+<td class="td11"><font id="Fnt_PingTimes">&?Stimulate011;</font></td>
+<td class="td2">
+<input type="text" id="Frm_PingTimes" value="" class="inputId"/>
+</td>
+</tr>
+<!-- PingTimeOut -->
+<tr id="Tr_PingTimeOut">
+<td class="td11"><font id="Fnt_PingTimeOut">&?Stimulate012;</font></td>
+<td class="td2">
+<input type="text" id="Frm_PingTimeOut" value="" class="inputId"/>( ms )
+</td>
+</tr>
+</table>
+<br>
+<table class="table" width="450px" border="0" style="margin:auto;">
+<!-- 仿真结果 -->
+<tr>
+<td class="td7" colspan="2" align="center"><font>&?Stimulate013;</font></td>
+</tr>
+<tr>
+<td class="td3" colspan="2">
+<textarea id="textarea_Stimulate" cols="" rows="" class="textarea_1" readonly="readonly">
+</textarea>
+</td>
+</tr>
+</table>
+<script type="text/javascript">
+SimulationTypeAuxDisplay();
+UseVlanAuxDisplay();
+</script>

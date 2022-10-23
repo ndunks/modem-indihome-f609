@@ -1,0 +1,5 @@
+﻿
+<%
+IMPORT FILE "wan_func.gch";
+wanV6QueryByApp("igmpproxy");
+%>

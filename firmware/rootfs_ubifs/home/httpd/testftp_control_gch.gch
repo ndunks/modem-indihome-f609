@@ -1,0 +1,15 @@
+<%
+IMPORT FILE "common_gch.gch";
+function testftp_control(FP_ACTION,FP_INDEX,FP_ERRORSTR)
+{
+var FP_OBJNAME      = "OBJ_TESTFTPCONTROL_ID";
+var FP_MULTIDISPLAY = 0;
+var FP_PARANUM      = 2;
+var PARA[2] =
+{
+"Control",
+"None"
+};
+return getFunctionGCH(FP_OBJNAME, FP_MULTIDISPLAY, PARA, FP_PARANUM, FP_ACTION, FP_INDEX, FP_ERRORSTR);
+}
+%>

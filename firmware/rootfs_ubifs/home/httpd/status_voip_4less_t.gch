@@ -1,0 +1,144 @@
+<%
+var FP_IDENTITY    = "";
+var FP_INDEX       = 0;
+var FP_INSTNUM     = 0;
+var FP_HANDLE      = "";
+var AuthUserName   = "";
+var RegStatus      = "";
+%>
+<div class="space_0">
+<table id="TestContent"  class="infor" width="410" border="0" cellpadding="0" cellspacing="1" bgcolor="#979797">
+<%
+FP_INSTNUM   = query_list( "OBJ_PON_VOIPPORTSTATUS_ID", "IGD");
+for(var i = 0; i < FP_INSTNUM; i++)
+{
+FP_IDENTITY  = query_identity(i);
+FP_HANDLE    = create_paralist();
+get_inst(FP_HANDLE, "OBJ_PON_VOIPPORTSTATUS_ID", FP_IDENTITY);
+RegStatus    = get_para(FP_HANDLE,"PortStatus");
+destroy_paralist(FP_HANDLE);
+%>
+<tr class="white_1">
+<td class="tdleft">&?sv01;</td>
+<td class="tdright">&?sv01;<%=i+1;%></td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft">&?sv02;</td>
+<%
+if(RegStatus == "0")
+{
+%>
+<td class="tdright">&?Registering;</td>
+<%
+}
+else if(RegStatus == "1")
+{
+%>
+<td class="tdright">&?Idle;</td>
+<%
+}
+else if(RegStatus == "2")
+{
+%>
+<td class="tdright">&?Hookoff;</td>
+<%
+}
+else if(RegStatus == "3")
+{
+%>
+<td class="tdright">&?Dialing;</td>
+<%
+}
+else if(RegStatus == "4")
+{
+%>
+<td class="tdright">&?Ringing;</td>
+<%
+}
+else if(RegStatus == "5")
+{
+%>
+<td class="tdright">&?Ringback;</td>
+<%
+}
+else if(RegStatus == "6")
+{
+%>
+<td class="tdright">&?Linking;</td>
+<%
+}
+else if(RegStatus == "7")
+{
+%>
+<td class="tdright">&?Linked;</td>
+<%
+}
+else if(RegStatus == "8")
+{
+%>
+<td class="tdright">&?Release;</td>
+<%
+}
+else if(RegStatus == "9")
+{
+%>
+<td class="tdright">&?Registerfail;</td>
+<%
+}
+else if(RegStatus == "10")
+{
+%>
+<td class="tdright">&?Inactive;</td>
+<%
+}
+%>
+</tr>
+<%
+}
+if(getenv("CurrentVersionInfo") == 85)
+{
+query_list( "OBJ_PONVOIPSLCCFG_ID", "IGD");
+FP_IDENTITY  = query_identity(0);
+FP_HANDLE    = create_paralist();
+get_inst(FP_HANDLE, "OBJ_PONVOIPSLCCFG_ID", FP_IDENTITY);
+var PortVoltage = get_para(FP_HANDLE,"PortVoltage");
+destroy_paralist(FP_HANDLE);
+query_list( "OBJ_VOIPSLCTEST112_ID", "IGD");
+FP_IDENTITY  = query_identity(0);
+FP_HANDLE    = create_paralist();
+get_inst(FP_HANDLE, "OBJ_VOIPSLCTEST112_ID", FP_IDENTITY);
+var ring_vol    = get_para(FP_HANDLE,"ring_vol");
+var battary    = get_para(FP_HANDLE,"battary");
+destroy_paralist(FP_HANDLE);
+%>
+<tr class="white_1">
+<td class="tdleft">&?Voltage002;</td>
+<td class="tdright"><%=ring_vol;%>&?Voltage005;</td>
+</tr>
+<tr class="blue_1">
+<td class="tdleft">&?Voltage001;</td>
+<td class="tdright"><%=PortVoltage;%>&?Voltage004;</td>
+</tr>
+<tr class="white_1">
+<td class="tdleft">&?Voltage003;</td>
+<td class="tdright"><%=battary;%>&?Voltage005;</td>
+</tr>
+<%
+}
+%>
+</table>
+</div>
+<form id="fSubmit" method="post" action="">
+<input type="hidden" id="IF_ERRORSTR" name="IF_ERRORSTR" value="ggg">
+</form>
+<script language="javascript">
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+}
+function pageReFresh()
+{
+jslDisable("Btn_ReFresh");
+getObj("fSubmit").submit();
+}
+</script>

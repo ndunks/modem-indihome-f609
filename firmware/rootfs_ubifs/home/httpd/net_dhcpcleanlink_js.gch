@@ -1,0 +1,63 @@
+<script language="javascript">
+var PARA=  new Array(
+"bSendRelease",
+"ZTE"
+);
+function getmsg(id)
+{
+var str  = new Array();
+str[0]   = new Array(101, "&?error_101;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errpara = getValue("IF_ERRORPARAM");
+ProcessRet(errstr, errpara);
+pageGetValue();
+}
+function pageGetValue()
+{
+if("1" == getValue("bSendRelease"))
+{
+setChecked("Frm_bSendRelease", true);
+}
+else
+{
+setChecked("Frm_bSendRelease", false);
+}
+}
+function pageSetValue()
+{
+HiddenParaInit(PARA);
+if( getChecked("Frm_bSendRelease") == true)
+{
+setValue("bSendRelease","1");
+}
+else
+{
+setValue("bSendRelease","0");
+}
+}
+function pageCheckValue()
+{
+return true;
+}
+function pageCancel()
+{
+jslDisable("Btn_Submit","Btn_Cancel");
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+if(pageCheckValue() == true)
+{
+jslDisable("Frm_bSendRelease");
+jslDisable("Btn_Submit","Btn_Cancel");
+pageSetValue();
+setValue("IF_ACTION", "apply");
+getObj("fSubmit").submit();
+}
+}
+</script>

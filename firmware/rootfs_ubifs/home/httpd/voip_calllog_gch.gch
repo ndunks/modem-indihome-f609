@@ -1,0 +1,31 @@
+<%
+IMPORT FILE "common_gch.gch";
+var FP_ERRORSTR       = "SUCC";
+var FP_HANDLE;
+var FP_INST_NUM        = 0;
+var INST_OBJNAME      = "OBJ_PON_VOIPCALLLOG_ID";
+var INST_PARANUM      = 6;
+var INST_PARA[6] =
+{
+"CallID",
+"BeginTime",
+"LocNumber",
+"RmtNumber",
+"Duration",
+"Result"
+};
+create_form_start("fSubmit", "");
+createBasicHidden();
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, INST_OBJNAME, "IGD");
+FP_INST_NUM = get_para(FP_HANDLE,"LOG_NUM");
+var DispNum = integer(FP_INST_NUM);
+for (var i=0; i<DispNum; i++)
+{
+create_hidden_multiinstpara1(FP_HANDLE, INST_PARA, i,  INST_PARANUM);
+}
+destroy_paralist(FP_HANDLE);
+create_hidden_sep("IF_DispNum", DispNum);
+getDisplayInstError(FP_ERRORSTR);
+create_form_end();
+%>

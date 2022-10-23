@@ -1,0 +1,80 @@
+<%
+IMPORT FILE "common_gch.gch";
+var FP_ERRORSTR       = "SUCC";
+var FP_HANDLE;
+var FP_ACTION         = request("IF_ACTION");
+var FP_ARP_NUM        = 0;
+var FP_THRESHOLD_NUM  = 0;
+var INST_OBJNAME      = "OBJ_GETARPINST_ID";
+var INST_PARANUM      = 4;
+var INST_PARA[4] =
+{
+"DestIP",
+"MACAddr",
+"Status",
+"Interface"
+};
+create_form_start("fSubmit", "");
+createBasicHidden();
+set_hidden("IF_ACTION", FP_ACTION);
+if ( "DISPPART"==FP_ACTION || "DISPALL"==FP_ACTION )
+{
+FP_ARP_NUM = request("IF_ARP_NUM");
+FP_THRESHOLD_NUM = request("IF_THRESHOLD_NUM");
+}
+else
+{
+FP_HANDLE = create_paralist();
+get_inst(FP_HANDLE, "OBJ_GETARPNUM_ID", "");
+FP_ARP_NUM = get_para(FP_HANDLE, "ARP_NUM");
+FP_THRESHOLD_NUM = get_para(FP_HANDLE, "THRESHOLD_NUM");
+destroy_paralist(FP_HANDLE);
+}
+create_hidden_sep("IF_ARP_NUM", FP_ARP_NUM);
+create_hidden_sep("IF_THRESHOLD_NUM", FP_THRESHOLD_NUM);
+var isInstGetExec = 0;
+FP_ARP_NUM = integer(FP_ARP_NUM);
+FP_THRESHOLD_NUM = integer(FP_THRESHOLD_NUM);
+var DispNum = 0;
+var DispType = 0;
+if ( FP_ARP_NUM <= FP_THRESHOLD_NUM )
+{
+DispNum = FP_ARP_NUM;
+DispType = 0;
+isInstGetExec = 1;
+}
+else
+{
+if ( "DISPPART" == FP_ACTION )
+{
+DispNum = FP_THRESHOLD_NUM;
+DispType = 1;
+isInstGetExec = 1;
+}
+else if ( "DISPALL" == FP_ACTION )
+{
+DispNum = FP_ARP_NUM;
+DispType = 0;
+isInstGetExec = 1;
+}
+else
+{
+isInstGetExec = 0;
+}
+}
+if ( 1 == isInstGetExec )
+{
+FP_HANDLE = create_paralist();
+set_para(FP_HANDLE, "DispNum", DispNum);
+set_para(FP_HANDLE, "DispType", DispType);
+get_inst(FP_HANDLE, INST_OBJNAME, "");
+for (var i=0; i<DispNum; i++)
+{
+create_hidden_multiinstpara1(FP_HANDLE, INST_PARA, i,  INST_PARANUM);
+}
+destroy_paralist(FP_HANDLE);
+create_hidden_sep("IF_DispNum", DispNum);
+}
+getDisplayInstError(FP_ERRORSTR);
+create_form_end();
+%>

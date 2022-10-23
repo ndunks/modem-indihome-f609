@@ -1,0 +1,145 @@
+<Object name="VoiceService" shortname="VS" objectType="Multi" wr_attr="3" spaattr="3">
+          <ObjectList>
+            <Object name="PhyInterface" shortname="VY" objectType="Multi" wr_attr="3" spaattr="3">
+              <ParameterList>
+                <Parameter name="InterfaceID" wr_attr="3" valueType="unsigned int" spaattr="3" />                                  
+              </ParameterList>
+              <ObjectList>
+                <Object name="Tests" shortname="PT" objectType="Single" wr_attr="3" spaattr="3">
+                  <ParameterList>
+                    <Parameter name="TestState" wr_attr="3" valueType="string" spaattr="3" len="16" />
+                    <Parameter name="TestSelector" wr_attr="3" valueType="string" spaattr="3" len="64" />
+                    <Parameter name="PhoneConnectivity" wr_attr="1" valueType="boolean" spaattr="3" />
+                  </ParameterList>
+		          <ObjectList>
+                    <Object name="X_ZTE-COM_SimulateTest" shortname="PM" objectType="Single" wr_attr="3" spaattr="3">
+                      <ParameterList>
+                        <Parameter name="TestType" wr_attr="3" valueType="string" spaattr="3" len="16" />
+                        <Parameter name="CalledNumber" wr_attr="3" valueType="string" spaattr="3" len="32" />
+                        <Parameter name="DialDTMFConfirmEnable" wr_attr="3" valueType="boolean" spaattr="3" />
+                        <Parameter name="DialDTMFConfirmNumber" wr_attr="3" valueType="string" spaattr="3" len="32" />
+                        <Parameter name="DialDTMFConfirmResult" wr_attr="1" valueType="boolean" spaattr="3" />
+                        <Parameter name="Status" wr_attr="1" valueType="string" spaattr="3" len="16" />
+                        <Parameter name="Conclusion" wr_attr="1" valueType="string" spaattr="3" len="16" />
+                        <Parameter name="CallerFailReason" wr_attr="1" valueType="string" spaattr="3" len="16" />
+                        <Parameter name="CalledFailReason" wr_attr="1" valueType="string" spaattr="3" len="16" />
+                        <Parameter name="FailedResponseCode" wr_attr="1" valueType="unsigned int" spaattr="3" />
+                      </ParameterList>
+                    </Object>
+                  </ObjectList>
+                </Object> 
+              </ObjectList>
+            </Object>      
+            <Object name="VoiceProfile" shortname="VP" objectType="Multi" wr_attr="3" spaattr="3" >
+              <ParameterList>
+                <Parameter name="Enable" wr_attr="3" valueType="string" spaattr="3" len="16" />
+                <Parameter name="Name" wr_attr="3" valueType="string" spaattr="3" len="64" />
+                <Parameter name="ClidMode" wr_attr="3" valueType="string" spaattr="3" len="16" />
+                <Parameter name="ReTxSignalMsgCount" wr_attr="1" valueType="unsigned int" spaattr="3" />
+		        <Parameter name="UnkownSignalMsgCount" wr_attr="1" valueType="unsigned int" spaattr="3" />
+		        <Parameter name="WrongSignalMsgCount" wr_attr="1" valueType="unsigned int" spaattr="3" />
+		        <Parameter name="RxSignalMsgCount" wr_attr="1" valueType="unsigned int" spaattr="3" />
+	        <Parameter name="TxSignalMsgCount" wr_attr="1" valueType="unsigned int" spaattr="3" />
+              </ParameterList>
+              <ObjectList>
+                <Object name="X_00D0D0_H248" shortname="VZ" objectType="Single" wr_attr="3" spaattr="3">
+                  <ParameterList>
+                    <Parameter name="X_00D0D0_MGCAddr1" wr_attr="3" valueType="string" spaattr="3" len="64" />
+                    <Parameter name="X_00D0D0_MGCPort1" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_MGCAddr2" wr_attr="3" valueType="string" spaattr="3" len="64" />
+                    <Parameter name="X_00D0D0_MGCPort2" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_LocalPort" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_MGMIDType" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_MGMID" wr_attr="3" valueType="string" spaattr="3" len="64" />
+                    <Parameter name="X_00D0D0_ServiceChangeType" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_RetranInterval" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_HeartBeatMessageType" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_HeartBeatInterval" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_ThreeHandShake" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_LongTimer" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_MaxExecTimer" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_AuthenticationMethID" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_MD5AuthMGIDType" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_MD5AuthMGID" wr_attr="3" valueType="string" spaattr="3" len="64" />
+                    <Parameter name="X_00D0D0_InitPublicKey" wr_attr="3" valueType="string" spaattr="3" len="64" />
+                    <Parameter name="X_00D0D0_DhPara_P" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_DhPara_G" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_PhysicalTermIDConfigMethod" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_PhysicalTermIDPrefix" wr_attr="3" valueType="string" spaattr="3" len="32" />
+                    <Parameter name="X_00D0D0_PhysicalTermIDAddLen" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_EphemeralTermIDPrefix" wr_attr="3" valueType="string" spaattr="3" len="32" />
+                    <Parameter name="X_00D0D0_EphemeralTermIDAddLen" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_EphemeralTermIDUniform" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_EphemeralTermIDStart" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_DSCPMark" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_QueueNum" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_EthernetPriorityMark" wr_attr="3" valueType="int" spaattr="3" />
+                    <Parameter name="X_00D0D0_DigitMapLongTimer" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_DigitMapShortTimer" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_DigitMapStartTimer" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_DigitMapZTimer" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_RegisterCycle" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_RetransmissionCycle" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="X_00D0D0_RetransmissionTime" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                  </ParameterList>
+                </Object>
+                <Object name="Line" shortname="VL" objectType="Multi" wr_attr="3" spaattr="3">
+                  <ParameterList>
+                    <Parameter name="Enable" wr_attr="3" valueType="string" spaattr="3" len="16" />
+                    <Parameter name="Status" wr_attr="1" valueType="string" spaattr="1" len="16" />
+                  </ParameterList>
+                  <ObjectList>
+                    <Object name="X_00D0D0_H248" shortname="LZ" objectType="Single" wr_attr="3" spaattr="3">
+                      <ParameterList>
+                        <Parameter name="X_00D0D0_PhysicalTermID" wr_attr="3" valueType="string" spaattr="3" len="64" />
+                      </ParameterList>
+                    </Object>
+                    <Object name="CallingFeatures" shortname="LF" objectType="Single" wr_attr="3" spaattr="3">
+                      <ParameterList>
+                        <Parameter name="CallerIDEnable" wr_attr="3" valueType="boolean" spaattr="3" />
+                        <Parameter name="CallerIDNameEnable" wr_attr="3" valueType="boolean" spaattr="3" />
+                        <Parameter name="CallWaitingEnable" wr_attr="3" valueType="boolean" spaattr="3" />                        
+                        <Parameter name="MWIEnable" wr_attr="3" valueType="boolean" spaattr="3" />
+                        <Parameter name="MessageWaiting" wr_attr="1" valueType="boolean" spaattr="3" />
+                      </ParameterList>
+                    </Object>
+                    <Object name="Stats" shortname="LX" objectType="Single" wr_attr="3" spaattr="3" >
+                      <ParameterList>
+                        <Parameter name="ResetStatistics" wr_attr="3" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="PacketsSent" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="PacketsReceived" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="BytesSent" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="BytesReceived" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="PacketsLost" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="Overruns" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="Underruns" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="ReceivePacketLossRate" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="FarEndPacketLossRate" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="ReceiveInterarrivalJitter" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="FarEndInterarrivalJitter" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="RoundTripDelay" wr_attr="1" valueType="unsigned int" spaattr="3" />
+                        <Parameter name="IncomingCallsReceived" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="IncomingCallsAnswered" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="IncomingCallsConnected" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="IncomingCallsFailed" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="OutgoingCallsAttempted" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="OutgoingCallsAnswered" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="OutgoingCallsConnected" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="OutgoingCallsFailed" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="CallsDropped" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="TotalCallTime" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="ServerDownTime" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="AverageFarEndInterarrivalJitter" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="AverageReceiveInterarrivalJitter" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                        <Parameter name="AverageRoundTripDelay" wr_attr="1" valueType="unsigned int" spaattr="1" />
+			            <Parameter name="RoundTripDelayPeak" wr_attr="1" valueType="unsigned int" spaattr="1" />
+			            <Parameter name="ReceiveInterarrivalJitterPeak" wr_attr="1" valueType="unsigned int" spaattr="1" />
+			            <Parameter name="FarEndInterarrivalJitterPeak" wr_attr="1" valueType="unsigned int" spaattr="1" />
+                      </ParameterList>
+                    </Object>
+                  </ObjectList>
+                </Object>
+              </ObjectList>
+            </Object>
+          </ObjectList>
+</Object>

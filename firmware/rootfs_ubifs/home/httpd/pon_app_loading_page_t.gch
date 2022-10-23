@@ -1,0 +1,12 @@
+<%
+IMPORT FILE "pon_loading_page_gch.gch";
+IMPORT FILE "pon_app_loading_page_js.gch";
+%>
+<table id="TestContent"  class="table" width="450px" border="0">
+<tr>
+<td class="td1">&?load_page003;</td>
+<td class="td2">
+<input type="checkbox" name="Frm_LoadPage_Enable" id="Frm_LoadPage_Enable" onclick="">
+</td>
+</tr>
+</table>

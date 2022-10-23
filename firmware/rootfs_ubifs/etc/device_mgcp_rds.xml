@@ -1,0 +1,60 @@
+<Object name="VoiceService" shortname="VS" objectType="Multi" wr_attr="3" spaattr="3">
+          <ObjectList>
+            <Object name="PhyInterface" shortname="VY" objectType="Multi" wr_attr="3" spaattr="3">
+              <ParameterList>
+                <Parameter name="InterfaceID" wr_attr="3" valueType="unsigned int" spaattr="3" />                                  
+              </ParameterList>
+              <ObjectList>
+                <Object name="Tests" shortname="PT" objectType="Single" wr_attr="3" spaattr="3">
+                  <ParameterList>
+                    <Parameter name="TestState" wr_attr="3" valueType="string" spaattr="3" len="16" />
+                    <Parameter name="TestSelector" wr_attr="3" valueType="string" spaattr="3" len="64" />
+                    <Parameter name="PhoneConnectivity" wr_attr="1" valueType="boolean" spaattr="3"/>
+                  </ParameterList>
+                </Object> 
+              </ObjectList>
+            </Object>   
+            <Object name="VoiceProfile" shortname="VP" objectType="Multi" wr_attr="3" spaattr="3" >
+              <ParameterList>
+                <Parameter name="Enable" wr_attr="3" valueType="string" spaattr="3" len="16" />
+                <Parameter name="Name" wr_attr="3" valueType="string" spaattr="3" len="64" />
+                <Parameter name="ClidMode" wr_attr="3" valueType="string" spaattr="3" len="16" />
+              </ParameterList>
+              <ObjectList>
+                <Object name="MGCP" shortname="VM" objectType="Single" wr_attr="3" spaattr="3">
+                  <ParameterList>
+                    <Parameter name="LineNamePrefix" wr_attr="3" valueType="string" spaattr="3" len="128" />
+                    <Parameter name="LocalDomain" wr_attr="3" valueType="string" spaattr="3" len="64" />
+                    <Parameter name="LocalPort" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="CA_DomainName1" wr_attr="3" valueType="string" spaattr="3" len="64" />
+                    <Parameter name="CA_Port1" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                    <Parameter name="CA_DomainName2" wr_attr="3" valueType="string" spaattr="3" len="64" />
+                    <Parameter name="CA_Port2" wr_attr="3" valueType="unsigned int" spaattr="3" />
+                  </ParameterList>
+                </Object>
+                <Object name="Line" shortname="VL" objectType="Multi" wr_attr="3" spaattr="3">
+                  <ParameterList>
+                    <Parameter name="Enable" wr_attr="3" valueType="string" spaattr="3" len="16" />
+                    <Parameter name="Status" wr_attr="1" valueType="string" spaattr="1" len="16" />
+                  </ParameterList>
+                  <ObjectList>
+                    <Object name="MGCP" shortname="LM" objectType="Single" wr_attr="3" spaattr="3">
+                      <ParameterList>
+                        <Parameter name="LineNameSN" wr_attr="3" valueType="string" spaattr="3" len="64" />
+                      </ParameterList>
+                    </Object>
+                    <Object name="CallingFeatures" shortname="LF" objectType="Single" wr_attr="3" spaattr="3">
+                      <ParameterList>
+                        <Parameter name="CallerIDEnable" wr_attr="3" valueType="boolean" spaattr="3" />
+                        <Parameter name="CallerIDNameEnable" wr_attr="3" valueType="boolean" spaattr="3" />
+                        <Parameter name="CallWaitingEnable" wr_attr="3" valueType="boolean" spaattr="3" />                        
+                        <Parameter name="MWIEnable" wr_attr="3" valueType="boolean" spaattr="3" />
+                        <Parameter name="MessageWaiting" wr_attr="1" valueType="boolean" spaattr="3" />
+                      </ParameterList>
+                    </Object>
+                  </ObjectList>
+                </Object>
+              </ObjectList>
+            </Object>
+          </ObjectList>
+</Object>

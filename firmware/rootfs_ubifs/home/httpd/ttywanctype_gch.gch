@@ -1,0 +1,76 @@
+<%
+IMPORT FILE "common_gch.gch";
+IMPORT FILE "ttywancppp_gch.gch";
+IMPORT FILE "ttywancip_gch.gch";
+var FP_ACTION, FP_IDENTITY, FP_HANDLE, FP_INDEX, FP_OBJNAME, FP_ERRORSTR, FP_ERRORTYPE;
+var FP_MULTIDISPLAY, FP_INSTNUM;
+FP_ACTION      = request("IF_ACTION");
+FP_INDEX       = request("IF_INDEX");
+FP_IDENTITY    = request("IF_IDENTITY");
+FP_OBJNAME     = "OBJ_DONGLEWANC_ID";
+var WANC_TYPE  = request("IF_WANCTYPE");
+FP_MULTIDISPLAY = request("IF_MULTIDISPLAY");
+if (FP_MULTIDISPLAY IS NULL)
+{
+FP_MULTIDISPLAY = -1; 
+}
+if ("NULL" == FP_IDENTITY || "" == FP_IDENTITY)
+{
+FP_IDENTITY = "";
+}
+create_form_start("fSubmit", "");
+createBasicHidden();
+FP_INSTNUM = query_list(FP_OBJNAME, "IGD");
+if (FP_INDEX IS NULL)
+{
+FP_INDEX = -1;
+if (FP_INSTNUM > 0)
+{
+FP_INDEX = 0;
+FP_MULTIDISPLAY = 0;
+FP_IDENTITY = query_identity(FP_INDEX);
+}
+}
+if (FP_INSTNUM > 0)
+{
+var WANC_HANDLE = create_paralist();
+WANC_TYPE    = query_wanctype(FP_INDEX);
+destroy_paralist(WANC_HANDLE);
+}
+create_hidden_sep("IF_WANCTYPE", WANC_TYPE);
+FP_ERRORSTR = "SUCC";
+if ("delete" == FP_ACTION)
+{
+var WANC_OBJNAME="";
+if("pppoe" == WANC_TYPE)
+WANC_OBJNAME = "OBJ_TTYWANCPPP_ID";
+else if("dhcp/static" == WANC_TYPE)
+WANC_OBJNAME = "OBJ_TTYWANCIP_ID";
+del_inst(WANC_OBJNAME, FP_IDENTITY);
+FP_ACTION   = "NULL";
+FP_IDENTITY = "";
+FP_INSTNUM  = 0;
+FP_INDEX    = -1;
+}
+if ("NULL" == FP_ACTION || ""==FP_ACTION ||("pppoe" == WANC_TYPE && ("apply" == FP_ACTION || "new" == FP_ACTION))||"pppdisconnect" == FP_ACTION||"pppconnect" == FP_ACTION)
+{
+FP_ERRORSTR = ttyPPP_func(FP_ACTION, FP_IDENTITY, FP_INSTNUM, FP_MULTIDISPLAY, FP_INDEX, FP_ERRORSTR);
+if ((FP_ERRORSTR!="SUCC") && (-1 == FP_IDENTITY) )
+{
+FP_ACTION="NULL";
+}
+}
+if ("NULL" == FP_ACTION || ""==FP_ACTION || ("dhcp/static" == WANC_TYPE && ("apply" == FP_ACTION || "new" == FP_ACTION )))
+{
+FP_ERRORSTR = ttyIP_func(FP_ACTION,FP_IDENTITY, FP_INSTNUM, FP_MULTIDISPLAY, FP_INDEX, FP_ERRORSTR);
+if ((FP_ERRORSTR!="SUCC") && (-1 == FP_IDENTITY))
+{
+FP_ACTION="NULL";
+}
+}
+create_hidden_sep("IF_ACTION", "");
+create_hidden_sep("IF_INSTNUM", FP_INSTNUM);
+create_hidden_sep("IF_MULTIDISPLAY", FP_MULTIDISPLAY);
+
+create_form_end();
+%>

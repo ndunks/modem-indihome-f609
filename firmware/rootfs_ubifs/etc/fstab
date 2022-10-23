@@ -1,0 +1,25 @@
+# <file system> <mount point>   <type>  <options>    <dump> <pass>
+
+# The syntax of busybox's fstab entry's a little different than traditional
+# mount, and doesn't work with the usual 'rootfs / rootfs rw 0 0' entry.
+# Actually, it's not needed unless you're mounting from a non-nfs device,
+# like a hard disk.  In that case, you probably need something like the 
+# following:
+
+# /dev/hda1       /               ext3    rw           1      1
+
+proc            /proc           proc    defaults     0      0
+sysfs           /sys            sysfs   defaults     0      0
+devpts          /dev/pts        devpts  defaults     0      0
+#tmpfs           /dev/shm        tmpfs   rw     0      0
+
+# usbfs isn't mounted by default as either USB needs to be statically linked
+# into the kernel, or the usbcore kernel module needs to be loaded
+# none          /proc/bus/usb   usbfs   defaults     0      0
+
+# tmpfs isn't mounted on /tmp by default for two reasons:
+#  a) it increases the memory footprint
+#  b) files there will disappear on reboot
+# none          /tmp            tmpfs   size=32M     0      0
+/dev/mtdblock7	/data	jffs2	defaults	0	0
+

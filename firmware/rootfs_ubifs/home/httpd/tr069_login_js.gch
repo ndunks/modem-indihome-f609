@@ -1,0 +1,88 @@
+<script language="javascript">
+function pageLoad()
+{
+validatecodeRefresh();
+<%
+if(getenv("request/login_err_type") == "INVALID_USERNAME_PASSWORD")
+{
+%>
+getObj("errorInfo").innerHTML = "Login failure.";
+<%
+}
+else
+{
+%>
+getObj("errorInfo").innerHTML = "";
+<%
+}
+%>
+}
+function subpageSubmit()
+{
+getObj("buttonmanul").disabled = true;
+getObj("Username").value = getObj("txt_Username").value;
+getObj("Password").value = getObj("txt_Password").value;
+getObj("Frm_Logintoken").value = "<%=getenv("request/login_monotonic_id");%>";
+document.fLogin.submit();
+}
+function dosubmit()
+{
+if (getObj("txt_Username").value == "")
+{
+alert("User Name is a required field.");
+return;
+}
+else if (getObj("txt_Password").value == "")
+{
+alert("Password is a required field.");
+return;
+}
+else
+{
+checkValidateCode(subpageSubmit);
+}
+}
+function checkValidateCode(successCall)
+{
+var ajaxObj = new AJAXObj();
+ajaxObj.addPostItem("Validate_Code", getValue("Frm_Validatecode").toLowerCase());
+ajaxObj.post("checkValidateCode.gch", checkValidateCodeCallBack);
+function checkValidateCodeCallBack()
+{
+if ( ajaxObj.getReadyState() == xmlHTTPStatus['Loaded']
+&& 200 == ajaxObj.getStatus() )
+{
+var resultText = ajaxObj.getResponseText();
+if( -1 != resultText.indexOf("SUCC"))
+{
+successCall();
+}
+else
+{
+getObj("errorInfo").innerHTML = "Incorrect validate code!";
+validatecodeRefresh();
+}
+}
+}
+}
+function validatecodeRefresh()
+{
+var randnum = MathRand();
+getObj("ImgID").src = "/queryImg.gif?"+randnum;
+jslDisable("RefreshId");
+getObj("Frm_Validatecode").value = "";
+}
+function MathRand()
+{
+var Num="";
+for(var i=0;i<6;i++)
+{
+Num+=Math.floor(Math.random()*10);
+}
+return Num;
+}
+function imgLoad()
+{
+getObj("RefreshId").disabled = false;
+}
+</script>

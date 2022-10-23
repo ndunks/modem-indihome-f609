@@ -1,0 +1,21 @@
+<%
+IMPORT FILE "common_gch.gch";
+function vbd_func(FP_ACTION,FP_INDEX,FP_ERRORSTR)
+{
+var FP_OBJNAME      = "OBJ_VFAXMODEMRPTCTRL_ID";
+var FP_MULTIDISPLAY = 0;
+var FP_PARANUM      = 8;
+var PARA[8] =
+{
+"MGInteract",
+"CNGRpt",
+"CEDRpt",
+"V21Rpt",
+"CNGCtrl",
+"ModemToneRpt",
+"FaxPassThrough",
+"ModemPassThrough"
+};
+return getOldFunctionGCH(FP_OBJNAME, FP_MULTIDISPLAY, PARA, FP_PARANUM, FP_ACTION, FP_INDEX, FP_ERRORSTR);
+}
+%>

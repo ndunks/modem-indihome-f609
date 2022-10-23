@@ -1,0 +1,127 @@
+<%
+IMPORT FILE "pon_app_voip_services_js.gch";
+IMPORT FILE "pon_voip_sip_services_gch.gch";
+%>
+<div class="space_0">
+<div style="text-align:left;width:500px;margin-left:0px">
+<div style="position:absolute; left:245px; height:30px;margin-top:3px;">
+<img src="img/info.gif"/>
+</div>
+<ul>
+<li style="margin-top:5px;text-align:left; margin-left:50px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&?ponservice005;</li>
+</ul>
+</div>
+</div>
+<table id="PortIsolation" class="table" width="500px" border="0">
+<tr>
+<td class="td1"></td>
+<td class="td2"></td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_TermNumber">&?sv01;</font></td>
+<td class="td2">
+<select size="1" class="list_6" id="Frm_TermNumber" onchange="TermNumberChange();">
+<%
+var FP_INSTNUM   = 0;
+FP_INSTNUM = query_list("OBJ_VOIPSIPLINE_ID", "IGD");
+for(var i = 0; i < FP_INSTNUM; i++)
+{
+%>
+<option value="<%=i;%>">&?sv01;<%=i+1;%></option>
+<%
+}
+%>
+</select>
+</td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_AuthUserName_1">&?va01;</font></td>
+<td class="td2"><font id="Fnt_AuthUserName"></font></td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_DigestUserName_1">&?va03;</font></td>
+<td class="td2"><font id="Fnt_DigestUserName"></font></td>
+</tr>
+<tr>
+<td id="Fnt_CallForwardUnconditionalNumber" class="td1">&?ponservice007;</td>
+<td class="td2"><input name="Frm_CallForwardUnconditionalEnable" id="Frm_CallForwardUnconditionalEnable" type="checkbox" value="" onclick="Enable_CallForwardUnconditionalEnable();"/></td>
+</tr>
+<tr>
+<td class="td1">&?ponservice018;</td>
+<td class="td2"><input name="Frm_CallForwardUnconditionalNumber" id="Frm_CallForwardUnconditionalNumber" type="text" value="" class="inputId"/></td>
+</tr>
+<tr>
+<td id="Fnt_CallForwardOnBusyNumber" class="td1">&?ponservice008;</td>
+<td class="td2"><input name="Frm_CallForwardOnBusyEnable" id="Frm_CallForwardOnBusyEnable" type="checkbox" value="" onclick="Enable_CallForwardOnBusyEnable();"/></td>
+</tr>
+<tr>
+<td class="td1">&?ponservice018;</td>
+<td class="td2"><input name="Frm_CallForwardOnBusyNumber" id="Frm_CallForwardOnBusyNumber" type="text" value="" class="inputId"/></td>
+</tr>
+<tr>
+<td id="Fnt_CallForwardOnNoAnswerNumber" class="td1">&?ponservice009;</td>
+<td class="td2"><input name="Frm_CallForwardOnNoAnswerEnable" id="Frm_CallForwardOnNoAnswerEnable" type="checkbox" value="" onclick="Enable_CallForwardOnBusyEnable();"/></td>
+</tr>
+<tr>
+<td  class="td1">&?ponservice018;</td>
+<td class="td2"><input name="Frm_CallForwardOnNoAnswerNumber" id="Frm_CallForwardOnNoAnswerNumber" type="text" value="" class="inputId"/></td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_CfnrTimer">&?ponservice010;</font></td>
+<td class="td2"><input name="Frm_CfnrTimer" id="Frm_CfnrTimer" type="text" value="" class="inputId" />&?ponservice015;</td>
+</tr>
+<tr>
+<td class="td1">&?ponservice006;</td>
+<td class="td2"><input name="Frm_CallWaitingEnable" id="Frm_CallWaitingEnable" type="checkbox" value="" onclick="Enable_CallWaitingEnable();"/></td>
+</tr>
+<tr>
+<td class="td1">&?ponservice011;</td>
+<td class="td2"><input name="Frm_CallTransfer" id="Frm_CallTransfer" type="checkbox" value="" onclick="DisableInfoReport();"/></td>
+</tr>
+<tr>
+<td class="td1">&?ponservice013;</td>
+<td class="td2"><input name="Frm_CallHoldFlag" id="Frm_CallHoldFlag" type="checkbox" value="" onclick="DisableInfoReport();"/></td>
+</tr>
+<!--土耳其定制 恶意呼叫设置<tr>
+<td class="td1">&?ponservice026;</td>
+<td class="td2"><input name="Frm_MCIDEnable" id="Frm_MCIDEnable" type="checkbox" value=""/></td>
+</tr>-->
+<tr>
+<td class="td1">&?ponservice016;</td>
+<td class="td2"><input name="Frm_HookDelay" id="Frm_HookDelay" type="checkbox" value=""/></td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_InfoReportFlag">&?ponservice025;</font></td>
+<td class="td2"><input name="Frm_InfoReportFlag" id="Frm_InfoReportFlag" type="checkbox" value="" onclick="Enable_InfoReport();" /></td>
+</tr>
+<tr>
+<td class="td1">&?ponservice028;</td>
+<td class="td2"><input name="Frm_3WayTalkingBySelf" id="Frm_3WayTalkingBySelf" type="checkbox" value="" onclick="Enable_3WayTalkingBySS();"/></td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_ConfUri">&?ponservice004;</font></td>
+<td class="td2"><input name="Frm_ConfUri" id="Frm_ConfUri" type="text" value="" class="inputId" /></td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_HotLine">&?ponservice019;</font></td>
+<td class="td2">
+<select size="1" class="list_6" id="Frm_HotLine" onchange="HotLineChange();">
+<option value="0">&?ponservice022;</option>
+<option value="1">&?ponservice023;</option>
+<option value="2">&?ponservice024;</option>
+</select>
+</td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_HLNumber">&?ponservice020;</font></td>
+<td class="td2"><input name="Frm_HLNumber" id="Frm_HLNumber" type="text" value="" class="inputId" /></td>
+</tr>
+<tr>
+<td class="td1"><font id="Fnt_DhlTimer">&?ponservice021;</font></td>
+<td class="td2"><input name="Frm_DhlTimer" id="Frm_DhlTimer" type="text" value="" class="inputId" />&?ponservice015;</td>
+</tr>
+<tr>
+<td class="td1">&?ponsip012;</td>
+<td class="td2"><input name="Frm_AntiPole" id="Frm_AntiPole" type="checkbox" value="" /></td>
+</tr>
+</table>

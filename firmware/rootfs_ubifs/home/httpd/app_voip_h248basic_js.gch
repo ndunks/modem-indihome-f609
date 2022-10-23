@@ -1,0 +1,209 @@
+<script language="javascript">
+var H248MAIN_PARA = new Array(
+"MGMIDType",
+"MGMID",
+"LocalPort",
+"MGCAddr1",
+"MGCPort1",
+"MGCAddr2",
+"MGCPort2",
+"ServiceChangeType",
+"RestartInterval",
+"HeartBeatInterval",
+"HeartBeatMessageType",
+"ThreeHandShake",
+"LongTimer",
+"MaxExecTimer",
+"PendingTimerInit",
+"MaxPendingTimes",
+"PendingType",
+"RetranIntervalTimer",
+"MaxRetranCount",
+"RetranTimerType",
+"AuthenticationMethID",
+"MD5AuthMGIDType",
+"MD5AuthMGID",
+"InitPublicKey",
+"DhPara_P",
+"DhPara_G",
+"PhysicalTermIDConfigMethod",
+"PhysicalTermIDPrefix",
+"PhysicalTermIDAddLen",
+"EphemeralTermIDPrefix",
+"EphemeralTermIDAddLen",
+"EphemeralTermIDUniform",
+"EphemeralTermIDStart",
+"DSCPMark",
+"QueueNum",
+"EthernetPriorityMark"
+);
+function getmsg(id)
+{
+var str      = new Array();
+str[0]   = new Array(101, "&?error_101;");
+str[1]   = new Array(102, "&?error_102;");
+str[2]   = new Array(103, "&?error_103;");
+str[3]   = new Array(115, "&?error_115;");
+str[4]   = new Array(116, "&?error_116;");
+str[5]   = new Array(117, "&?error_117;");
+return getMsgFormArray(str, arguments);
+}
+function pageLoad(url)
+{
+moveErrLayer(580,95);
+getObj("fSubmit").action = url;
+var errstr= getValue("IF_ERRORSTR");
+var errparam = getValue("IF_ERRORPARAM");
+ProcessRet(errstr, errparam);
+moveErrLayer(592,20);
+pageGetValue();
+ChooseMIDType();
+}
+function pageGetValue()
+{
+jslSetValue("Frm_LocalPort", "LocalPort");
+jslSetValue("Frm_MGCAddr1", "MGCAddr1");
+jslSetValue("Frm_MGCPort1", "MGCPort1");
+jslSetValue("Frm_MGCAddr2", "MGCAddr2");
+jslSetValue("Frm_MGCPort2", "MGCPort2");
+jslSetValue("Frm_MGMIDType", "MGMIDType");
+jslSetValue("Frm_MGMID", "MGMID");
+}
+function pageSetValue()
+{
+HiddenParaInit(H248MAIN_PARA);
+jslSetValue("LocalPort", "Frm_LocalPort");
+jslSetValue("MGCAddr1", "Frm_MGCAddr1");
+jslSetValue("MGCPort1", "Frm_MGCPort1");
+jslSetValue("MGCAddr2", "Frm_MGCAddr2");
+jslSetValue("MGCPort2", "Frm_MGCPort2");
+jslSetValue("MGMIDType", "Frm_MGMIDType");
+var MGMIDType = getValue("Frm_MGMIDType");
+if ( MGMIDType != "0")
+{
+jslSetValue("MGMID", "Frm_MGMID");
+}
+}
+function pageCheckValue()
+{
+var value = getValue("Frm_MGCAddr1");
+var check = checkStrLengthRange(value, 1, 63);
+if (check == -3)
+{
+msg = getmsg(102,0,63);
+ShowErrorForCom("Frm_MGCAddr1","Fnt_MGCAddr1",msg);
+return false;
+}
+var value = getValue("Frm_MGCAddr2");
+var check = checkStrLengthRange(value, 1, 63);
+if (check == -3)
+{
+msg = getmsg(102,0,63);
+ShowErrorForCom("Frm_MGCAddr2","Fnt_MGCAddr2",msg);
+return false;
+}
+var value = getValue("Frm_LocalPort");
+check = checkIntegerRange(value, 1024, 65535);
+if (check == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_LocalPort","Fnt_LocalPort",msg);
+return false;
+}
+if (check == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_LocalPort","Fnt_LocalPort",msg);
+return false;
+}
+if (check == -3)
+{
+msg = getmsg(116,1024,65535);
+ShowErrorForCom("Frm_LocalPort","Fnt_LocalPort",msg);
+return false;
+}
+var value = getValue("Frm_MGCPort1");
+check = checkIntegerRange(value, 1024, 65535);
+if (check == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_MGCPort1","Fnt_MGCPort1",msg);
+return false;
+}
+if (check == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_MGCPort1","Fnt_MGCPort1",msg);
+return false;
+}
+if (check == -3)
+{
+msg = getmsg(116,1024,65535);
+ShowErrorForCom("Frm_MGCPort1","Fnt_MGCPort1",msg);
+return false;
+}
+var value = getValue("Frm_MGCPort2");
+check = checkIntegerRange(value, 1024, 65535);
+if (check == -1)
+{
+msg = getmsg(101);
+ShowErrorForCom("Frm_MGCPort2","Fnt_MGCPort2",msg);
+return false;
+}
+if (check == -2)
+{
+msg = getmsg(115);
+ShowErrorForCom("Frm_MGCPort2","Fnt_MGCPort2",msg);
+return false;
+}
+if (check == -3)
+{
+msg = getmsg(116,1024,65535);
+ShowErrorForCom("Frm_MGCPort2","Fnt_MGCPort2",msg);
+return false;
+}
+var MGMIDType = getValue("Frm_MGMIDType");
+if ( MGMIDType != "0")
+{
+var value = getValue("Frm_MGMID");
+var check = checkStrLengthRange(value, 1, 64);
+if (check == -3)
+{
+msg = getmsg(102,0,64);
+ShowErrorForCom("Frm_MGMID","Fnt_MGMID",msg);
+return false;
+}
+}
+return true;
+}
+function ChooseMIDType()
+{
+var value = getValue("Frm_MGMIDType");
+if(value == "0")
+{
+jslDisable("Frm_MGMID");
+}
+else
+{
+jslEnable("Frm_MGMID");
+}
+}
+function pageCancel()
+{
+DisableALL();
+getObj("fSubmit").submit();
+}
+function pageSubmit()
+{
+if(pageCheckValue() == true)
+{
+pageSetValue();
+setValue("IF_ACTION", "apply");
+DisableALL();
+getObj("fSubmit").submit();
+}
+else
+{
+}
+}
+</script>
