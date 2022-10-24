@@ -16,11 +16,13 @@ WEB  Login: user admin, pass Telkomdso123
 
 ## Information
 
+```
 Base: 4.14_03ZTE2
 CFE version 5.2.10-117.134 for BCM96838 (32bit,SP,BE)
 Build Date: Wed, 29 Mar 2017 04:00:11 +0800 (root@BUILD.MDU)
 Copyright (C) 2000-2013 Broadcom Corporation.
 Broadcom BMIPS4350
+```
 
 ``` bash
 # cat /proc/cmdline 
