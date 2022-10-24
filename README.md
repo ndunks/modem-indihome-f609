@@ -9,6 +9,7 @@ Target:
 ![Modem Indihome ZTE F609 Uart Pinout](./ZTE-f609-UART-pinout.jpeg)
 
 UART Login: user root, pass root
+TELNET Login: user root, pass: Telkom135
 WEB  Login: user admin, pass Telkomdso123
 
 [Boot.log](boot.log)
