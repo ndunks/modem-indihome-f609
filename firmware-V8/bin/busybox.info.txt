@@ -1,0 +1,107 @@
+
+busybox:     file format elf32-tradbigmips
+busybox
+architecture: mips:isa32, flags 0x00000112:
+EXEC_P, HAS_SYMS, D_PAGED
+start address 0x00444da0
+
+Program Header:
+    PHDR off    0x00000034 vaddr 0x00400034 paddr 0x00400034 align 2**2
+         filesz 0x00000100 memsz 0x00000100 flags r-x
+  INTERP off    0x00000134 vaddr 0x00400134 paddr 0x00400134 align 2**0
+         filesz 0x00000014 memsz 0x00000014 flags r--
+0x70000000 off    0x00000148 vaddr 0x00400148 paddr 0x00400148 align 2**2
+         filesz 0x00000018 memsz 0x00000018 flags r--
+    LOAD off    0x00000000 vaddr 0x00400000 paddr 0x00400000 align 2**16
+         filesz 0x0005400c memsz 0x0005400c flags r-x
+    LOAD off    0x0005400c vaddr 0x0046400c paddr 0x0046400c align 2**16
+         filesz 0x00001a98 memsz 0x001687d0 flags rw-
+ DYNAMIC off    0x00000160 vaddr 0x00400160 paddr 0x00400160 align 2**2
+         filesz 0x00000118 memsz 0x00000118 flags rwx
+EH_FRAME off    0x00053fd0 vaddr 0x00453fd0 paddr 0x00453fd0 align 2**2
+         filesz 0x00000014 memsz 0x00000014 flags r--
+    NULL off    0x00000000 vaddr 0x00000000 paddr 0x00000000 align 2**2
+         filesz 0x00000000 memsz 0x00000000 flags ---
+
+Dynamic Section:
+  NEEDED               liblog.so
+  NEEDED               libcommfun.so
+  NEEDED               libmaster.so
+  NEEDED               libcfapi.so
+  NEEDED               liboss.so
+  NEEDED               libpthread.so.0
+  NEEDED               libdb.so
+  NEEDED               libdl.so.0
+  NEEDED               libcsputil.so
+  NEEDED               libcrypt.so.0
+  NEEDED               libc.so.0
+  RPATH                /data/duanyuanyuan/wk_use/wangkai/Builds_/ZXHN_BCM6848-f660v8.0_telkom/csp/release/tools/uclibc/lib
+  INIT                 0x00404c60
+  FINI                 0x00447eb0
+  HASH                 0x00400278
+  STRTAB               0x004034ac
+  SYMTAB               0x0040130c
+  STRSZ                0x000017b2
+  SYMENT               0x00000010
+  MIPS_RLD_MAP         0x00465250
+  DEBUG                0x00000000
+  PLTGOT               0x00465260
+  MIPS_RLD_VERSION     0x00000001
+  MIPS_FLAGS           0x00000002
+  MIPS_BASE_ADDRESS    0x00400000
+  MIPS_LOCAL_GOTNO     0x000000eb
+  MIPS_SYMTABNO        0x0000021a
+  MIPS_UNREFEXTNO      0x00000020
+  MIPS_GOTSYM          0x000000f4
+private flags = 50001007: [abi=O32] [mips32] [not 32bitmode] [noreorder] [PIC] [CPIC]
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .interp       00000014  00400134  00400134  00000134  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  1 .reginfo      00000018  00400148  00400148  00000148  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA, LINK_ONCE_SAME_SIZE
+  2 .dynamic      00000118  00400160  00400160  00000160  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  3 .hash         00001094  00400278  00400278  00000278  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  4 .dynsym       000021a0  0040130c  0040130c  0000130c  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  5 .dynstr       000017b2  004034ac  004034ac  000034ac  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  6 .init         00000028  00404c60  00404c60  00004c60  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  7 .text         000420f0  00404c90  00404c90  00004c90  2**4
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  8 .MIPS.stubs   00001130  00446d80  00446d80  00046d80  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  9 .fini         00000028  00447eb0  00447eb0  00047eb0  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+ 10 .rodata       0000c0f0  00447ee0  00447ee0  00047ee0  2**4
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+ 11 .eh_frame_hdr 00000014  00453fd0  00453fd0  00053fd0  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+ 12 .eh_frame     00000028  00453fe4  00453fe4  00053fe4  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+ 13 .data.rel.ro  00000c44  0046400c  0046400c  0005400c  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+ 14 .data         00000600  00464c50  00464c50  00054c50  2**4
+                  CONTENTS, ALLOC, LOAD, DATA
+ 15 .rld_map      00000004  00465250  00465250  00055250  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+ 16 .got          00000844  00465260  00465260  00055260  2**4
+                  CONTENTS, ALLOC, LOAD, DATA
+ 17 .sbss         00000054  00465aa8  00465aa8  00055aa4  2**3
+                  ALLOC
+ 18 .bss          00166cdc  00465b00  00465b00  00055aa4  2**4
+                  ALLOC
+ 19 .pdr          000054a0  00000000  00000000  00055aa4  2**2
+                  CONTENTS, READONLY
+ 20 .gnu.attributes 00000010  00000000  00000000  0005af44  2**0
+                  CONTENTS, READONLY
+ 21 .mdebug.abi32 00000000  005cc7dc  005cc7dc  0005af54  2**0
+                  CONTENTS, READONLY
+SYMBOL TABLE:
+no symbols
+
+

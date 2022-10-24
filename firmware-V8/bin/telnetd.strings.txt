@@ -1,0 +1,754 @@
+/lib/ld-uClibc.so.0
+ProcUserLog
+strlen
+CreateSocket
+__errno_location
+setsockopt
+memset
+bind
+CloseSocket
+listen
+RegistAcceptfd
+RegistReadProcFun
+SET_TIMER
+strcpy
+stat
+SetSocketEvent
+strncpy
+ASEND
+ioctl
+memmove
+OssDebugPrintf
+gSessionList
+dbAPIGetView
+dbAPISetView
+GetUB
+GetSelfPIDName
+memcpy
+OSSSendAckData
+RetUB
+write
+exit
+sigemptyset
+sigaction
+alarm
+fcntl
+read
+StrToIP
+sleep
+fork
+getpid
+execv
+fopen
+fclose
+gettimeofday
+gmtime
+snprintf
+fprintf
+fflush
+strerror
+kill
+delPtyInfoToLogModel
+IPToStr
+CfGetRegionCode
+strcmp
+AddMonFdList
+setsid
+tcsetpgrp
+tcgetattr
+tcsetattr
+sigaddset
+sigprocmask
+WriteStrToFile
+dbGetValComm
+access
+addPtyInfoToLogModel
+SET_LOOP_TIMER
+NEXT_STATE
+unlink
+KILL_TIMER
+DBShmCliInit
+OSSInitConfig
+OSSStart
+GMDebugTable
+pthread_mutex_init
+mutex_w
+gRedirSessList
+pthread_mutex_lock
+SENDER
+pthread_mutex_unlock
+free
+malloc
+libcommfun.so
+_DYNAMIC_LINKING
+__RLD_MAP
+_GLOBAL_OFFSET_TABLE_
+liboss.so
+libpthread.so.0
+libdb.so
+libdl.so.0
+libcfapi.so
+__start
+_fini
+__uClibc_main
+__data_start
+libc.so.0
+_ftext
+_fdata
+_edata
+__bss_start
+_fbss
+_end
+/data/duanyuanyuan/wk_use/wangkai/Builds_/ZXHN_BCM6848-f660v8.0_telkom/csp/release/tools/uclibc/lib
+	($B
+	0$B
+@ !'
+@ !,B
+@ !$
+,pF0
+@(!$
+,rF0
+`$B(P
+  !$
+  !$
+@ !'
+` !$
+`(!$
+  !'
+(!Tb
+` !&
+@0!$
+	,&D
+	,&D
+` !<
+c	8<
+	z&F
+@0!$
+	@(B
+@0!<
+@$c		
+@ !4
+@ !$
+@ !$
+@ !$
+  !'
+  !$
+(!,c
+@0!$
+	5&&
+	B&&
+ !TS
+  !$
+#rC0
+td.c
+HangMgr Not Exist
+will Create Sockt Keep Listen
+create socket failed
+setsockopt error,errorno=%d
+setsockopt error=%d
+Server Cannot Bind
+Server Cannot Listen
+RegistAcceptfd FAILED
+CreateSocktKeepListen ok fd=%d
+Create netlink socket error!
+Bind netlink socket error!
+Monitor RegisterRead netlink socket error!
+try allocate pty in ptyXY modal
+/dev/ptyXY
+pqrstuvwxyzabcde
+open pty success, PtysName=%s
+cant use pty=%s for errno=%d
+getpty failed!
+para ptSession
+SetSocketEvent %d failed,close the session
+socket fd=%d set FD_WRITE_EVENT
+socket fd=%d dont set FD_WRITE_EVENT for PtyBuf empty
+SetSocketEvent ptym=%d failed,close the session
+ptym fd=%d set FD_WRITE_EVENT
+ptym fd=%d dont set FD_WRITE_EVENT for skBuf empty
+the last word is IAC
+Ignoring IAC: %c(%d),%c(%d)
+ShowOpDetail Switch: %d ->
+skfd	 inIP	 skBufSize	 InIdx	 OutIdx	 ptys	 shellID	 PtyBufSize	 InIdx	 OutIdx
+---------------------------------------------------------------------------------------------------------
+%d	 %x	 %d	 %d	 %d	  %s	 %d	 %d	 %d	 %d
+the td details == 
+                    enable: %d         
+                    state :%d 
+                    fd:%d
+                    port        :%d 
+                    username    :%s 
+                    passwd    :%s
+                    secusername :%s
+                    secpasswd   :%s
+                    iTdMode   :%d
+					g_iSecTimeoutCnt:%d
+                    MaxConNum :%d
+                    ProcType  :%d
+					ExitTime:%d
+                    Wan_Enable:%d
+                    Lan_Enable:%d
+******
+Not Support
+		ShowCfg     -- Show telnet shell configuration.
+		ShowSession -- List all telnet session.
+		SwitchShow  -- Toggle the show switch of the session message.
+		Password    -- Change the password of telnet shell,
+		               password must be compose of ASCII[32,126],
+		               max length must be 256.
+		               The cmd won't check the password!
+		DelPassword -- Delete the password of telnet shell.
+enter CmDebugDeletePassword.
+Delete the password of telnet shell success.
+Delete the password of telnet shell failed.
+enter CmDebugChangePassword.
+Change the password of telnet shell to "%s" success.
+Change the password of telnet shell to "%s" failed.
+%s counts=%d
+%c(%u)
+ack buf execcd!
+ptym fd=%d set FD_READ_EVENT
+SetSocketReadEv
+SetSocketEvent socketfd=%d failed,close the session
+socket fd=%d set FD_READ_EVENT
+socket fd=%d dont set FD_READ_EVENT,for sktBuf full
+Login timed out after 60 seconds
+Unable to create the SIGCHLD
+SetSigchild success  
+Unable to create the time
+fcntl F_GGETFL failed errno=%d
+fcntl F_SETFL failed errno=%d
+/var/td_lock.txt
+ReadIPFromFile ok Ip<%0x>
+para szTtyFileName
+send msg 0x%x OK
+send msg 0x%x Failed
+the msg 0x%x isnt a CtrlMsg, cant send
+the CLI had been running
+the CLI isnt Running
+will fork child for execing cli
+fork child process failed
+fork new process Success pid=%d
+/bin/cliagent
+execv DstProc %s failed
+open %s fail.
+/userconfig/TdTraceLog.txt
+fopen %s failed!
+TD in PRODUCTION MODE, so not 2 Trace
+parm error in TdCmdTrace
+gettimeofday error,iRet=%d
+%04d-%02d-%02d %02d:%02d:%02d
+<%s>%s
+Get %s state error: %s.
+para ptDelSession
+will free session skfd=%d ptysname=%s
+free Fd=%d ptyms=%s ok
+Telnet
+send EV_HANG_CLOSE to cli
+===1, when free the telnet session, unload the esignal pipe
+IP<%s> logout
+the session have been freed
+enter StopTelnetd,will stop the telnetd
+para ptTelnetdCfg
+telnetd had been stopped,needt stop it again
+will Stop Sockt Listen
+Close Socket %d failed
+stop telnetd failed because cannt close socket
+Stop telnetd Sockt %d Listen Success
+stop telnetd success
+do action with cfg:enable=%d,port=%u,maxcon=%u,usr=%s,pwd=%s,ProcType=%d
+port be changed,should stop telnetd first
+Stop telnetd Failed
+Stop telnetd success
+telnetd should be stopped
+telnetd should be Run
+enter RunTelnetd,will Run the telnetd
+telnetd had been running,needt run it
+start telnetd failed because cannt create socket
+Run telnetd Failed
+run telnetd success
+Run telnetd success
+td_mgr init ok,will load data from db
+read db Failed! quit start telnetd
+enter CheckTelnetdCfg
+ username too long
+ user pwd too long
+CheckTelnetdCfg ok
+telnetd do action with cfg failed
+quit StartTdMgr normally
+quit StartTdMgr for CheckTelnetdCfg failed
+para lpMsg
+enter CmSetTelnetdCfg 
+detail:bEnable=%d,dwPort=%d,dwMaxCounts=%d,usr=%s,pwd=%s
+success ,exit td_mgr
+The message received from netlink is null!
+The contents of message received from netlink is null!
+no session match the ptysname %s
+Socket(%d):write %d chrs ,errno=%d,so will free session
+para ptSocketMsg
+no such ptym
+will write socket iMaxLen=%d
+Write Socket:
+outPtyIdx reset 0,should set sk FD_WRITE_EV
+Socket(%d):write %d chrs derive PtyBuf,new ptyBufsize=%d, pty iOutPtyIdx=%d
+write socket EWOULDBLOCK, so will set FD_WRITE_EV
+set socket or pty event failed,                         will free the session
+===>the previous is shell, release the pipe %s
+will rollback to CLI
+Get Tty failed,Cant RollBack
+new pty name=%s, fd=%d
+PtymFd=%d addMonFdList Failed
+Regist  pty EV_READ or EV_WRITE failed!,will close the session
+rollback to CLI ok
+no session mathc the ptysname %s
+success Free the session 
+no such pty
+will RemoveIACs  skBuf
+RemoveIACs OK,will write ptym derive skBuf
+Ptym(%d):write %d chrs, errno=%d,so should free the session
+Write Pty:
+outSkIdx reset 0,should set pty FD_WRITE_EV
+Ptym(%d): write %d chrs derive skBuf,new skBufSize=%d, SkiOutPtyIdx= %d
+Ptym(%d),iWrCounts(%d), errno=%d
+write pty EWOULDBLOCK,set FD_WRITE_EV
+iOutIdx=%d, skSize=%d,char=%c(%d)
+set socket or pty event failed,will free the session
+-ldev
+-lops
+-lproduction
+-luser
+will fork child for execing shell
+in the child process ptysname=%s
+open pty(pts) %s failed
+name=%s,pwd=%s
+*************************************************************
+*************************************************************
+*************************************************************
+WARNING: This system is for the use of authorized clients only.
+Individuals using the computer network system without
+authorization, or in excess of their authorization, are
+subject to having all their activity on this computer
+network system monitored and recorded by system
+personnel. To protect the computer network system from
+unauthorized use and to ensure the computer network systems
+is functioning properly, system administrators monitor this
+system. Anyone using this computer network system
+expressly consents to such monitoring and is advised that
+if such monitoring reveals possible conduct of criminal
+activity, system personnel may provide the evidence of
+such activity to law enforcement officers.
+Access is restricted to authorized users only.
+Unauthorized access is a violation of state and federal, 
+civil and criminal laws.
+KEEP OUT!!! YOUR IP ADDRESS HAS BEEN RECORDED
+*************************************************************
+*************************************************************
+************************************************************* 
+Login: 
+input name=%s
+Password: 
+DevInfo
+ModelName
+Telnet temporarily locked
+User name is incorrect
+Password is incorrect
+Reached the maximum number of login,  locked 3 mins.
+<%s><%d> login
+will exec shell
+/bin/sh
+execv shell failed
+fork child process ok, childpid=%d
+enter _SetTdSec
+ iTdMode illagel
+ ptTdSec DevUserName too long,it will be cut
+ ptTdSec DevUserPwd too long,it will be cut
+set Sec Session Timer failed
+Td has been set mode<%d>
+_SetTdSec ok mode<%d>;devUserName<%s>;devUserPwd<%s>
+para ptAcceptMsg
+get NewSocket  Invalid
+The connect number is limited
+GetUB for NewMachine failed
+create PTY Failed
+Not Enought PTY DEV
+Regist socket write or read EVENT failed!, will close the session
+send EV_HANG_REQUEST to HangMgr ok
+log on cli
+log on shell
+ForkChildProAndEexcShell,cant create new session
+EV_TELNETD_SOCKET_READ
+no such socket
+iMaxLen=%d, SktSize=%d
+socket(%d):read %d chrs,errno=%d,                        so shoul free the session
+Read Socket:
+socket(%d):read %d chrs into skbuf,                         new size=%d, new iInSktIdx= %d
+will set socket FD_READ_EVENT again
+EV_TELNETD_SOCKET_WRITE 
+no such Ptym
+iMaxLen=%d, PtySize=%d
+cPtyBuf is full,reset!
+Ptym(%d): read %d chrs errno=%d,so should free the session
+Read Pty:
+Ptym(%d):read %d chrs into PtyBuf,new size=%d, new iInPtyIdx=%d
+EV_PTYM_WRITE 
+enter HandleChildQuitEv
+will free the session skfd=%d
+quit HandleChildQuitEv
+Telnet send EV_HANGINST_EXIST to HangMgr ok
+para ptSwitchInfo
+EV_DEST_SWITCH isnt from CLI,so keep silence
+dont exist such session as pty=%s
+Get Tty failed cant Switch 
+send EV_HANG_CLOSE to CLI
+exec Shell failed,cant switch,will rollback to cli
+rollback to cli failed,have to free the session
+switch success
+Receive msg EV_TELNETD_SET_TDSEC
+para ptTdSec
+Receive msg EV_KEY_ACT_INSAFEMOD
+useage:[show]
+	  show----show details of td cfgdata
+didn't find cmd!!!
+td_mgr init ok
+Para:(lpMsg) Error!
+============g_ip<%0x> will be locked=========
+============IP is changed old<%0x> new<%0x> reset 5 minutes timer=========
+the lock file has been deleted !now creat it again and all of ips will be locked!.
+9.9.9.9
+WriteStrToFile fail!
+delete %s failed.
+ 10 minus no session,set auth user,clear dev u&p
+kill Sec Timer failed id <%d>
+show
+ShowCfg
+ShowSession
+SwitchShow
+Password
+DelPassword
+setmode
+InitTdMgr
+StartTdMgr
+CheckTelnetdCfg
+TelnetdActionWithCfg
+StopTelnetd
+StopSocktListen
+FreeSession
+HangMgrIsExist
+SendCtlMsg
+TdCmdTrace
+TdGetLocalTime
+TdFopen
+TdTraceFileSizeLimit
+RunTelnetd
+CreateSocktKeepListen
+_TdRegisterReadProc
+_TelnetReceivePkt
+CmSetTelnetdCfg
+CmGetTtyInfo
+TdASynMsg
+CreateNewSession
+IsLogOnCli
+ReadIPFromFile
+GetTty
+SetFd
+SetPtymReadEv
+SetSocketReadEv
+SendHangRequest
+ForkChildProcAndExecCli
+CliIsRunning
+SetSigchild
+ForkChildProAndEexcShell
+CheckUserScrt
+SetTimeInterval
+CheckUser
+CreateFile
+ReadSocketToSkBuf
+DebugShowOpDetail
+WriteSoketDerivePtyBuf
+SetSocketWriteEv
+ReadPtymToPtyBuf
+RollBackToCli
+WritePtymDeriveSkBuf
+ClrLastIACsInSktBuf
+RemoveIACs
+SetPtymWriteEv
+HandleChildQuitEv
+ResponseHangDetect
+DealHangCloseEv
+SwitchToShell
+SetTdSec
+_SetTdSec
+CmDebugDeletePassword
+CmDebugChangePassword
+TdTimerMsg
+TdAuthTimeout
+telnetd_trace.c
+telnetd_trace process received Message pointer is NULL
+telnetd_trace process received Message Length is zero
+telnetd_trace process received Message Length is %d
+************************************:
+pid:0x%08x 	 count:%u 
+rdir file conut:%d:
+FileName = %s,PID=%d
+LinkID=0x%x
+RtraceRedirMsgDeal process received Message pointer is NULL
+/var/tmp/%s
+find seesion
+***********open %s failed********
+telnetd_trace
+CmDebugShowRtrace
+RtraceRedirMsgDeal
+AddLinkNdOp
+PROCESSTELNETD
+telnetd
+telnetd
+telnetd_rtrace
+telnetd_rtrace
+GCC: (Buildroot 2011.11) 4.6.2
+GCC: (GNU) 3.3.2
+.symtab
+.strtab
+.shstrtab
+.interp
+.reginfo
+.dynamic
+.hash
+.dynsym
+.dynstr
+.init
+.text
+.MIPS.stubs
+.fini
+.rodata
+.data.rel.ro
+.data
+.rld_map
+.got
+.bss
+.pdr
+.comment
+.gnu.attributes
+.mdebug.abi32
+SyncTelnetdState
+gTelnetdCfg
+SendIAC
+CmDebugSetTdMode
+HangMgrIsExist
+__FUNCTION__.11863
+NeedCheckDevPwd
+CreateSocktKeepListen
+__FUNCTION__.11900
+_TdRegisterReadProc
+iCount.11828
+__FUNCTION__.11832
+_TelnetReceivePkt
+GetTty
+__FUNCTION__.11918
+SetSocketWriteEv
+__FUNCTION__.12016
+SetPtymWriteEv
+__FUNCTION__.12031
+RemoveIACs
+__FUNCTION__.12099
+CmDebugSwitchShowOpDetail
+gbShowOpDetail
+CmDebugPrintfSessions
+CmDebugPrintfTdInfo
+g_iSecTimeoutCnt
+CmDebugShowAllCmd
+CmDebugDeletePassword
+__FUNCTION__.12337
+CmDebugChangePassword
+__FUNCTION__.12332
+DebugShowOpDetail
+__FUNCTION__.12320
+CmGetTtyInfo.isra.6
+__FUNCTION__.12379
+SetPtymReadEv
+__FUNCTION__.12026
+SetSocketReadEv
+__FUNCTION__.12021
+SigAlarmProc
+gbChkUsrOk
+SetSigchild
+__FUNCTION__.12247
+SetTimeInterval
+__FUNCTION__.12185
+SetFd.constprop.18
+__FUNCTION__.11945
+ReadIPFromFile.constprop.19
+__FUNCTION__.12157
+SendCtlMsg.constprop.20
+__FUNCTION__.12279
+ForkChildProcAndExecCli
+__FUNCTION__.12312
+__FUNCTION__.12266
+CreateFile.constprop.21
+__FUNCTION__.12385
+TdFopen.constprop.22
+__FUNCTION__.12404
+TdCmdTrace
+__FUNCTION__.12417
+__FUNCTION__.12394
+__FUNCTION__.12409
+FreeSession
+__FUNCTION__.11934
+StopTelnetd
+__FUNCTION__.11848
+__FUNCTION__.11907
+TelnetdActionWithCfg
+__FUNCTION__.11796
+__FUNCTION__.11837
+StartTdMgr
+__FUNCTION__.11802
+g_iRegionCode
+g_hotwire_cfg
+__FUNCTION__.11790
+CmSetTelnetdCfg
+__FUNCTION__.12011
+__FUNCTION__.11779
+WriteSoketDerivePtyBuf
+__FUNCTION__.12082
+RollBackToCli
+__FUNCTION__.12306
+DealHangCloseEv
+__FUNCTION__.11890
+WritePtymDeriveSkBuf
+__FUNCTION__.12066
+__FUNCTION__.12108
+ForkChildProAndEexcShell
+__FUNCTION__.12167
+__FUNCTION__.12144
+__FUNCTION__.12222
+_SetTdSec
+__FUNCTION__.12196
+g_iSecTimerId
+TdASynMsg
+__FUNCTION__.11962
+__FUNCTION__.11868
+__FUNCTION__.12250
+__FUNCTION__.11971
+__FUNCTION__.12049
+__FUNCTION__.12120
+__FUNCTION__.12239
+__FUNCTION__.11878
+__FUNCTION__.12295
+__FUNCTION__.12201
+cmdDebugProcTable
+__FUNCTION__.11786
+__FUNCTION__.11812
+iCount.11823
+adminlock
+__FUNCTION__.12192
+GMDPtr
+__FUNCTION__.10774
+__FUNCTION__.10800
+__FUNCTION__.10838
+__FUNCTION__.10830
+_DYNAMIC
+strcpy
+ioctl
+SET_TIMER
+ASEND
+printf
+_fdata
+__gnu_local_gp
+_gp_disp
+sigemptyset
+strerror
+memmove
+SetSocketEvent
+snprintf
+getpid
+memcpy
+dbGetValComm
+malloc
+sleep
+IPToStr
+gSessionList
+AddMonFdList
+fflush
+tOSSCFG
+sigaddset
+dbAPIGetView
+_init
+alarm
+StrToIP
+write
+RegistAcceptfd
+fprintf
+SET_LOOP_TIMER
+kill
+ProcUserLog
+bind
+__start
+setsockopt
+TdMgr_Main
+_ftext
+read
+OSSInitConfig
+strncpy
+unlink
+DBShmCliInit
+RegistReadProcFun
+gRedirSessList
+__RLD_MAP
+listen
+CreateSocket
+delPtyInfoToLogModel
+fork
+execv
+sigaction
+addPtyInfoToLogModel
+__uClibc_main
+gettimeofday
+fopen
+__bss_start
+memset
+main
+NEXT_STATE
+CLIENTIP
+fclose
+tcgetattr
+OSSStart
+g_Ip
+strcmp
+pthread_mutex_unlock
+data_start
+_fini
+dbAPISetView
+CloseSocket
+CfGetRegionCode
+OssDebugPrintf
+mutex_w
+stat
+GetUB
+access
+WriteStrToFile
+_edata
+_GLOBAL_OFFSET_TABLE_
+_end
+RetUB
+pthread_mutex_lock
+GMDebugTable
+__errno_location
+SENDER
+exit
+KILL_TIMER
+gmtime
+GetSelfPIDName
+pthread_mutex_init
+strlen
+open
+OSSSendAckData
+g_aPAT_TELNETD
+__data_start
+setsid
+telnetd_trace
+fcntl
+_fbss
+tcsetattr
+close
+tcsetpgrp
+free
+sigprocmask

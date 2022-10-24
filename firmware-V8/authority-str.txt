@@ -1,0 +1,83 @@
+[user_permit_list]
+sendcmd
+rtrace
+insmod /kmodule/ko_debug.ko
+tdmtool
+cat
+epondbg
+ip
+tc
+iptables
+multicast_test
+igmptest
+gponctl
+gpondbg
+gpontest
+epontst
+ethdriver_test
+switchtst
+opticaltst
+ps
+ls
+cd
+pwd
+top
+date
+grep
+ping
+ifconfig
+redir
+exit
+killall hostapd
+hostapd
+ethswctl
+dw
+/etc/rdpa_gpon_init_m.sh
+bs
+[ops_permit_list]
+sendcmd 1 DB p UserInfo
+echo 2 > /proc/zteinfo/factory/factorymode
+echo 0 > /proc/zteinfo/factory/factorymode
+sendcmd 1 DB p DevAuthInfo
+echo 0 > /proc/net/fastforward/hff_power
+echo 0 > /proc/net/fastforward/ffe_power
+echo 1 > /proc/net/fastforward/ffe_entry_clear
+echo panic 3 >backup
+echo watchdog 3 >backup
+echo monitorwdg 3 >backup
+echo 0 > /proc/zteinfo/watchdog/conf
+killall vsftpd
+vsftpd -s &
+[forbid_list]
+sendcmd 1 DB p UserInfo
+sendcmd 1 DB p DeviceInfo
+sendcmd 1 DB p DevAuthInfo
+sendcmd 1 DB p TelnetCfg
+sendcmd 1 DB all
+sendcmd 1 DB save
+sendcmd 1 DB set
+sendcmd 1 DB addr
+sendcmd 1 DB delr
+sendcmd 1 DB rreset
+sendcmd 1 DB lreset
+sendcmd 1 DB reset
+sendcmd 1 DB saveasy
+sendcmd 1 DB decry
+sendcmd 2 BoardControl set 34008
+sendcmd 2 BoardControl hlt
+sendcmd 132 omcidebug recalpath
+sendcmd 139 omcidebug remoterestoredefault
+gponctl stop
+gponctl start
+gpontest -slonglaser
+epontst -slonglaser
+epontst -sconnect
+epontst -stxpower
+switchtst -w
+switchtst -spen
+switchtst -sportenable
+switchtst -splinkpara
+switchtst -slinkpara
+switchtst -wphy
+cat /var/tmp/ftp_password.log
+sendcmd 61 telnetd ShowCfg
