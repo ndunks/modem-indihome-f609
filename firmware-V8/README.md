@@ -8,6 +8,33 @@ Luckily I have patched the config and enabling FTP on Root dir '/', telnet on po
 Goal:
     - Rooting: Escape sandbox/jail on telnet
 
+## Busybox
+
+Busybox ash shell is cuztomized with only defined command can be run, but the custom ash shell sems to be buggy. I often got force disconnect (SIGSEGV) when trying run command.
+
+Busybox sources for disassembly referrences:
+- 
+
+```
+BusyBox v1.01 (2017.08.23-11:15+0000) Built-in shell (ash)
+Enter 'help' for a list of built-in commands.
+
+```
+
+Known Header Flag
+``` c
+// CONFIG_ASH_ALIAS: Not defined
+// CONFIG_FEATURE_COMMAND_TAB_COMPLETION: Not defined
+// CONFIG_ASH_ALIAS: Not defined
+// JOBS: Not defined
+// CONFIG_ASH_CMDCMD: Not defined
+// CONFIG_ASH_GETOPTS: Not defined
+#define CONFIG_FEATURE_SH_EXTRA_QUIET
+#define CONFIG_FEATURE_COMMAND_EDITING
+#define CONFIG_FEATURE_COMMAND_TAB_COMPLETION
+```
+
+- https://github.com/jameshilliard/TL_WR743ND_V2_GPL/tree/master/apps/busybox-1.01/shell
 
 ``` bash
 # cat /proc/cpuinfo 

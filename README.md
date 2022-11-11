@@ -88,3 +88,8 @@ VCED exceptions         : not available
 VCEI exceptions         : not available
 
 ```
+
+## Related Buildroot/toolchain
+
+- https://github.com/Stricted/DT_Hybrid_GPL
+- https://github.com/jameshilliard/TL_WR743ND_V2_GPL/tree/master/apps/busybox-1.01/shell
