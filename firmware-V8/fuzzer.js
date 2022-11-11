@@ -45,25 +45,66 @@ const REGFORMATS = [
 // @ts-ignore
 const reg = Object.fromEntries(REGFORMATS.map(v => [v, 'xxxxxxxx']))
 
-
 /** @type {net.Socket} */
 const sock = net.connect({
     host: 'localhost',
-    port: 1233,
-    noDelay: true,
-    onread: {
-        buffer: Buffer.alloc(10 * 1024), // 10 KiB
-        callback: onMessage
-    }
+    port: 1233
 });
-sock.once('connect', () => {
-    console.error('Connected')
-    main()
-})
+let ack = null
+sock.setEncoding('ascii')
+sock.once('connect', () => main().catch(e => console.error(e)))
 sock.once('close', (err) => {
     console.error('Closed', err)
     process.exit()
 })
+
+sock.on('readable', () => {
+    console.log('**', sock.readableLength, stack.length);
+    while (ack == null) {
+        ack = sock.read(1)
+    }
+    if (ack == '+') {
+        if (sock.readableLength) {
+            onMessage(sock.read())
+        }
+    } else if (stack.length) {
+        onMessage(null)
+    }
+})
+
+/**
+ * @param {string | null} str
+ */
+function onMessage(str) {
+    //let str = buf.slice(0, len).toString()
+
+    console.log('<- %s\t%s', str?.length, str);
+
+    if (!stack.length) {
+        if (str) {
+            handleInterupt(str.slice(1, str.length - 3))
+        }
+        return
+    }
+
+    const r = stack.pop();
+    if (!str) {
+        return r(str)
+    }
+
+    // https://sourceware.org/gdb/current/onlinedocs/gdb/Overview.html#Overview
+    if (str.length <= 0) {
+        r(true)
+    } else if (str[0] != '$') {
+        console.warn(`Invalid marker`)
+        r(null)
+    } else {
+        const msg = str.slice(1, str.length - 3)
+        write('+', false).then(() => r(msg))
+    }
+
+    return true
+}
 
 /** @param {string} str  */
 function checksum(str) {
@@ -92,9 +133,9 @@ function write(msg, waitResponse = true, immediate = false) {
             msg = bufferByte + msg
             bufferByte = ''
         }
-
-        console.log('-> %d\t%s', msg.length, msg)
+        ack = null // we're waiting new ack
         sock.write(msg, err => {
+            console.log('-> %d\t%s', msg.length, msg)
             if (err) {
                 j(err)
             } else {
@@ -104,63 +145,8 @@ function write(msg, waitResponse = true, immediate = false) {
     })
 }
 
-/**
- * @param {(string | number)[]} args
- * @returns {Promise<string>}
- **/
-function send(...args) {
-    let msg = args.join(';')
-    return write(`$${msg}#${checksum(msg)}`)
-}
-
-/**
- * @param {number} len 
- * @param {Uint8Array} buf 
- */
-function onMessage(len, buf) {
-    let str = buf.slice(0, len).toString()
-
-    console.log('<- %d\t%s', len, str);
-
-    if (!stack.length) {
-        handleInterupt(str.slice(1, str.length - 3))
-        return true
-    }
-
-    const r = stack.pop();
-
-    // https://sourceware.org/gdb/current/onlinedocs/gdb/Overview.html#Overview
-    if (str[0] == '-') {
-        console.warn(`Not acknowledged`)
-        r(false)
-        return true
-    }
-
-    if (str[0] == '+') {
-        // Clear acknowledged flag
-        str = str.slice(1)
-    }
-
-    if (str.length <= 0) {
-        r(true)
-    } else if (str[0] != '$') {
-        console.warn(`Invalid marker`)
-        r(null)
-    } else {
-        const msg = str.slice(1, str.length - 3)
-        // I think TCP protocol doesn't need to do extra checksum
-        // const sum = str.slice(str.length - 2)
-        // const sumCheck = checksum(msg)
-        // if (sumCheck != sum) {
-        //     console.warn(`Checksum missmatch ${sum} != ${sumCheck}`);
-        //     stack.push(r)
-        //     write('-', false)
-        // } else {
-        write('+', false).then(() => r(msg))
-        // }
-    }
-
-    return true
+function send(msg, waitResponse = true) {
+    return write(`$${msg}#${checksum(msg)}`, waitResponse)
 }
 
 function updateRegister() {
@@ -206,7 +192,7 @@ async function main() {
     }).on('line', send)
 
     // Auto close
-    const autoKill = setTimeout(() => send('vKill', 1), 10000)
+    const autoKill = setTimeout(() => send('vKill;1'), 10000)
 
     //Tell the remote stub about features supported by GDB
     //await send('qSupported:multiprocess+;swbreak+;hwbreak+;qRelocInsn+;fork-events+;vfork-events+;exec-events+;vContSupported+;QThreadEvents+;no-resumed+;xmlRegisters=i386')
@@ -217,8 +203,9 @@ async function main() {
     // await send('vMustReplyEmpty')
     // await send('Hgp0.0')
     // await send('qTStatus')
-    await send('vCont;c:p1.-1')
+    await send('vCont;c:p1.-1', false)
     clearTimeout(autoKill)
+    sock.read()
 }
 
 async function handleInterupt(msg) {
