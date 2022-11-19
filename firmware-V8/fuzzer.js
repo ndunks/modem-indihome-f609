@@ -1,5 +1,29 @@
 // @ts-check
-const net = require("net");
+const net = require("node:net");
+const cp = require("node:child_process");
+
+// nodemon -I -w fuzzer.js --delay 100ms fuzzer.js
+
+/**
+ * @returns {Promise<cp.ChildProcess>}
+ */
+function run() {
+    return new Promise((r, j) => {
+        const proc = cp.execFile('/usr/sbin/chroot', [
+            '.', 'qemu-mips-static', '-singlestep', '-g', '1233',
+            '/bin/sh', '-luser'
+        ], {
+            killSignal: 'SIGKILL',
+            env: {
+                TERM: 'vt100',
+                PATH: '/bin',
+                SHELL: '/bin/sh'
+            }
+        })
+        console.log('Process started', proc.pid);
+        r(proc)
+    })
+}
 
 // https://github.com/qemu/qemu/blob/master/gdbstub/gdbstub.c#L123
 const gdb_signal_table = [
@@ -8,21 +32,6 @@ const gdb_signal_table = [
     'SIGSTOP', 'SIGTSTP', 'SIGCONT', 'SIGCHLD', 'SIGTTIN', 'SIGTTOU', 'SIGIO', 'SIGXCPU',
     'SIGXFSZ', 'SIGVTALRM', 'SIGPROF', 'SIGWINCH', 'SIGLOST', 'SIGUSR1', 'SIGUSR2',
 ]
-
-/* CPU Register
-zero       at       v0       v1       a0       a1       a2       a3
-R0   00000000 fffffff8 407fed7c 407fed7c 407fed7c 00000000 00000002 407fed7a
-           t0       t1       t2       t3       t4       t5       t6       t7
-R8   00000000 00000000 3ffe9000 f0000000 00000001 15010000 0011131a 0042b07c
-           s0       s1       s2       s3       s4       s5       s6       s7
-R16  004688cc 407fed7c 4080035c 00000000 00000000 00450000 00000000 ffffffff
-           t8       t9       k0       k1       gp       sp       s8       ra
-R24  00000132 3fe5e6a0 00000000 00000000 0046d250 407fdd60 00470000 00432cc4
-           sr       lo       hi      bad    cause       pc
-     20000010 0002a981 00000397 00000000 00000000 3fe5e6b4
-          fsr      fir
-     00000000 00739300
-*/
 
 /**
  * http://web.mit.edu/freebsd/head/contrib/gdb/gdb/regformats/reg-mips.dat
@@ -46,32 +55,43 @@ const REGFORMATS = [
 const reg = Object.fromEntries(REGFORMATS.map(v => [v, 'xxxxxxxx']))
 
 /** @type {net.Socket} */
-const sock = net.connect({
-    host: 'localhost',
-    port: 1233
-});
+let sock
 let ack = null
-sock.setEncoding('ascii')
-sock.once('connect', () => main().catch(e => console.error(e)))
-sock.once('close', (err) => {
-    console.error('Closed', err)
-    process.exit()
-})
 
-sock.on('readable', () => {
-    console.log('**', sock.readableLength, stack.length);
-    while (ack == null) {
-        ack = sock.read(1)
-    }
-    if (ack == '+') {
-        if (sock.readableLength) {
-            onMessage(sock.read())
+function connect() {
+    return new Promise(
+        (r, j) => {
+            try {
+                sock = net.connect({
+                    host: 'localhost',
+                    port: 1233
+                });
+            } catch (error) {
+                return j(error)
+            }
+            sock.setEncoding('ascii')
+            sock.once('connect', () => r(sock))
+            sock.once('close', (err) => {
+                console.error('Closed', err)
+                process.exit()
+            })
+
+            sock.on('readable', () => {
+                console.log('**', sock.readableLength, stack.length);
+                while (ack == null) {
+                    ack = sock.read(1)
+                }
+                if (ack == '+') {
+                    if (sock.readableLength) {
+                        onMessage(sock.read())
+                    }
+                } else if (stack.length) {
+                    onMessage(null)
+                }
+            })
         }
-    } else if (stack.length) {
-        onMessage(null)
-    }
-})
-
+    )
+}
 /**
  * @param {string | null} str
  */
@@ -182,9 +202,24 @@ function dumpRegister(names = ['zero', 'at', 'v0', 'v1', 'a0', 'a1', 'a2', 'a3',
     process.stderr.write(lines.join("\n") + "\n")
 }
 
+/** @type {cp.ChildProcess} */
+let proc
 
-// After connected to GDBStub
 async function main() {
+    proc = await run()
+
+    process.once('SIGUSR2', (s) => {
+        if (proc) {
+            proc.kill('SIGKILL')
+        }
+    })
+    
+    let sock = await connect().catch(e => {
+        proc.kill()
+        // @ts-ignore
+        proc = null
+        throw e
+    })
     // redirect stdin, you can type command from from CLI
     const readline = require("readline")
     readline.createInterface({
@@ -198,14 +233,20 @@ async function main() {
     //await send('qSupported:multiprocess+;swbreak+;hwbreak+;qRelocInsn+;fork-events+;vfork-events+;exec-events+;vContSupported+;QThreadEvents+;no-resumed+;xmlRegisters=i386')
     await send('qSupported:multiprocess+;vContSupported+')
     await updateRegister()
-    //console.log(reg);
     dumpRegister()
-    // await send('vMustReplyEmpty')
-    // await send('Hgp0.0')
-    // await send('qTStatus')
     await send('vCont;c:p1.-1', false)
     clearTimeout(autoKill)
-    sock.read()
+    // stack size: 0x2050
+    // paramoffset: 0x101c
+    try {
+        for(let i = 7000; i < 8000 && proc.stdout?.readable; i+=100){
+            proc.stdin?.write("ls " + "x".repeat(i) + "\n")
+            await new Promise( r => setTimeout(r, 100))
+            //console.log('RET', proc.stdout?.read())
+        }
+    } catch (error) {
+        console.error(error)
+    }
 }
 
 async function handleInterupt(msg) {
@@ -225,6 +266,7 @@ async function handleInterupt(msg) {
             if (code === 0) {
                 console.log(`GOT code ${code}`);
                 await write('+', false, true)
+                proc.kill()
                 process.exit()
             }
         default:
@@ -233,3 +275,4 @@ async function handleInterupt(msg) {
             break;
     }
 }
+main()

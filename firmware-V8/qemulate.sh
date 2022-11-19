@@ -10,13 +10,11 @@ if [ ! -f bin/qemu-mips-static ]; then
     ln -s /bin/qemu-mips-static usr/libexec/qemu-binfmt/mips-binfmt-P
 fi
 
-chroot . qemu-mips-static -singlestep -g 1233 -E TERM=vt100,PATH=/bin:/sbin,SHELL=/bin/sh \
-    /bin/sh -luser
-# chroot . qemu-mips-static -E TERM=vt100,PATH=/bin:/sbin,SHELL=/bin/sh \
-#     /bin/sh -ldev
+#(sleep 0.5 && node exploit.js) | chroot . qemu-mips-static -d in_asm -singlestep -g 1234 -E TERM=vt100,PATH=/bin:/sbin,SHELL=/bin/sh /bin/sh -luser
+chroot . qemu-mips-static -singlestep -g 1234 -E TERM=vt100,PATH=/bin:/sbin,SHELL=/bin/sh /bin/sh -luser
 echo -e "\nExited"
 
-exit
+# exit
 
 #(gdb) bt
 #0  0x3fe5e6b4 in strcpy () from /rifin/works/Oprek/modem-indihome-f609/firmware-V8/lib/libuClibc-0.9.32.so

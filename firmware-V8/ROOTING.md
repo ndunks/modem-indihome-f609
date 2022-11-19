@@ -1,3 +1,104 @@
+## Exploiting
+
+target is `busybox sh -luser`. `-luser` argument is vendor customized to limit to current user (even is root) to allow limited command based on *authority.txt*.
+
+Buffer Overflow:
+```
+ls A*6000
+```
+Using pattern, found offset in `PC` at 1121 ( in write TdTraceLog.txt )
+
+Using 10000 pattern, found break on chek authority call.
+PC at: 0x3fe5e830
+RA at: 00432d2c (forloop strncat)
+
+Junk len 8864 (ls ..pattern)
+offset of RA: 4141
+
+dest stack: 0x407fed5c
+
+``` c
+bool checkAuthority(char **param_1,int param_2,int param_3)
+
+{
+  size_t sVar1;
+  char *pcVar2;
+  int iVar3;
+  int iVar4;
+  bool bVar5;
+  undefined1 *cmdCheck;
+  int iVar6;
+  char **ppcVar7;
+  char *__needle;
+  char acStack8248 [4100];
+  char paramstack [4100];
+  char *local_30;
+  
+  memset(paramstack,0,0x1002);
+  memset(acStack8248,0,0x1002);
+  strcpy(paramstack,*param_1); // copy first arg (cmd name)
+  ppcVar7 = param_1;
+  for (iVar6 = 1; ppcVar7 = ppcVar7 + 1, iVar6 < param_2; iVar6 = iVar6 + 1) {
+    sVar1 = bb_strlen(" ");
+    strncat(paramstack," ",sVar1); // add space
+    local_30 = *ppcVar7;
+    sVar1 = bb_strlen(local_30);
+    strncat(paramstack,local_30,sVar1); // copy arg
+  }
+  cmdCheck = UserCmd;
+  iVar6 = 0;
+  do {
+    if (DAT_00468f78 <= iVar6) goto LAB_00432e48;
+    pcVar2 = strstr(paramstack,cmdCheck);
+    if (pcVar2 != NULL) {
+      __needle = *param_1;
+      pcVar2 = strstr(cmdCheck,__needle);
+      if (pcVar2 != NULL) {
+        iVar6 = 0;
+        if (param_2 < 2) {
+          return true;
+        }
+        while( true ) {
+          iVar4 = iVar6 * 0x3284;
+          if (DAT_00468f80 <= iVar6) {
+            return true;
+          }
+          iVar3 = strcmp(__needle,g_atTdForbidCmdArray + iVar4 + 4);
+          if (iVar3 == 0) break;
+          iVar6 = iVar6 + 1;
+        }
+        iVar6 = 0;
+        do {
+          bVar5 = *(int *)(g_atTdForbidCmdArray + iVar4) <= iVar6;
+          iVar6 = iVar6 + 1;
+          if (bVar5) {
+            return true;
+          }
+          pcVar2 = strstr(paramstack,g_atTdForbidCmdArray + iVar6 * 0x80 + iVar4 + 4);
+        } while (pcVar2 == NULL);
+LAB_00432e48:
+        bVar5 = false;
+        if (param_3 == 1) {
+          FUN_00432ba0(parsefile->buf,acStack8248);
+          cmdCheck = OpsCmd;
+          for (iVar6 = 0; bVar5 = iVar6 < DAT_00468f7c, bVar5; iVar6 = iVar6 + 1) {
+            iVar4 = strcmp(acStack8248,cmdCheck);
+            cmdCheck = cmdCheck + 0x80;
+            if (iVar4 == 0) {
+              return true;
+            }
+          }
+        }
+        return bVar5;
+      }
+    }
+    iVar6 = iVar6 + 1;
+    cmdCheck = cmdCheck + 0x80;
+  } while( true );
+}
+```
+
+
 
 ## Telnetd info
 
