@@ -49,7 +49,9 @@ chmod -R +x disk/loop/bin disk/loop/lib
 
 cat > disk/loop/init <<END
 #!/bin/sh
+
 export PATH=/bin:/bin2
+export HOME=/
 
 if [ ! -e bin2/dmesg ]; then
     /bin2/busybox-full --install -s /bin2
@@ -57,8 +59,7 @@ fi
 
 mount -t proc none /proc
 mount -t sysfs none /sys
-
-exec getty -n -l /bin/sh ttyS0 115200 vt100
+exec getty -n -l /bin/sh console 115200 vt100
 END
 chmod +x disk/loop/init
 sync
