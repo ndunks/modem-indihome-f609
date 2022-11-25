@@ -35,13 +35,18 @@ mknod disk/loop/dev/console c 5 1
 cp ../bin/acsd disk/loop/bin
 cp ../bin/bdmf_shell disk/loop/bin
 cp ../bin/busybox disk/loop/bin
+cp ../bin/dw disk/loop/bin
 cp ../bin/ethdriver_test disk/loop/bin
 cp ../bin/gdbserver disk/loop/bin
 cp ../bin/gpontest disk/loop/bin
 cp ../bin/iptables disk/loop/bin
 cp ../bin/multicast_test disk/loop/bin
 cp ../bin/opticaltst disk/loop/bin
+cp ../bin/pppd disk/loop/bin
+cp ../bin/redir disk/loop/bin
+cp ../bin/sendcmd disk/loop/bin
 cp ../bin/switchtst disk/loop/bin
+cp ../bin/tc disk/loop/bin
 cp ../bin/telnetd disk/loop/bin
 cp ../bin/voip disk/loop/bin
 
