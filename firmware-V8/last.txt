@@ -1,0 +1,13 @@
+ÿýÿýÿý!ÿûÿûroot
+klampok
+echo OKK
+sh
+exit
+
+F609
+Login: Password: 
+
+BusyBox v1.01 (2017.08.23-11:15+0000) Built-in shell (ash)
+Enter 'help' for a list of built-in commands.
+
+/ # ec

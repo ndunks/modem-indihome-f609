@@ -1,0 +1,225 @@
+root
+klampok
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+cat /var/tmp/a.txt > /var/tmp/authority_tmp.txt
+cat /var/tmp/authority_tmp.txt
+exit

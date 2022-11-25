@@ -2,6 +2,8 @@
 
 # udhcpc script edited by Tim Riker <Tim@Rikers.org>
 
+# Simplified for busybox in qemu
+
 [ -z "$1" ] && echo "Error: should be called from udhcpc" && exit 1
 
 ACTION="$1"
@@ -18,38 +20,25 @@ fi
 
 case "$ACTION" in
 	deconfig)
-		/sbin/ifconfig $interface up
-		/sbin/ifconfig $interface 0.0.0.0
+		ifconfig $interface up
+		ifconfig $interface 0.0.0.0
 
 		# drop info from this interface
 		# resolv.conf may be a symlink to /tmp/, so take care
-		TMPFILE="/tmp/udhcpc-$$"
+		TMPFILE="/var/tmp/udhcpc-$$"
 		grep -vE "# $interface\$" $RESOLV_CONF > $TMPFILE
 		cat $TMPFILE > $RESOLV_CONF
 		rm -f $TMPFILE
-
-		if [ -x /usr/sbin/avahi-autoipd ]; then
-			/usr/sbin/avahi-autoipd -c $interface && /usr/sbin/avahi-autoipd -k $interface
-		fi
-		;;
-
-	leasefail|nak)
-		if [ -x /usr/sbin/avahi-autoipd ]; then
-			/usr/sbin/avahi-autoipd -c $interface || /usr/sbin/avahi-autoipd -wD $interface --no-chroot
-		fi
 		;;
 
 	renew|bound)
-		if [ -x /usr/sbin/avahi-autoipd ]; then
-			/usr/sbin/avahi-autoipd -c $interface && /usr/sbin/avahi-autoipd -k $interface
-		fi
-		/sbin/ifconfig $interface $ip $BROADCAST $NETMASK
+		ifconfig $interface $ip $BROADCAST $NETMASK
 
 		# RFC3442: If the DHCP server returns both a Classless
 		# Static Routes option and a Router option, the DHCP
 		# client MUST ignore the Router option.
 		if [ -n "$staticroutes" ]; then
-			echo "deleting routers"
+			echo "deleting default gateway"
 			route -n | while read dest gw mask flags metric ref use iface; do
 				[ "$iface" != "$interface" -o "$gw" = "0.0.0.0" ] || \
 					route del -net "$dest" netmask "$mask" gw "$gw" dev "$interface"
@@ -62,7 +51,7 @@ case "$ACTION" in
 				shift 2
 			done
 		elif [ -n "$router" ] ; then
-			echo "deleting routers"
+			echo "deleting default gateway"
 			while route del default gw 0.0.0.0 dev $interface 2> /dev/null; do
 				:
 			done
@@ -74,7 +63,7 @@ case "$ACTION" in
 
 		# drop info from this interface
 		# resolv.conf may be a symlink to /tmp/, so take care
-		TMPFILE="/tmp/udhcpc-$$"
+		TMPFILE="/var/tmp/udhcpc-$$"
 		grep -vE "# $interface\$" $RESOLV_CONF > $TMPFILE
 		cat $TMPFILE > $RESOLV_CONF
 		rm -f $TMPFILE

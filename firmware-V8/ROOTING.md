@@ -19,7 +19,6 @@ dest stack: 0x407fed5c
 
 ``` c
 bool checkAuthority(char **param_1,int param_2,int param_3)
-
 {
   size_t sVar1;
   char *pcVar2;
@@ -98,7 +97,11 @@ LAB_00432e48:
 }
 ```
 
+``` sh
+# cat <<EOF error, make file manually then cat again
+while true; do nc 192.168.1.1 22 < write-authority.txt; done
 
+```
 
 ## Telnetd info
 
@@ -149,6 +152,10 @@ Dynamic section at offset 0x140 contains 26 entries:
  0x70000012 (MIPS_UNREFEXTNO)            21
  0x70000013 (MIPS_GOTSYM)                0x15
  0x00000000 (NULL)                       0x0
+```
+
+```
+
 ```
 
 ## Busybox
@@ -309,6 +316,28 @@ curl -u 'ftp:ftp' -o libwlupnp.so ftp://192.168.1.1/lib/libwlupnp.so
 curl -u 'ftp:ftp' -o libwps.so ftp://192.168.1.1/lib/libwps.so
 curl -u 'ftp:ftp' -o libwwan.so ftp://192.168.1.1/lib/libwwan.so
 curl -u 'ftp:ftp' -o rp-pppoe.so ftp://192.168.1.1/lib/rp-pppoe.so
+
+curl -u 'ftp:ftp' -o tdmtool ftp://192.168.1.1/bin/tdmtool
+curl -u 'ftp:ftp' -o epondbg ftp://192.168.1.1/bin/epondbg
+curl -u 'ftp:ftp' -o iptables ftp://192.168.1.1/bin/iptables
+curl -u 'ftp:ftp' -o multicast_test ftp://192.168.1.1/bin/multicast_test
+curl -u 'ftp:ftp' -o igmptest ftp://192.168.1.1/bin/igmptest
+curl -u 'ftp:ftp' -o gponctl ftp://192.168.1.1/bin/gponctl
+curl -u 'ftp:ftp' -o gpondbg ftp://192.168.1.1/bin/gpondbg
+curl -u 'ftp:ftp' -o gpontest ftp://192.168.1.1/bin/gpontest
+curl -u 'ftp:ftp' -o epontst ftp://192.168.1.1/bin/epontst
+curl -u 'ftp:ftp' -o ethdriver_test ftp://192.168.1.1/bin/ethdriver_test
+curl -u 'ftp:ftp' -o switchtst ftp://192.168.1.1/bin/switchtst
+curl -u 'ftp:ftp' -o opticaltst ftp://192.168.1.1/bin/opticaltst
+curl -u 'ftp:ftp' -o date ftp://192.168.1.1/bin/date
+curl -u 'ftp:ftp' -o grep ftp://192.168.1.1/bin/grep
+curl -u 'ftp:ftp' -o ping ftp://192.168.1.1/bin/ping
+curl -u 'ftp:ftp' -o ifconfig ftp://192.168.1.1/bin/ifconfig
+curl -u 'ftp:ftp' -o exit ftp://192.168.1.1/bin/exit
+curl -u 'ftp:ftp' -o killall ftp://192.168.1.1/bin/killall
+curl -u 'ftp:ftp' -o hostapd ftp://192.168.1.1/bin/hostapd
+curl -u 'ftp:ftp' -o ethswctl ftp://192.168.1.1/bin/ethswctl
+curl -u 'ftp:ftp' -o bdmf_shell ftp://192.168.1.1/bin/bdmf_shell
 
 ln -s ld-uClibc-0.9.32.so ld-linux.so.2
 ln -s ld-uClibc-0.9.32.so ld-uClibc.so.0
