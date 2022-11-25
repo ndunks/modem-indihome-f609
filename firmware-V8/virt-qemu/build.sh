@@ -25,7 +25,10 @@ set -e
 echo "Creating rootfs.."
 mount -t ext2 -o loop disk/disk.img ./disk/loop
 
-mkdir -p disk/loop/{bin,bin2,dev,proc,sys,lib,etc,var/tmp,userconfig}
+mkdir -p disk/loop/{bin,sbin,dev,proc,sys,lib,etc,var/tmp,userconfig}
+mkdir -p disk/loop/usr/share/udhcpc
+cp ../usr/share/udhcpc/default.script disk/loop/usr/share/udhcpc/
+chmod +x disk/loop/usr/share/udhcpc/default.script
 
 mknod disk/loop/dev/console c 5 1
 
@@ -38,7 +41,7 @@ cp ../bin/voip disk/loop/bin
 
 ln -s busybox disk/loop/bin/sh
 
-cp ../bin/busybox-full disk/loop/bin2
+cp ../bin/busybox-full disk/loop/sbin
 
 cp -ra ../etc/ disk/loop/
 cp -ra ../lib/ disk/loop/
@@ -50,16 +53,19 @@ chmod -R +x disk/loop/bin disk/loop/lib
 cat > disk/loop/init <<END
 #!/bin/sh
 
-export PATH=/bin:/bin2
+export PATH=/bin:/sbin
 export HOME=/
 
-if [ ! -e bin2/dmesg ]; then
-    /bin2/busybox-full --install -s /bin2
+if [ ! -e sbin/dmesg ]; then
+    /sbin/busybox-full --install -s /sbin
 fi
 
 mount -t proc none /proc
 mount -t sysfs none /sys
-exec getty -n -l /bin/sh console 115200 vt100
+mdev -s
+ifconfig lo up
+ifconfig eth0 up && udhcpc -i eth0
+exec getty -n -l /bin/sh ttyS0 115200 vt100
 END
 chmod +x disk/loop/init
 sync
