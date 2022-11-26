@@ -2,7 +2,7 @@ set arch mips
 set endian big
 file bin/busybox
 
-shell bash -c "(sleep 0.5 && node exploit.js) | chroot . qemu-mips-static -s 16777216 -singlestep -g 1234 -E TERM=vt100,PATH=/bin:/sbin,SHELL=/bin/sh /bin/sh -luser" &
+#shell bash -c "(sleep 0.5 && node exploit.js) | chroot . qemu-mips-static -s 16777216 -singlestep -g 1234 -E TERM=vt100,PATH=/bin:/sbin,SHELL=/bin/sh /bin/sh -luser" &
 #shell konsole -e bash -c "chroot . qemu-mips-static -singlestep -g 1234 -E TERM=vt100,PATH=/bin:/sbin,SHELL=/bin/sh /bin/sh -luser" &
 target remote :1234
 # b run_applet_by_name
@@ -11,9 +11,9 @@ target remote :1234
 
 # ASH shell applet
 # in check Authority
-#b *0x00432c3c
+b *0x00432c3c
 # Before strcpy
-#b *0x00432cbc
+b *0x00432cbc
 # After strcpy
 b *0x00432cd0
 # dest argv: x/s *($sp-24)

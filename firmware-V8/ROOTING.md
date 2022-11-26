@@ -2,7 +2,9 @@
 
 target is `busybox sh -luser`. `-luser` argument is vendor customized to limit to current user (even is root) to allow limited command based on *authority.txt*.
 
-Buffer Overflow:
+Rooting this device done using a simple shellcode binary to bypass `-luser` restriction.
+
+Found Buffer Overflow, but hard to exploit since it have null byte in address jump. I din't try to jump directly to stack using calculated offset
 ```
 ls A*6000
 ```

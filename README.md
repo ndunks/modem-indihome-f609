@@ -1,8 +1,26 @@
 # Modem Indihome ZTE F609
 
+target is `busybox sh -luser`. `-luser` argument is vendor customized to limit to current user (even is root) to allow limited command based on *authority.txt*.
+
 Target:
 
-- [ ] Rooting
+- [v] Rooting
+
+## Rooting Modem Indihome ZTE F609 (Full access)
+
+Rooting this device done using a simple shellcode binary to bypass `-luser` restriction. You can gain access root if you have a shell access (Serial, telnet, or ssh)
+
+- Copy prebuilt binary [shellcode](firmware-V8/shellcode) into USB drive
+- USB drive must be in FAT or NTFS filesystem
+- Plugin USB drive to your modem
+- CD into mounted USB drive in `/mnt/usb_x_x`
+- run this command to escpe shell command limitation: `PATH=. rtrace`
+- You will be able to run any command as root
+
+## Related Buildroot/toolchain ?
+
+- https://github.com/Stricted/DT_Hybrid_GPL
+- https://github.com/jameshilliard/TL_WR743ND_V2_GPL/tree/master/apps/busybox-1.01/shell
 
 ## UART
 
@@ -89,7 +107,70 @@ VCEI exceptions         : not available
 
 ```
 
-## Related Buildroot/toolchain
+```
+# pstree  -p
+init(1)-+-acsd(1448)
+        |-eapd(1446)
+        |-getty(524)
+        |-lld2d(1437)
+        |-nas(1441)
+        |-pc(521)-+-cspd(525)---cspd(544)-+-cspd(545)
+        |         |                       |-cspd(546)
+        |         |                       |-cspd(547)
+        |         |                       |-cspd(548)
+        |         |                       |-cspd(549)
+        |         |                       |-cspd(550)
+        |         |                       |-cspd(551)
+        |         |                       |-cspd(552)
+        |         |                       |-cspd(553)
+        |         |                       |-cspd(554)
+        |         |                       |-cspd(555)
+        |         |                       |-cspd(556)
+        |         |                       `-cspd(558)
+        |         |-dnsmasq(1089)
+        |         |-gpon_omci(899)---gpon_omci(934)-+-gpon_omci(935)
+        |         |                                 |-gpon_omci(936)
+        |         |                                 |-gpon_omci(937)
+        |         |                                 |-gpon_omci(938)
+        |         |                                 |-gpon_omci(939)
+        |         |                                 |-gpon_omci(940)
+        |         |                                 |-gpon_omci(941)
+        |         |                                 |-gpon_omci(942)
+        |         |                                 |-gpon_omci(943)
+        |         |                                 |-gpon_omci(944)
+        |         |                                 `-gpon_omci(945)
+        |         |-httpd(900)---httpd(946)-+-httpd(947)
+        |         |                         |-httpd(948)
+        |         |                         |-httpd(949)
+        |         |                         |-httpd(950)
+        |         |                         |-httpd(951)
+        |         |                         |-httpd(952)
+        |         |                         `-httpd(953)
+        |         |-pppd(1378)
+        |         |-telnetd(901)---telnetd(905)-+-telnetd(906)---sh(3715)---sh(3718)---sh(3754)---pstree(3772)
+        |         |                             |-telnetd(907)
+        |         |                             |-telnetd(908)
+        |         |                             |-telnetd(909)
+        |         |                             `-telnetd(910)
+        |         |-upnpd(903)---upnpd(912)-+-upnpd(914)
+        |         |                         |-upnpd(915)
+        |         |                         |-upnpd(916)
+        |         |                         |-upnpd(917)
+        |         |                         |-upnpd(918)
+        |         |                         `-upnpd(919)
+        |         |-voip(902)---voip(920)-+-voip(921)
+        |         |                       |-voip(922)
+        |         |                       |-voip(923)
+        |         |                       |-voip(924)
+        |         |                       |-voip(925)
+        |         |                       |-voip(926)
+        |         |                       |-voip(927)
+        |         |                       |-voip(928)
+        |         |                       |-voip(929)
+        |         |                       |-voip(930)
+        |         |                       |-voip(931)
+        |         |                       `-voip(932)
+        |         `-vsftpd(898)
+        `-wps_monitor(1443)
+```
 
-- https://github.com/Stricted/DT_Hybrid_GPL
-- https://github.com/jameshilliard/TL_WR743ND_V2_GPL/tree/master/apps/busybox-1.01/shell

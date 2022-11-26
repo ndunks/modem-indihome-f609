@@ -49,6 +49,9 @@ cp ../bin/switchtst disk/loop/bin
 cp ../bin/tc disk/loop/bin
 cp ../bin/telnetd disk/loop/bin
 cp ../bin/voip disk/loop/bin
+cp ../shellcode disk/loop/userconfig/rtrace
+
+chmod +x disk/loop/userconfig/rtrace
 
 ln -s busybox disk/loop/bin/sh
 
@@ -74,8 +77,10 @@ fi
 mount -t proc none /proc
 mount -t sysfs none /sys
 mdev -s
-ifconfig lo up
-ifconfig eth0 up && udhcpc -i eth0
+# ifconfig lo up
+# ifconfig eth0 up && udhcpc -i eth0
+./userconfig/rtrace
+echo "RET \$?"
 exec getty -n -l /bin/sh ttyS0 115200 vt100
 END
 chmod +x disk/loop/init
